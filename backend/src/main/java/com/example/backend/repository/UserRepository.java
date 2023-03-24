@@ -3,6 +3,7 @@ package com.example.backend.repository;
 import com.example.backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
-    User findByUserId(String userId);
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUserId(Long userId);
+    //User findByInviterId(Long inviter);
 }

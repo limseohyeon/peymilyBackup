@@ -1,7 +1,6 @@
 package com.example.backend.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,11 +10,14 @@ import javax.persistence.Table;
 @Entity
 @Getter
 @Setter
-@Table(name = "pet_tbl")
+@Table(name = "PET_TBL")
+@Data
+@AllArgsConstructor(staticName = "build")
+@NoArgsConstructor
 public class Pet {
     @Id
     @GeneratedValue
-    private Integer userId;
+    private Long userId;
     private String email;
     private String petName;
     private Integer petAge;

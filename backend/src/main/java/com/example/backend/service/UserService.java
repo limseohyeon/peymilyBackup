@@ -15,7 +15,7 @@ public class UserService {
     private UserRepository repository;
 
     public User saveUser(UserRequest userRequest) {
-        User user = User.build(0,
+        User user = User.build(0L,
                 userRequest.getEmail(),
                 userRequest.getPassword(),
                 userRequest.getUserName(),
@@ -29,7 +29,9 @@ public class UserService {
         return repository.findAll();
     }
 
-    public User getUser(String userId) {
+    public User getUser(Long userId) {
         return repository.findByUserId(userId);
     }
+
+    //public User getInviter(Long inviterId) { return repository.findByInviterId(inviterId); }
 }
