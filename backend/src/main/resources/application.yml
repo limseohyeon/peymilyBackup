@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/project
+    url: jdbc:mysql://project.c4yxzoa8i9pa.ap-northeast-2.rds.amazonaws.com/project
     username: ${ DB_USERNAME }
     password: ${ DB_PASSWORD }
   jpa:
