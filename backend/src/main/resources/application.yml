@@ -1,6 +1,0 @@
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://project.c4yxzoa8i9pa.ap-northeast-2.rds.amazonaws.com:3306/project?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password: 123456
