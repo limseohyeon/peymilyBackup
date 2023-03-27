@@ -1,9 +1,10 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://project-db.c4yxzoa8i9pa.ap-northeast-2.rds.amazonaws.com:3306/project
-    username: 'root'
-    password: '!Vcd7xkzl1'
+    url: jdbc:mysql://petmilydb.c4yxzoa8i9pa.ap-northeast-2.rds.amazonaws.com:3306/petmilyDB
+    username: admin
+    password: "!Vcd7xkzl1"
+
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
