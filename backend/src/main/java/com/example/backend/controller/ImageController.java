@@ -2,6 +2,8 @@ package com.example.backend.controller;
 
 import com.example.backend.util.FileUploadUtil;
 import com.example.backend.util.ImageUtil;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import com.example.backend.consts.ConstURL;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 public class ImageController {
@@ -26,19 +30,20 @@ public class ImageController {
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
 
-    // ':'는 해당 변수가 있다는 것을 나타내고, .+는 해당 변수가 확장자를 포함하는 것을 나타냅니다.
-    // 즉, /{imageName:.+}는 URL 경로에서 imageName이라는 변수가 있으며, 확장자를 포함할 수 있습니다.
     @GetMapping("/downloadImage/{imageName:.+}")
-    public ResponseEntity<byte[]> downloadImage(@PathVariable("imageName") String imageName) throws IOException {
+    public ResponseEntity<Resource> downloadImage(@PathVariable String imageName) throws IOException {
         String downloadDir = "image-uploads/";
-        File file = new File(downloadDir + imageName);
-        byte[] bytes = FileUtils.readFileToByteArray(file);
+        Path path = Paths.get(downloadDir, imageName);
+        Resource resource = new UrlResource(path.toUri());
+
+        if (!resource.exists() || !resource.isReadable()) {
+            throw new IOException("Failed to read image: " + imageName);
+        }
 
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.IMAGE_JPEG)
-                .contentLength(file.length())
-                .body(bytes);
+                .body(resource);
     }
 
     @GetMapping("/showImage/{imageName:.+}")
