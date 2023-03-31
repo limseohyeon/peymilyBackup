@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@Controller
 @RequestMapping("/pet")
 @RequiredArgsConstructor
 public class PetController {

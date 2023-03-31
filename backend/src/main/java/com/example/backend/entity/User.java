@@ -3,10 +3,7 @@ package com.example.backend.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -19,7 +16,9 @@ public class User {
 
     @Id
     @GeneratedValue
+    @Column(unique = true)
     private Long userId;
+    @Column(unique = true)
     private String email;
     private String password;
     private String userName;

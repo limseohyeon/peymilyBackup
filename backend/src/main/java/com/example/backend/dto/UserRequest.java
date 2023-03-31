@@ -12,12 +12,15 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-//@Entity
-//@Table(name="USERS_TBL")
+@Entity
+@Table(name="USERS_TBL")
 @Data
 @AllArgsConstructor(staticName = "build")
 @NoArgsConstructor
 public class UserRequest {
+    @Id
+//    @NotNull
+    private Long userId;
     @Email
     @NotNull(message = "invalid email address")
     private String email;
