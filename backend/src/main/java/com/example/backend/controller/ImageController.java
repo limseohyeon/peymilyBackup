@@ -15,6 +15,7 @@ import com.example.backend.consts.ConstURL;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -40,20 +41,15 @@ public class ImageController {
             throw new IOException("Failed to read image: " + imageName);
         }
 
+        String contentType = Files.probeContentType(path);
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
         return ResponseEntity
                 .ok()
-                .contentType(MediaType.IMAGE_JPEG)
+                .contentType(MediaType.parseMediaType(contentType))
                 .body(resource);
     }
 
-    @GetMapping("/showImage/{imageName:.+}")
-    public ResponseEntity<byte[]> showImage(@PathVariable("imageName") String imageName) throws IOException {
-        String imageUrl = "http://" + ConstURL.url + "/image-uploads/" + imageName;
-        byte[] bytes = ImageUtil.readImageToByteArray(imageUrl);
-
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(bytes);
-    }
 }
