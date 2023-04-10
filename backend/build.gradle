@@ -30,6 +30,22 @@ dependencies {
 	// 230330
 	implementation 'commons-io:commons-io:2.11.0'
 
+	// 230402
+	implementation 'org.springframework.boot:spring-boot-starter-web:2.7.4'
+	implementation 'org.modelmapper:modelmapper:2.4.4'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+	// 230408
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	compileOnly 'org.projectlombok:lombok:1.18.20'
+	annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+	// 230410
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-config:5.5.1'
+
 	compileOnly 'org.projectlombok:lombok'
 	//runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'

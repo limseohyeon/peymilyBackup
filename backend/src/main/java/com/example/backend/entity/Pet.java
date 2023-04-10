@@ -2,10 +2,7 @@ package com.example.backend.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -17,9 +14,11 @@ import javax.persistence.Table;
 public class Pet {
     @Id
     @GeneratedValue
-    private Long userId;
+    private Long petId;
     private String email;
+    @Column(unique = true)
     private String petName;
     private Integer petAge;
     private String detailInfo;
+    private String inviter;
 }
