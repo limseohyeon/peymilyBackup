@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.AuthenticationException;
 
 import javax.crypto.SecretKey;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -28,13 +25,21 @@ public class AuthService {
     // 보안 키 (230410 추가)
     private static final String SECRET_KEY = "CL2xeP3cZ0MDZQDmuWeHPajwAJSPwtBk0JI5t6KCdGnK6ckXxx";
 
+    public Optional<User> findByEmail(String email) {   // Optional : 객체 값이 있을 수도 있고 없을 수도 있다
+        return userRepository.findByEmail(email);
+    }
+
     public String login(String email, String password) throws AuthenticationException {
-        User user = userRepository.findByEmail(email);
-        if (user == null || !user.getPassword().equals(password)) {
-            throw new BadCredentialsException("Invalid email or password");
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (!user.getPassword().equals(password)) {
+                throw new BadCredentialsException("Invalid email or password");
+            }
+            Map<String, Object> claims = new HashMap<>();
+            return createToken(email);
         }
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(email);
+        throw new BadCredentialsException("Invalid email or password");
     }
 
     private String createToken(String email) {

@@ -41,9 +41,9 @@ public class PetController {
         return request.getHeader("inviter"); // 예시로 header에서 inviter 정보를 가져옴
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<PetService>> getPet(@PathVariable("userId") Long userId, HttpServletRequest request) {
-        Optional<User> optionalUser = userRepository.findById(userId);
+    @GetMapping("/{email}")
+    public ResponseEntity<List<PetService>> getPet(@PathVariable("email") String email, HttpServletRequest request) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             String inviter = user.getInviter();

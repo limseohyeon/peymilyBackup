@@ -16,25 +16,25 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @RestController
-@RequestMapping("/pet/{userId}")
+@RequestMapping("/pet/{email}")
 public class PetImageController {
 
     @PostMapping("/uploadImage")
-    public ResponseEntity<String> uploadImage(@PathVariable("userId") Long userId, @RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<String> uploadImage(@PathVariable("email") String email, @RequestParam("file") MultipartFile file) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String uploadDir = "image-uploads/";
         // 유저 정보를 기반으로 업로드 디렉토리 생성
-        String userUploadDir = uploadDir + userId + "/";
+        String userUploadDir = uploadDir + email + "/";
         FileUploadUtil.saveFile(userUploadDir, fileName, file);
 
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
 
     @GetMapping("/downloadImage/{imageName:.+}")
-    public ResponseEntity<Resource> downloadImage(@PathVariable("userId") Long userId, @PathVariable String imageName) throws IOException {
+    public ResponseEntity<Resource> downloadImage(@PathVariable("email") String email, @PathVariable String imageName) throws IOException {
         String downloadDir = "image-uploads/";
         // 유저 정보를 기반으로 다운로드 디렉토리 지정
-        String userDownloadDir = downloadDir + userId + "/";
+        String userDownloadDir = downloadDir + email + "/";
         Path path = Paths.get(userDownloadDir, imageName);
         Resource resource = new UrlResource(path.toUri());
 
