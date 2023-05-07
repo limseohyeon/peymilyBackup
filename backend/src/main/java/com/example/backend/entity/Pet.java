@@ -3,6 +3,8 @@ package com.example.backend.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Getter
@@ -14,11 +16,15 @@ import javax.persistence.*;
 public class Pet {
     @Id
     @GeneratedValue
-    private Long petId;
+    private Long id;
+
     private String email;
     @Column(unique = true)
     private String petName;
     private Integer petAge;
     private String detailInfo;
     private String inviter;
+
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Schedule> schedules = new ArrayList<>();
 }
