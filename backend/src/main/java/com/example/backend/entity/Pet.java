@@ -9,14 +9,14 @@ import java.util.ArrayList;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor(staticName = "build")
 @Table(name = "PET_TBL")
 @Data
-@AllArgsConstructor(staticName = "build")
-@NoArgsConstructor
 public class Pet {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long id; // pet_id -> id로 수정
 
     private String email;
     @Column(unique = true)

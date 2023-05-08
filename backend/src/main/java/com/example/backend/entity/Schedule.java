@@ -9,10 +9,10 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "SCHEDULE_TBL")
-@Data
-@AllArgsConstructor(staticName = "build")
 @NoArgsConstructor
+@AllArgsConstructor(staticName = "build")
+@Table(name = "SCHEDULE_TBL")
+@Builder
 public class Schedule {
     @Id
     @GeneratedValue
