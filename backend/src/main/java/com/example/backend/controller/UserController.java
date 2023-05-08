@@ -24,11 +24,6 @@ public class UserController {
     @Autowired
     private HttpServletRequest request;
 
-    @PostMapping("/signup")
-    public ResponseEntity<User> saveUser(@RequestBody @Valid UserRequest userRequest) {
-        return new ResponseEntity<>(userService.saveUser(userRequest), HttpStatus.CREATED);
-    }
-
     @GetMapping("/fetchAll")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());

@@ -1,5 +1,7 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.UserRequest;
+import com.example.backend.entity.User;
 import com.example.backend.service.AuthService;
 import com.example.backend.service.AuthenticationResponse;
 import com.example.backend.service.UserService;
@@ -8,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.AuthenticationException;
+
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +24,11 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    @PostMapping("/signup")
+    public ResponseEntity<User> saveUser(@RequestBody @Valid UserRequest userRequest) {
+        return new ResponseEntity<>(userService.saveUser(userRequest), HttpStatus.CREATED);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody Map<String, String> request) {
