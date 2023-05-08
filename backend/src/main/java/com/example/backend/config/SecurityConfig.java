@@ -34,8 +34,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/pet").authenticated()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .and()
                 .headers().frameOptions().disable(); // add this line if you use H2 database
     }
 }
