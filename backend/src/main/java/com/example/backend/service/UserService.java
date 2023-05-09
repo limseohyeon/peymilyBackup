@@ -65,12 +65,14 @@ public class UserService {
     }
 
     public User saveUser(UserRequest userRequest) {
-        User user = User.build(0L,
-                userRequest.getEmail(),
-                userRequest.getPassword(),
-                userRequest.getUserName(),
-                userRequest.getPhoneNumber(),
-                userRequest.getInviter());
+        User user = User.builder()
+                .email(userRequest.getEmail())
+                .password(userRequest.getPassword())
+                .userName(userRequest.getUserName())
+                .phoneNumber(userRequest.getPhoneNumber())
+                .inviter(userRequest.getInviter())
+                .token(generateToken(userRequest.getUserName()))
+                .build();
 
         return repository.save(user);
     }

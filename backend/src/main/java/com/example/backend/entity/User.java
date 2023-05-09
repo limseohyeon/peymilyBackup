@@ -23,6 +23,7 @@ public class User {
     private String userName;
     private String phoneNumber;
     private String inviter;
+    private String token; // 새로운 필드 추가
 
     public static User build(Long userId, String email, String password, String userName, String phoneNumber, String inviter) {
         return User.builder()

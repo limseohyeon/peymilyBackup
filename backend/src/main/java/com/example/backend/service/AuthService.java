@@ -23,7 +23,7 @@ public class AuthService {
     private final String secretKey;
 
     // 보안 키 (230410 추가)
-    private static final String SECRET_KEY = "CL2xeP3cZ0MDZQDmuWeHPajwAJSPwtBk0JI5t6KCdGnK6ckXxx";
+    // private static final String SECRET_KEY = "CL2xeP3cZ0MDZQDmuWeHPajwAJSPwtBk0JI5t6KCdGnK6ckXxx";
 
     public Optional<User> findByEmail(String email) {   // Optional : 객체 값이 있을 수도 있고 없을 수도 있다
         return userRepository.findByEmail(email);
@@ -49,9 +49,10 @@ public class AuthService {
                 .setSubject(email)
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, this.secretKey)
                 .compact();
     }
+
 
     // 230410 추가
     public AuthService() {
@@ -74,7 +75,7 @@ public class AuthService {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
     public Boolean isTokenExpired(String token) {

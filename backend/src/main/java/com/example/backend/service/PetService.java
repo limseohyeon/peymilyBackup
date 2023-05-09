@@ -3,6 +3,7 @@ package com.example.backend.service;
 import com.example.backend.entity.Pet;
 import com.example.backend.repository.PetRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PetService {
 
+    @Autowired
     private final PetRepository petRepository;
 
     public void savePet(Pet pet) {

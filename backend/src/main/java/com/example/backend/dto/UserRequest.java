@@ -20,8 +20,8 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 @Builder
 public class UserRequest {
-    @Id
 //    @NotNull
+    @Id
     private Long userId;
     @Email
     @NotNull(message = "invalid email address")
