@@ -1,10 +1,14 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.PetRequest;
+import com.example.backend.dto.UserRequest;
 import com.example.backend.entity.Pet;
 import com.example.backend.entity.User;
 import com.example.backend.repository.PetRepository;
 import com.example.backend.service.PetService;
+import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.modelmapper.ModelMapper;
@@ -21,20 +25,20 @@ import java.util.stream.Collectors;
 public class PetController {
 
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private PetRepository petRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private PetService petService;
 
-    @PostMapping
-    public ResponseEntity<PetService> createPet(@RequestBody PetService petService) {
-        Pet pet = modelMapper.map(petService, Pet.class);
-        Pet savedPet = petRepository.save(pet);
-        PetService savedPetService = modelMapper.map(savedPet, PetService.class);
-        return ResponseEntity.ok(savedPetService);
+    @PostMapping()
+    public ResponseEntity<Pet> savePet(@RequestBody @Valid PetRequest petRequest) {
+        Pet savedPet = petService.savePet(petRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedPet);
     }
 
     private String getCurrentUserInviter(HttpServletRequest request) {
@@ -58,7 +62,6 @@ public class PetController {
         }
         return ResponseEntity.notFound().build();
     }
-
 
     @GetMapping
     public ResponseEntity<List<PetService>> getPets() {

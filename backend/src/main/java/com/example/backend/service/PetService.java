@@ -1,12 +1,17 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.PetRequest;
+import com.example.backend.dto.UserRequest;
 import com.example.backend.entity.Pet;
+import com.example.backend.entity.User;
 import com.example.backend.repository.PetRepository;
+import com.example.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +31,8 @@ public class PetService {
     @Autowired
     private final PetRepository petRepository;
 
-    public void savePet(Pet pet) {
-        petRepository.save(pet);
-    }
+    @Autowired
+    private final UserService userService;
 
     public List<Pet> getAllPets() {
         return petRepository.findAll();
@@ -47,6 +52,25 @@ public class PetService {
 
     public void updatePet(Pet pet) {
         petRepository.save(pet);
+    }
+
+    public Pet savePet(PetRequest petRequest) {
+        Optional<User> optionalUser = userService.findByEmail(petRequest.getEmail());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            Pet pet = Pet.builder()
+                    .userId(user.getUserId())
+                    .email(petRequest.getEmail())
+                    .petName(petRequest.getPetName())
+                    .petAge(petRequest.getPetAge())
+                    .detailInfo(petRequest.getDetailInfo())
+                    .inviter(petRequest.getInviter())
+                    .build();
+
+            return petRepository.save(pet);
+        } else {
+            throw new UsernameNotFoundException("Invalid username or password");
+        }
     }
 
     public void uploadPetImage(String petName, MultipartFile file) throws IOException {

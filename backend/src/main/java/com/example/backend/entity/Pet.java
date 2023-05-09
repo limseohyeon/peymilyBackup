@@ -13,11 +13,12 @@ import java.util.ArrayList;
 @AllArgsConstructor(staticName = "build")
 @Table(name = "PET_TBL")
 @Data
+@Builder
 public class Pet {
     @Id
     @GeneratedValue
-    private Long id; // pet_id -> id로 수정
-
+    private Long id;
+    private Long userId; // User 객체의 userId 필드 값을 저장할 필드
     private String email;
     @Column(unique = true)
     private String petName;
@@ -27,4 +28,15 @@ public class Pet {
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedules = new ArrayList<>();
+
+    public static Pet build(Long userId, String email, String petName, Integer petAge, String detailInfo, String inviter) {
+        return Pet.builder()
+                .userId(userId)
+                .email(email)
+                .petName(petName)
+                .petAge(petAge)
+                .detailInfo(detailInfo)
+                .inviter(inviter)
+                .build();
+    }
 }

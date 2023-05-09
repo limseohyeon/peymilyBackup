@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.dto.UserRequest;
+import com.example.backend.entity.Pet;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import io.jsonwebtoken.Claims;
@@ -11,10 +12,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -97,6 +95,10 @@ public class UserService {
                 .phoneNumber(user.getPhoneNumber())
                 .inviter(user.getInviter())
                 .build();
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return repository.findByEmail(email);
     }
 
     //public User getInviter(Long inviterId) { return repository.findByInviterId(inviterId); }
