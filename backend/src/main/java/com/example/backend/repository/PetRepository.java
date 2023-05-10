@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PetRepository extends JpaRepository<Pet, Long> {
-    Pet findByPetName(String petName);
+    Optional<Pet> findByPetName(String petName);
 
     @Query("SELECT p.petName FROM Pet p")
     List<String> findAllPetNames();

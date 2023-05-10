@@ -1,16 +1,14 @@
 package com.example.backend.service;
 
 import com.example.backend.dto.UserRequest;
-import com.example.backend.entity.Pet;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Function;
@@ -19,26 +17,10 @@ import java.util.function.Function;
 public class UserService {
 
     @Autowired
+    private AuthService authService;
+
+    @Autowired
     private UserRepository repository;
-
-    private static final String SECRET_KEY = "secret";
-
-    public String generateToken(String username) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
-    }
-
-    private String createToken(Map<String, Object> claims, String subject) {
-        Date now = new Date();
-        Date expirationDate = new Date(now.getTime() + 1000 * 60 * 60 * 10); // 10 hours
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(now)
-                .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
-    }
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -54,7 +36,7 @@ public class UserService {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(authService.getSecretKey()).parseClaimsJws(token).getBody();
     }
 
     public Boolean isTokenExpired(String token) {
@@ -69,7 +51,7 @@ public class UserService {
                 .userName(userRequest.getUserName())
                 .phoneNumber(userRequest.getPhoneNumber())
                 .inviter(userRequest.getInviter())
-                .token(generateToken(userRequest.getUserName()))
+                // .token(authService.generateToken(userRequest.getUserName()))
                 .build();
 
         return repository.save(user);
@@ -97,9 +79,7 @@ public class UserService {
                 .build();
     }
 
-    public Optional<User> findByEmail(String email) {
-        return repository.findByEmail(email);
-    }
+    public Optional<User> findByEmail(String email) { return repository.findByEmail(email); }
 
     //public User getInviter(Long inviterId) { return repository.findByInviterId(inviterId); }
 }

@@ -2,12 +2,15 @@ package com.example.backend.service;
 
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.AuthenticationException;
 
@@ -20,12 +23,12 @@ public class AuthService {
 
     @Autowired
     private UserRepository userRepository;
-    private final String secretKey;
 
-    // 보안 키 (230410 추가)
-    // private static final String SECRET_KEY = "CL2xeP3cZ0MDZQDmuWeHPajwAJSPwtBk0JI5t6KCdGnK6ckXxx";
+    @Value("${jwt.secret}")
+    private String secretKey;
+    private Long expiredMs = 1000 * 60 * 60L;
 
-    public Optional<User> findByEmail(String email) {   // Optional : 객체 값이 있을 수도 있고 없을 수도 있다
+    public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -37,7 +40,7 @@ public class AuthService {
                 throw new BadCredentialsException("Invalid email or password");
             }
             Map<String, Object> claims = new HashMap<>();
-            return createToken(email);
+            return JwtUtil.createJwt(email, secretKey, expiredMs);
         }
         throw new BadCredentialsException("Invalid email or password");
     }
@@ -49,16 +52,23 @@ public class AuthService {
                 .setSubject(email)
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS256, this.secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
+    public String generateToken(String userName) {
+        Date now = new Date();
+        Date expirationDate = new Date(now.getTime() + 1000 * 60 * 60 * 10); // 10 hours
+        return Jwts.builder()
+                .setSubject(userName)
+                .setIssuedAt(now)
+                .setExpiration(expirationDate)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+    }
 
-    // 230410 추가
-    public AuthService() {
-        // Generate a new secret key for JWT signing using HS256 algorithm
-        SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-        this.secretKey = Base64.getEncoder().encodeToString(key.getEncoded());
+    public String getSecretKey() {
+        return secretKey;
     }
 
     public String getEmailFromToken(String token) {
@@ -76,10 +86,5 @@ public class AuthService {
 
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-    }
-
-    public Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
     }
 }

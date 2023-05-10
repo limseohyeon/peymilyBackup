@@ -2,8 +2,10 @@ package com.example.backend.controller;
 
 import com.example.backend.entity.Pet;
 import com.example.backend.entity.Schedule;
+import com.example.backend.entity.User;
 import com.example.backend.repository.PetRepository;
 import com.example.backend.repository.ScheduleRepository;
+import com.example.backend.repository.UserRepository;
 import com.example.backend.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.hibernate.sql.InFragment.NULL;
+
 @RestController
-@RequestMapping("/schedule")
+@RequestMapping("/schedule/{inviter}")
 public class ScheduleController {
 
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private PetRepository petRepository;
     @Autowired
@@ -27,10 +33,11 @@ public class ScheduleController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping("/{petId}")
-    public ResponseEntity<ScheduleService> createSchedule(@PathVariable("petId") Long petId, @RequestBody ScheduleService scheduleService) {
-        Optional<Pet> optionalPet = petRepository.findById(petId);
-        if (optionalPet.isPresent()) {
+    @PostMapping("/{petName}")
+    public ResponseEntity<ScheduleService> createSchedule(@PathVariable("petName") String petName, @PathVariable("inviter") String email, @RequestBody ScheduleService scheduleService) {
+        Optional<Pet> optionalPet = petRepository.findByPetName(petName);
+
+        if (optionalPet != null && optionalPet.isPresent() && email != null) {
             Pet pet = optionalPet.get();
             Schedule schedule = modelMapper.map(scheduleService, Schedule.class);
             schedule.setPet(pet);
@@ -41,11 +48,12 @@ public class ScheduleController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/{petId}")
-    public ResponseEntity<List<ScheduleService>> getSchedulesByPetId(@PathVariable("petId") Long petId) {
-        Optional<Pet> optionalPet = petRepository.findById(petId);
-        if (optionalPet.isPresent()) {
-            List<Schedule> schedules = scheduleRepository.findByPetId(petId);
+    @GetMapping("/{petName}")
+    public ResponseEntity<List<ScheduleService>> getSchedulesByPetId(@PathVariable("petName") String petName, @PathVariable("inviter") String email) {
+        Optional<Pet> optionalPet = petRepository.findByPetName(petName);
+
+        if (optionalPet != null && optionalPet.isPresent() && email != null) {
+            List<Schedule> schedules = scheduleRepository.findByPetPetName(petName);
             List<ScheduleService> scheduleServices = schedules.stream()
                     .map(schedule -> modelMapper.map(schedule, ScheduleService.class))
                     .collect(Collectors.toList());

@@ -12,3 +12,6 @@ spring:
       ddl-auto: update
 server:
   address: 0.0.0.0
+
+jwt:
+  secret: CL2xeP3cZ0MDZQDmuWeHPajwAJSPwtBk0JI5t6KCdGnK6ckXxx

@@ -46,6 +46,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.security:spring-security-config:5.5.1'
 
+	// 230510
+	implementation 'org.springframework.security:spring-security-crypto:5.5.1'
+
 	compileOnly 'org.projectlombok:lombok'
 	//runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'

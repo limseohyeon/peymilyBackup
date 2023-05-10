@@ -1,5 +1,6 @@
 package com.example.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,15 +12,17 @@ import java.util.ArrayList;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "build")
-@Table(name = "PET_TBL")
+@Table(name = "PET_TBL", uniqueConstraints = {@UniqueConstraint(columnNames = {"petName"})})
 @Data
 @Builder
 public class Pet {
     @Id
     @GeneratedValue
     private Long id;
-    private Long userId; // User 객체의 userId 필드 값을 저장할 필드
-    private String email;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private User user;
     @Column(unique = true)
     private String petName;
     private Integer petAge;
@@ -29,10 +32,9 @@ public class Pet {
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedules = new ArrayList<>();
 
-    public static Pet build(Long userId, String email, String petName, Integer petAge, String detailInfo, String inviter) {
+    public static Pet build(User user, String petName, Integer petAge, String detailInfo, String inviter) {
         return Pet.builder()
-                .userId(userId)
-                .email(email)
+                .user(user)
                 .petName(petName)
                 .petAge(petAge)
                 .detailInfo(detailInfo)

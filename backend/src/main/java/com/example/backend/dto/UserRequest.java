@@ -33,5 +33,5 @@ public class UserRequest {
     private String phoneNumber;
     // 같은 inviter끼리 펫 정보 공유
     private String inviter;
-    private String token;
+    // private String token;
 }
