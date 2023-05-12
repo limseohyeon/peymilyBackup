@@ -34,7 +34,7 @@ public class PetImageController {
     public ResponseEntity<Resource> downloadImage(@PathVariable("inviter") String inviter, @PathVariable String imageName) throws IOException {
         String downloadDir = "image-uploads/";
         // 유저 정보를 기반으로 다운로드 디렉토리 지정
-        String userDownloadDir = downloadDir + inviter + "/";
+        String userDownloadDir = downloadDir + "/" + inviter + "/";
         Path path = Paths.get(userDownloadDir, imageName);
         Resource resource = new UrlResource(path.toUri());
 

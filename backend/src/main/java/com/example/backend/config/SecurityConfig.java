@@ -37,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users/**").authenticated()
                 .antMatchers("/pet/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/pet/add").authenticated() // POST 요청에 대해서만 적용
+                .antMatchers(HttpMethod.POST, "/pet/{email}/uploadImage").authenticated()
                 .antMatchers("/schedule/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
