@@ -33,6 +33,7 @@ public class UserController {
     private HttpServletRequest request;
 
     @GetMapping("/fetchAll")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }

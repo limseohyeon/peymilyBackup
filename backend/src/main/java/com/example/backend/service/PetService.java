@@ -6,6 +6,7 @@ import com.example.backend.entity.Pet;
 import com.example.backend.entity.User;
 import com.example.backend.repository.PetRepository;
 import com.example.backend.repository.UserRepository;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
