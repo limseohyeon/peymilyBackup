@@ -19,9 +19,9 @@ import java.nio.file.Paths;
 @RequestMapping("/pet/{inviter}")
 public class PetImageController {
 
-    @PostMapping("/uploadImage")
-    public ResponseEntity<String> uploadImage(@PathVariable("inviter") String inviter, @RequestParam("file") MultipartFile file) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+    @PostMapping("/uploadImage/{petId}")
+    public ResponseEntity<String> uploadImage(@PathVariable("inviter") String inviter, @PathVariable("petId") Long petId, @RequestParam("file") MultipartFile file) throws IOException {
+        String fileName = petId + ".jpg"; // petId를 기준으로 파일 이름을 정함
         String uploadDir = "image-uploads/";
         // 유저 정보를 기반으로 업로드 디렉토리 생성
         String userUploadDir = uploadDir + inviter + "/";
@@ -29,6 +29,7 @@ public class PetImageController {
 
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
+
 
     @GetMapping("/downloadImage/{imageName:.+}")
     public ResponseEntity<Resource> downloadImage(@PathVariable("inviter") String inviter, @PathVariable String imageName) throws IOException {

@@ -13,7 +13,10 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "USERS_TBL", uniqueConstraints = {@UniqueConstraint(columnNames = {"email", "userName"})})
+@Table(name = "USERS_TBL", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"email"}),
+        @UniqueConstraint(columnNames = {"userName"})
+})
 @Builder
 public class User {
     @Id

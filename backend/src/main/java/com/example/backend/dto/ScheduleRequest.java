@@ -1,20 +1,17 @@
-package com.example.backend.entity;
+package com.example.backend.dto;
 
 import com.example.backend.entity.Pet;
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
+@Table(name="SCHEDULE_TBL")
+@Data
 @AllArgsConstructor(staticName = "build")
-@Table(name = "SCHEDULE_TBL")
-@Builder
-public class Schedule {
+@NoArgsConstructor
+public class ScheduleRequest {
     @Id
     @GeneratedValue
     private Long id;

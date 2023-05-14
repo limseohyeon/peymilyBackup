@@ -1,7 +1,9 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.UserRequest;
+import com.example.backend.entity.Pet;
 import com.example.backend.entity.User;
+import com.example.backend.repository.UserRepository;
 import com.example.backend.service.AuthService;
 import com.example.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import com.example.backend.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -38,9 +41,22 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<User> getUser(@PathVariable String userId) {
-        return ResponseEntity.ok(userService.getUser(Long.parseLong(userId)));
+//    @GetMapping("/{userId}")
+//    public ResponseEntity<User> getUser(@PathVariable String userId) {
+//        return ResponseEntity.ok(userService.getUser(Long.parseLong(userId)));
+//    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<User> getUser(@PathVariable("email") String email) {
+        Optional<User> optionalUser = userService.findByEmail(email);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            if (user.getEmail().equals(email)) {
+                return ResponseEntity.ok(user);
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/current-user")

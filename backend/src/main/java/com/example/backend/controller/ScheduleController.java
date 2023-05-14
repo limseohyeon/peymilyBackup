@@ -34,16 +34,18 @@ public class ScheduleController {
     private ModelMapper modelMapper;
 
     @PostMapping("/{petName}")
-    public ResponseEntity<ScheduleService> createSchedule(@PathVariable("petName") String petName, @PathVariable("inviter") String email, @RequestBody ScheduleService scheduleService) {
+    public ResponseEntity<Schedule> createSchedule(@PathVariable("petName") String petName,
+                                                   @PathVariable("inviter") String email,
+                                                   @RequestBody ScheduleService scheduleService) {
         Optional<Pet> optionalPet = petRepository.findByPetName(petName);
 
-        if (optionalPet != null && optionalPet.isPresent() && email != null) {
+        if (optionalPet.get().getPetName().equals(petName) && optionalPet.get().getInviter().equals(email)) {
             Pet pet = optionalPet.get();
             Schedule schedule = modelMapper.map(scheduleService, Schedule.class);
             schedule.setPet(pet);
             Schedule savedSchedule = scheduleRepository.save(schedule);
-            ScheduleService savedScheduleService = modelMapper.map(savedSchedule, ScheduleService.class);
-            return ResponseEntity.ok(savedScheduleService);
+            //ScheduleService savedScheduleService = modelMapper.map(savedSchedule, ScheduleService.class);
+            return ResponseEntity.ok(savedSchedule);
         }
         return ResponseEntity.notFound().build();
     }
