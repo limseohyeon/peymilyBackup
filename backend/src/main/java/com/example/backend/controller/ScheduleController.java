@@ -64,19 +64,44 @@ public class ScheduleController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/{scheduleId}")
-    public ResponseEntity<ScheduleService> updateSchedule(@PathVariable("scheduleId") Long scheduleId, @RequestBody ScheduleService scheduleService) {
-        Optional<Schedule> optionalSchedule = scheduleRepository.findById(scheduleId);
-        if (optionalSchedule.isPresent()) {
-            Schedule schedule = optionalSchedule.get();
-            modelMapper.map(scheduleService, schedule);
-            Schedule updatedSchedule = scheduleRepository.save(schedule);
-            ScheduleService updatedScheduleService = modelMapper.map(updatedSchedule, ScheduleService.class);
-            return ResponseEntity.ok(updatedScheduleService);
+    @PutMapping("/put-pet/{petName}/{id}")
+    public ResponseEntity<ScheduleService> updateSchedule(@PathVariable("petName") String petName,
+                                                          @PathVariable("id") Integer id,
+                                                          @RequestBody ScheduleService scheduleService) {
+        List<Schedule> schedules = scheduleRepository.findByPetPetName(petName);
+        for (Schedule sch : schedules) {
+            if (sch.getId().equals(id)) {
+                // 스케줄 엔티티 필드값 변경
+                sch.setSchedule(scheduleService.getSchedule());
+                sch.setDate(scheduleService.getDate());
+                sch.setHm(scheduleService.getHm());
+                sch.setPeriod(scheduleService.getPeriod());
+                sch.setNotice(scheduleService.getNotice());
+                sch.setIsCompleted(scheduleService.getIsCompleted());
+
+                // 변경된 스케줄 엔티티 저장
+                scheduleRepository.save(sch);
+
+                // 변경된 스케줄 정보를 반환
+                ScheduleService updatedScheduleService = ScheduleService.builder()
+                        .schedule(sch.getSchedule())
+                        .date(sch.getDate())
+                        .hm(sch.getHm())
+                        .period(sch.getPeriod())
+                        .notice(sch.getNotice())
+                        .isCompleted(sch.getIsCompleted())
+                        .build();
+
+                return ResponseEntity.ok(updatedScheduleService);
+            }
         }
+
+        // 해당 id에 대한 스케줄이 없는 경우 Not Found 반환
         return ResponseEntity.notFound().build();
     }
 
+
+    // delete 미완
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<Void> deleteSchedule(@PathVariable("scheduleId") Long scheduleId) {
         scheduleRepository.deleteById(scheduleId);

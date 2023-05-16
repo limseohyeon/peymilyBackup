@@ -1,14 +1,12 @@
 package com.example.backend.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder // ScheduleController.java에서 build()가 가능하게 해줌
 public class ScheduleService {
 
     private Long id;
@@ -17,12 +15,14 @@ public class ScheduleService {
     private String hm;
     private Integer period;
     private Integer notice;
+    private Integer isCompleted;
 
-    public ScheduleService(String schedule, String date, String hm, Integer period, Integer notice) {
+    public ScheduleService(String schedule, String date, String hm, Integer period, Integer notice, Integer isCompleted) {
         this.schedule = schedule;
         this.date = date;
         this.hm = hm;
         this.period = period;
         this.notice = notice;
+        this.isCompleted = isCompleted;
     }
 }

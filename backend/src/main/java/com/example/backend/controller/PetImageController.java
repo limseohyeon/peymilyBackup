@@ -20,8 +20,12 @@ import java.nio.file.Paths;
 public class PetImageController {
 
     @PostMapping("/uploadImage/{petId}")
-    public ResponseEntity<String> uploadImage(@PathVariable("inviter") String inviter, @PathVariable("petId") Long petId, @RequestParam("file") MultipartFile file) throws IOException {
-        String fileName = petId + ".jpg"; // petId를 기준으로 파일 이름을 정함
+    public ResponseEntity<String> uploadImage(@PathVariable("inviter") String inviter,
+                                              @PathVariable("petId") Long petId,
+                                              @RequestParam("file") MultipartFile file) throws IOException {
+        // 파일 이름에서 확장자 추출
+        String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = petId.toString() + ".jpg"; // petId를 기준으로 파일 이름을 정함
         String uploadDir = "image-uploads/";
         // 유저 정보를 기반으로 업로드 디렉토리 생성
         String userUploadDir = uploadDir + inviter + "/";
@@ -30,9 +34,9 @@ public class PetImageController {
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
 
-
-    @GetMapping("/downloadImage/{imageName:.+}")
-    public ResponseEntity<Resource> downloadImage(@PathVariable("inviter") String inviter, @PathVariable String imageName) throws IOException {
+    @GetMapping("/downloadImage/{imageName:.+}") // 이미지 확장자를 포함하기 위해 ".+"를 추가
+    public ResponseEntity<Resource> downloadImage(@PathVariable("inviter") String inviter,
+                                                  @PathVariable String imageName) throws IOException {
         String downloadDir = "image-uploads/";
         // 유저 정보를 기반으로 다운로드 디렉토리 지정
         String userDownloadDir = downloadDir + "/" + inviter + "/";
@@ -52,5 +56,34 @@ public class PetImageController {
                 .ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .body(resource);
+    }
+
+    @PutMapping("/updateImage/{petId}")
+    public ResponseEntity<String> updateImage(@PathVariable("inviter") String inviter,
+                                              @PathVariable("petId") Long petId,
+                                              @RequestParam("file") MultipartFile file) throws IOException {
+        String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = petId.toString() + StringUtils.getFilenameExtension(originalFilename);
+        String uploadDir = "image-uploads/";
+        String userUploadDir = uploadDir + inviter + "/";
+        FileUploadUtil.saveFile(userUploadDir, fileName, file);
+
+        return new ResponseEntity<>("Image updated successfully", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteImage/{petId}")
+    public ResponseEntity<String> deleteImage(@PathVariable("inviter") String inviter,
+                                              @PathVariable("petId") String petId) throws IOException {
+        String fileName = petId;
+        String uploadDir = "image-uploads/";
+        String userUploadDir = uploadDir + inviter + "/";
+        Path filePath = Paths.get(userUploadDir, fileName);
+
+        if (Files.exists(filePath)) {
+            Files.delete(filePath);
+            return new ResponseEntity<>("Image deleted successfully", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Image not found", HttpStatus.NOT_FOUND);
+        }
     }
 }
