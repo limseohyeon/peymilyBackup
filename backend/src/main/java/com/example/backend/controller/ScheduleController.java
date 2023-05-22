@@ -64,7 +64,7 @@ public class ScheduleController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/put-pet/{petName}/{id}")
+    @PutMapping("/put-schedule/{petName}/{id}")
     public ResponseEntity<ScheduleService> updateSchedule(@PathVariable("petName") String petName,
                                                           @PathVariable("id") Integer id,
                                                           @RequestBody ScheduleService scheduleService) {
@@ -100,11 +100,20 @@ public class ScheduleController {
         return ResponseEntity.notFound().build();
     }
 
+    @DeleteMapping("/delete-schedule/{petName}/{id}")
+    public ResponseEntity<Schedule> deleteSchedule(@PathVariable("petName") String petName,
+                                                   @PathVariable("id") Integer id) {
+        List<Schedule> schedules = scheduleRepository.findByPetPetName(petName);
+        for (Schedule sch : schedules) {
+            if (sch.getId().equals(id)) {
+                Schedule deletedSchedule = sch;
+                scheduleRepository.deleteById(sch.getId());
 
-    // delete 미완
-    @DeleteMapping("/{scheduleId}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable("scheduleId") Long scheduleId) {
-        scheduleRepository.deleteById(scheduleId);
-        return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(deletedSchedule);
+            }
+        }
+
+        // 해당 id에 대한 스케줄이 없는 경우 Not Found 반환
+        return ResponseEntity.notFound().build();
     }
 }

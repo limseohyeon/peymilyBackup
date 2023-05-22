@@ -116,11 +116,6 @@ public class PetController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{petId}")
-    public ResponseEntity<Void> deletePet(@PathVariable("petId") Long petId) {
-        petRepository.deleteById(petId);
-        return ResponseEntity.noContent().build();
-    }
     @DeleteMapping("/delete-pet/{email}/{petName}")
     @Transactional
     public ResponseEntity<Pet> deletePet(@PathVariable("email") String email,
