@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,8 @@ public class SharedPetService {
     private final PetRepository petRepository;
     @Autowired
     private final SharedPetRepository sharedPetRepository;
+    @Autowired
+    private final SharedPetService sharedPetService;
 
     public SharedPet sharePet(SharedPetRequest sharedPetRequest, String email, String petName) {
 
@@ -57,8 +60,18 @@ public class SharedPetService {
         throw new Error("펫 이름이 없습니다");
     }
 
-    public List<SharedPet> getNSharedPet(Integer N) {
-        List<SharedPet> sharedPets = sharedPetRepository.findAll(); // sharedPetRepository에서 모든 SharedPet 객체 가져오기
+    public List<SharedPet> findAllByOwner(String email) {
+        List<SharedPet> sharedPets = sharedPetRepository.findAll();
+
+        List<SharedPet> filteredPets = sharedPets.stream()
+                .filter(pet -> pet.getOwner().equals(email))
+                .collect(Collectors.toList());
+
+        return filteredPets;
+    }
+
+    public List<SharedPet> getNSharedPet(String email, Integer N) {
+        List<SharedPet> sharedPets = sharedPetService.findAllByOwner(email); // sharedPetRepository에서 모든 SharedPet 객체 가져오기
 
         // sharedPets를 날짜 기준으로 내림차순 정렬
         sharedPets.sort(Comparator.comparing(SharedPet::getDate, Comparator.reverseOrder()));
