@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor(staticName = "build")
+@AllArgsConstructor
 @Builder
 public class SharedPet {
     @Id

@@ -39,6 +39,8 @@ public class SharedPetController {
     private ModelMapper modelMapper;
     @Autowired
     private HttpServletRequest request;
+
+    // 아래 코드 쓰면 에러 발생(순환 오류)
     @Autowired
     private SharedPetService sharedPetService;
 
@@ -64,7 +66,7 @@ public class SharedPetController {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             String inviter = user.getInviter();
-            List<SharedPet> sharedPets = sharedPetRepository.findByInviter(inviter);
+            List<SharedPet> sharedPets = sharedPetRepository.findByOwner(inviter);
 
             return ResponseEntity.ok(sharedPets);
         }
@@ -96,7 +98,7 @@ public class SharedPetController {
                                          @PathVariable("sharedPetId") Long sharedPetId) {
 
         Optional<User> optionalUser = userRepository.findByEmail(email);
-        List<SharedPet> listSharedPet = sharedPetRepository.findByInviter(optionalUser.get().getInviter());
+        List<SharedPet> listSharedPet = sharedPetRepository.findByOwner(optionalUser.get().getInviter());
 
         if (optionalUser.isPresent()) {
             for (SharedPet sharedPet : listSharedPet) {

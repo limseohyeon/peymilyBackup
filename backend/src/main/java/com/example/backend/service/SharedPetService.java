@@ -31,8 +31,6 @@ public class SharedPetService {
     private final PetRepository petRepository;
     @Autowired
     private final SharedPetRepository sharedPetRepository;
-    @Autowired
-    private final SharedPetService sharedPetService;
 
     public SharedPet sharePet(SharedPetRequest sharedPetRequest, String email, String petName) {
 
@@ -71,7 +69,7 @@ public class SharedPetService {
     }
 
     public List<SharedPet> getNSharedPet(String email, Integer N) {
-        List<SharedPet> sharedPets = sharedPetService.findAllByOwner(email); // sharedPetRepository에서 모든 SharedPet 객체 가져오기
+        List<SharedPet> sharedPets = findAllByOwner(email); // sharedPetRepository에서 모든 SharedPet 객체 가져오기
 
         // sharedPets를 날짜 기준으로 내림차순 정렬
         sharedPets.sort(Comparator.comparing(SharedPet::getDate, Comparator.reverseOrder()));

@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface SharedPetRepository extends JpaRepository<SharedPet, Long> {
-    List<SharedPet> findByInviter(String inviter);
+    List<SharedPet> findByOwner(String inviter);
 
     @Modifying
     @Query("DELETE FROM SharedPet sp WHERE sp.sharedPetId = :sharedPetId")
