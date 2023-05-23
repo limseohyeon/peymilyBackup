@@ -42,11 +42,13 @@ public class PetController {
     @Autowired
     private PetService petService;
 
-    @PostMapping("/add/{inviter}")
+    @PostMapping("/add/{email}")
     public ResponseEntity<Pet> savePet(@RequestBody @Valid PetRequest petRequest,
-                                       @PathVariable("inviter") String email) {
+                                       @PathVariable("email") String email) {
         try {
-            Pet savedPet = petService.savePet(petRequest, email);
+            Optional<User> user = userRepository.findByEmail(email);
+            Pet savedPet = petService.savePet(petRequest, user.get().getInviter());
+
             return ResponseEntity.status(HttpStatus.CREATED).body(savedPet);
         } catch (UsernameNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

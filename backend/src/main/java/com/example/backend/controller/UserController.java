@@ -49,11 +49,15 @@ public class UserController {
     @GetMapping("/{email}")
     public ResponseEntity<User> getUser(@PathVariable("email") String email) {
         Optional<User> optionalUser = userService.findByEmail(email);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+        String inviter = optionalUser.get().getInviter();
 
-            if (user.getEmail().equals(email)) {
-                return ResponseEntity.ok(user);
+        if (optionalUser.isPresent()) {
+            List<User> allUsers = userService.getAllUsers();
+
+            for (User usr : allUsers) {
+                if (usr.getEmail().equals(inviter)) {
+                    return ResponseEntity.ok(usr);
+                }
             }
         }
         return ResponseEntity.notFound().build();
