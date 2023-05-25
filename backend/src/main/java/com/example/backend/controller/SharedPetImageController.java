@@ -20,25 +20,25 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/pet/{email}")
-public class PetImageController {
+@RequestMapping("/shared-images/{email}")
+public class SharedPetImageController {
 
     @Autowired
     UserRepository userRepository;
 
-    @PostMapping("/uploadImage/{petId}")
+    @PostMapping("/uploadImage/{sharedPetId}")
     public ResponseEntity<String> uploadImage(@PathVariable("email") String email,
-                                              @PathVariable("petId") Long petId,
+                                              @PathVariable("sharedPetId") Long sharedPetId,
                                               @RequestParam("file") MultipartFile file) throws IOException {
         // 파일 이름에서 확장자 추출
         String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
-        String fileName = petId.toString() + ".jpg"; // petId를 기준으로 파일 이름을 정함
-        String uploadDir = "image-uploads/";
+        String fileName = sharedPetId.toString() + ".jpg"; // petId를 기준으로 파일 이름을 정함
+        String uploadDir = "shared-images/";
 
         Optional<User> user = userRepository.findByEmail(email);
         String inviter = user.get().getInviter();
 
-        // 유저 정보를 기반으로 업로드 디렉토리 생성
+        // inviter 정보를 기반으로 업로드 디렉토리 생성
         String userUploadDir = uploadDir + inviter + "/";
         FileUploadUtil.saveFile(userUploadDir, fileName, file);
 
@@ -48,7 +48,7 @@ public class PetImageController {
     @GetMapping("/downloadImage/{imageName:.+}") // 이미지 확장자를 포함하기 위해 ".+"를 추가
     public ResponseEntity<Resource> downloadImage(@PathVariable("email") String email,
                                                   @PathVariable String imageName) throws IOException {
-        String downloadDir = "image-uploads/";
+        String downloadDir = "shared-images/";
 
         Optional<User> user = userRepository.findByEmail(email);
         String inviter = user.get().getInviter();
@@ -73,27 +73,27 @@ public class PetImageController {
                 .body(resource);
     }
 
-    @PutMapping("/updateImage/{petId}")
+    @PutMapping("/updateImage/{sharedPetId}")
     public ResponseEntity<String> updateImage(@PathVariable("email") String email,
-                                              @PathVariable("petId") Long petId,
+                                              @PathVariable("sharedPetId") Long sharedPetId,
                                               @RequestParam("file") MultipartFile file) throws IOException {
         Optional<User> user = userRepository.findByEmail(email);
         String inviter = user.get().getInviter();
 
         String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
-        String fileName = petId.toString() + StringUtils.getFilenameExtension(originalFilename);
-        String uploadDir = "image-uploads/";
+        String fileName = sharedPetId.toString() + StringUtils.getFilenameExtension(originalFilename);
+        String uploadDir = "shared-images/";
         String userUploadDir = uploadDir + inviter + "/";
         FileUploadUtil.saveFile(userUploadDir, fileName, file);
 
         return new ResponseEntity<>("Image updated successfully", HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteImage/{petId}")
+    @DeleteMapping("/deleteImage/{sharedPetId}")
     public ResponseEntity<String> deleteImage(@PathVariable("email") String email,
-                                              @PathVariable("petId") String petId) throws IOException {
-        String fileName = petId;
-        String uploadDir = "image-uploads/";
+                                              @PathVariable("sharedPetId") String sharedPetId) throws IOException {
+        String fileName = sharedPetId;
+        String uploadDir = "shared-images/";
 
         Optional<User> user = userRepository.findByEmail(email);
         String inviter = user.get().getInviter();

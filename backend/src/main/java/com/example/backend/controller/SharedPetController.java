@@ -40,16 +40,17 @@ public class SharedPetController {
     @Autowired
     private HttpServletRequest request;
 
-    // 아래 코드 쓰면 에러 발생(순환 오류)
     @Autowired
     private SharedPetService sharedPetService;
 
-    @PostMapping("/add/{inviter}/{petName}")
+    @PostMapping("/add/{email}/{petName}")
     public ResponseEntity<SharedPet> savePet(@RequestBody @Valid SharedPetRequest sharedPetRequest,
-                                             @PathVariable("inviter") String email,
+                                             @PathVariable("email") String email,
                                              @PathVariable("petName") String petName) {
         try {
-            SharedPet sharedPet = sharedPetService.sharePet(sharedPetRequest, email, petName);
+            String inviter = userRepository.findByEmail(email).get().getInviter();
+
+            SharedPet sharedPet = sharedPetService.sharePet(sharedPetRequest, inviter, petName);
             return ResponseEntity.status(HttpStatus.CREATED).body(sharedPet);
         } catch (UsernameNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
