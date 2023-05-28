@@ -66,11 +66,11 @@ public class ScheduleController {
 
     @PutMapping("/{petName}/{id}")
     public ResponseEntity<ScheduleService> updateSchedule(@PathVariable("petName") String petName,
-                                                          @PathVariable("id") Integer id,
+                                                          @PathVariable("id") Long id,
                                                           @RequestBody ScheduleService scheduleService) {
         List<Schedule> schedules = scheduleRepository.findByPetPetName(petName);
         for (Schedule sch : schedules) {
-            if (sch.getId().equals(id)) {
+            if (sch.getId() == id) {
                 // 스케줄 엔티티 필드값 변경
                 sch.setSchedule(scheduleService.getSchedule());
                 sch.setDate(scheduleService.getDate());
@@ -102,10 +102,10 @@ public class ScheduleController {
 
     @DeleteMapping("/{petName}/{id}")
     public ResponseEntity<Schedule> deleteSchedule(@PathVariable("petName") String petName,
-                                                   @PathVariable("id") Integer id) {
+                                                   @PathVariable("id") Long id) {
         List<Schedule> schedules = scheduleRepository.findByPetPetName(petName);
         for (Schedule sch : schedules) {
-            if (sch.getId().equals(id)) {
+            if (sch.getId() == id) {
                 Schedule deletedSchedule = sch;
                 scheduleRepository.deleteById(sch.getId());
 
