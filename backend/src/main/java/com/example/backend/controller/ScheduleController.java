@@ -64,7 +64,7 @@ public class ScheduleController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/put-schedule/{petName}/{id}")
+    @PutMapping("/{petName}/{id}")
     public ResponseEntity<ScheduleService> updateSchedule(@PathVariable("petName") String petName,
                                                           @PathVariable("id") Integer id,
                                                           @RequestBody ScheduleService scheduleService) {
@@ -100,7 +100,7 @@ public class ScheduleController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/delete-schedule/{petName}/{id}")
+    @DeleteMapping("/{petName}/{id}")
     public ResponseEntity<Schedule> deleteSchedule(@PathVariable("petName") String petName,
                                                    @PathVariable("id") Integer id) {
         List<Schedule> schedules = scheduleRepository.findByPetPetName(petName);
