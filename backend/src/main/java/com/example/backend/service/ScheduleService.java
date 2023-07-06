@@ -13,14 +13,16 @@ public class ScheduleService {
     private String schedule;
     private String date;
     private String hm;
+    private String executer;
     private Integer period;
     private Integer notice;
     private Integer isCompleted;
 
-    public ScheduleService(String schedule, String date, String hm, Integer period, Integer notice, Integer isCompleted) {
+    public ScheduleService(String schedule, String date, String hm, String executer, Integer period, Integer notice, Integer isCompleted) {
         this.schedule = schedule;
         this.date = date;
         this.hm = hm;
+        this.executer = executer;
         this.period = period;
         this.notice = notice;
         this.isCompleted = isCompleted;

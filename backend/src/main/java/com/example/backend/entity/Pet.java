@@ -23,6 +23,8 @@ import java.util.ArrayList;
 @Data
 @Builder
 public class Pet implements Serializable {
+    // Serializable은 객체를 전송또는 저장할 때 필요하다
+    // 즉, 전송 또는 저장을 하지 않는 단순 출력문만 있는 경우에는 불필요하다
     @Id
     @GeneratedValue
     private Long id;

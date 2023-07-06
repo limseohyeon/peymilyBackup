@@ -28,6 +28,7 @@ public class Schedule {
     private String schedule;
     private String date;
     private String hm;
+    private String executer;
     private Integer period;
     private Integer notice;
     private Integer isCompleted;

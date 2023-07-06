@@ -23,5 +23,4 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     @Modifying
     @Query("DELETE FROM Pet p WHERE p.petName = :petName")
     void deletePetByName(@Param("petName") String petName);
-
 }
