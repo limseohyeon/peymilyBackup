@@ -29,7 +29,7 @@ public class Pet implements Serializable {
     @GeneratedValue
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName="userId") // 230709 긴급 수정
     @JsonBackReference
     private User user;
     @Column(unique = true)
