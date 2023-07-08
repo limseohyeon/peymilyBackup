@@ -65,7 +65,7 @@ public class PetService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             Pet pet = Pet.builder()
-                    //.userId(user.getUserId())
+                    .user(user)
                     .petName(petRequest.getPetName())
                     .petAge(petRequest.getPetAge())
                     .detailInfo(petRequest.getDetailInfo())
