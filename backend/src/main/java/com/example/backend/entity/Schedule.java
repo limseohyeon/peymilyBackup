@@ -1,6 +1,7 @@
 package com.example.backend.entity;
 
 import com.example.backend.entity.Pet;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 
@@ -24,6 +25,7 @@ public class Schedule {
             @JoinColumn(name="petName", referencedColumnName="petName"),
             @JoinColumn(name="inviter", referencedColumnName="inviter")
     })
+    @JsonBackReference
     private Pet pet;
     private String schedule;
     private String date;
@@ -45,5 +47,18 @@ public class Schedule {
     @Override
     public int hashCode() {
         return Objects.hash(pet);
+    }
+
+    public Schedule build(Pet pet, String schedule, String date, String hm, String executer, Integer period, Integer notice, Integer isCompleted) {
+        return builder()
+                .pet(pet)
+                .schedule(schedule)
+                .date(date)
+                .hm(hm)
+                .executer(executer)
+                .period(period)
+                .notice(notice)
+                .isCompleted(isCompleted)
+                .build();
     }
 }

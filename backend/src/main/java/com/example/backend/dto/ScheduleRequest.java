@@ -15,12 +15,15 @@ public class ScheduleRequest {
     @Id
     @GeneratedValue
     private Long id;
+    /*
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name="petName", referencedColumnName="petName"),
             @JoinColumn(name="inviter", referencedColumnName="inviter")
     })
-    private Pet pet;
+    private Pet pet;*/
+    private String petName;
+    private String inviter;
     private String schedule;
     private String date;
     private String hm;

@@ -1,7 +1,20 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.PetRequest;
+import com.example.backend.dto.ScheduleRequest;
+import com.example.backend.entity.Pet;
+import com.example.backend.entity.Schedule;
+import com.example.backend.entity.User;
+import com.example.backend.repository.PetRepository;
+import com.example.backend.repository.ScheduleRepository;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+@Service
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,14 +30,31 @@ public class ScheduleService {
     private Integer period;
     private Integer notice;
     private Integer isCompleted;
+    @Autowired
+    private PetService petService;
+    @Autowired
+    private PetRepository petRepository;
+    @Autowired
+    private ScheduleRepository scheduleRepository;
 
-    public ScheduleService(String schedule, String date, String hm, String executer, Integer period, Integer notice, Integer isCompleted) {
-        this.schedule = schedule;
-        this.date = date;
-        this.hm = hm;
-        this.executer = executer;
-        this.period = period;
-        this.notice = notice;
-        this.isCompleted = isCompleted;
+    public Schedule saveSchedule(ScheduleRequest schedulerequest, String petName) {
+        Optional<Pet> optionalPet = petRepository.findByPetName(petName);
+
+        if (optionalPet.isPresent()) {
+            Schedule schedule = Schedule.builder()
+                    .pet(optionalPet.get())
+                    .schedule(schedulerequest.getSchedule())
+                    .date(schedulerequest.getDate())
+                    .hm(schedulerequest.getHm())
+                    .executer(schedulerequest.getExecuter())
+                    .period(schedulerequest.getPeriod())
+                    .notice(schedulerequest.getNotice())
+                    .isCompleted(schedulerequest.getIsCompleted())
+                    .build();
+
+            return scheduleRepository.save(schedule);
+        } else {
+            throw new UsernameNotFoundException("Invalid pet");
+        }
     }
 }
