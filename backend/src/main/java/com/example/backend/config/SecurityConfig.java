@@ -31,9 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                .antMatchers("/auth").permitAll()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/auth/login").permitAll() // 이 부분 추가
+                .antMatchers("/users/fetchAll").authenticated()
                 .antMatchers("/users/**").authenticated()
                 .antMatchers("/pet/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/pet/add").authenticated() // POST 요청에 대해서만 적용
@@ -45,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/shared-images/{email}/**").authenticated()
                 .anyRequest().denyAll()
                 .and()
-                .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

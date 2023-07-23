@@ -36,7 +36,7 @@ public class UserController {
     private HttpServletRequest request;
 
     @GetMapping("/fetchAll")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
