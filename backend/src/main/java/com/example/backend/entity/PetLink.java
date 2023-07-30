@@ -5,10 +5,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor(staticName = "build")
 @Table(name = "PET_LINK_TBL")
 @Data
 @Builder

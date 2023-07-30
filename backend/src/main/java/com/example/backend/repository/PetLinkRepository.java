@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PetLinkRepository extends JpaRepository<PetLink, Long> {
-    Optional<PetLink> findLinkByPetId(String petId);
+    //Optional<PetLink> findLinkByPetId(String petId);
 
     @Query("SELECT p FROM PetLink p WHERE p.owner = ?1")
     Optional<PetLink> findLinkByOwner(String owner);
@@ -19,5 +19,5 @@ public interface PetLinkRepository extends JpaRepository<PetLink, Long> {
     @Query("SELECT CASE WHEN p.inviter = ?1 OR p.owner = ?2 THEN true ELSE false END FROM PetLink p")
     boolean isAvailablePetLink(String owner, String inviter);
 
-    public List<PetLink> findAllLink(String owner, String inviter);
+    //public List<PetLink> findAllLink(String owner, String inviter);
 }
