@@ -21,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -29,8 +30,8 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private UserService userService;
 
-    @Value("${jwt.secret}")
-    private String secretKey;
+    //@Value("${jwt.secret}")
+    private String secretKey = "CL2xeP3cZ0MDZQDmuWeHPajwAJSPwtBk0JI5t6KCdGnK6ckXxx";
 
     private String extractToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
@@ -54,15 +55,26 @@ public class JwtFilter extends OncePerRequestFilter {
         }
     }
 
-    private boolean isValidToken(String token) {
+    public boolean isValidToken(String token) {
         try {
             // 토큰 디코딩 및 유효성 검사
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            Date expirationDate = claims.getExpiration();
+            Date now = new Date();
+            if (expirationDate != null && expirationDate.before(now)) {
+                System.out.println("Token Expired");
+                return false;
+            }
+
             return true;
         } catch (Exception e) {
             // 토큰 디코딩에 실패하거나 유효하지 않은 경우 예외 발생
-            System.out.println("token decoding failed or unacceptable token. Error : " + e);
-
+            System.out.println("Token decoding failed or token is null. Error : " + e.getMessage());
             return false;
         }
     }

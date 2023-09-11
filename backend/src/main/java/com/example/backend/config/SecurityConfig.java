@@ -32,21 +32,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/users/fetchAll").permitAll()//authenticated()
-                .antMatchers("/users/**").permitAll()//authenticated()
-                .antMatchers("/pet/**").permitAll()//authenticated()
-                .antMatchers(HttpMethod.POST, "/pet/add").permitAll()//authenticated()
-                .antMatchers(HttpMethod.POST, "/pet/{email}/uploadImage").permitAll()//authenticated()
-                .antMatchers("/schedule/**").permitAll()//authenticated()
-                .antMatchers(HttpMethod.DELETE, "/schedule/**").permitAll()
-                .antMatchers("/shared/**").permitAll()//authenticated()
-                .antMatchers("/shared-images/**").permitAll()//authenticated()
-                .antMatchers(HttpMethod.POST, "/shared-images/{email}/**").permitAll()//authenticated()
-                .antMatchers(HttpMethod.POST, "/link/**").permitAll()//authenticated()
-                .antMatchers("/link/**").permitAll()//authenticated()
-                .anyRequest().permitAll();
-//                .and()
-//                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
+                .antMatchers("/users/fetchAll").authenticated()
+                .antMatchers("/users/**").authenticated()
+                .antMatchers("/pet/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/pet/add").authenticated()
+                .antMatchers(HttpMethod.POST, "/pet/{email}/uploadImage").authenticated()
+                .antMatchers("/schedule/**").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/schedule/**").authenticated()//permitAll()
+                .antMatchers("/shared/**").authenticated()
+                .antMatchers("/shared-images/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/shared-images/{email}/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/link/**").authenticated()
+                .antMatchers("/link/**").authenticated()
+                .anyRequest().permitAll()
+                .and()
+                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
