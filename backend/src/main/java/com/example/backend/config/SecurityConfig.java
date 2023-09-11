@@ -42,9 +42,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/shared/**").permitAll()//authenticated()
                 .antMatchers("/shared-images/**").permitAll()//authenticated()
                 .antMatchers(HttpMethod.POST, "/shared-images/{email}/**").permitAll()//authenticated()
-                .anyRequest().denyAll()
-                .and()
-                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
+                .antMatchers(HttpMethod.POST, "/link/**").permitAll()//authenticated()
+                .antMatchers("/link/**").permitAll()//authenticated()
+                .anyRequest().permitAll();
+//                .and()
+//                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

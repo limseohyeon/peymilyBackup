@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "PET_LINK_TBL")
 @Data
-@Builder
+@NoArgsConstructor // 기본 생성자 생성 - builder랑 호환 안되고 builder 없애야 함
 public class PetLink implements Serializable {
     @Id
     @GeneratedValue
@@ -16,13 +16,4 @@ public class PetLink implements Serializable {
     private String inviter;
     private Long petId;
 
-
-    public static PetLink build(Long linkId, String owner, String inviter, Long petId) {
-        return PetLink.builder()
-                .linkId(linkId)
-                .owner(owner)
-                .inviter(inviter)
-                .petId(petId)
-                .build();
-    }
 }

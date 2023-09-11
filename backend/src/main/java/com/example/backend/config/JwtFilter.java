@@ -1,6 +1,9 @@
 package com.example.backend.config;
 
 import com.example.backend.service.UserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,24 +40,48 @@ public class JwtFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private boolean isAuthenticated(HttpServletRequest request) {
-        String token = extractToken(request);
+    private String extractEmailFromToken(String token) {
+        try {
+            // 토큰에서 클레임 정보 추출
+            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            Claims claims = claimsJws.getBody();
 
-        if (token == null || token.isEmpty()) {
+            return claims.getSubject();
+        } catch (Exception e) {
+            System.out.println("failed to extract email. Error : " + e);
+
+            return null;
+        }
+    }
+
+    private boolean isValidToken(String token) {
+        try {
+            // 토큰 디코딩 및 유효성 검사
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            // 토큰 디코딩에 실패하거나 유효하지 않은 경우 예외 발생
+            System.out.println("token decoding failed or unacceptable token. Error : " + e);
+
             return false;
         }
-
-        return true;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String email = "";
+        String token = extractToken(request);
 
-        if (!isAuthenticated(request)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+        if (token == null && request.getRequestURI().startsWith("/auth/")) {
+            filterChain.doFilter(request, response);
             return;
         }
+
+        if (token == null || token.isEmpty() || !isValidToken(token)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+            return;
+        }
+
+        String email = extractEmailFromToken(token);
 
         // 권한 부여
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -64,4 +91,5 @@ public class JwtFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request, response);
     }
+
 }
