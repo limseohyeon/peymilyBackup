@@ -16,6 +16,7 @@ public interface PetLinkRepository extends JpaRepository<PetLink, Long> {
     @Query("SELECT p FROM PetLink p WHERE p.inviter = ?1")
     List<PetLink> findLinkByInviter(String inviter);
 
+    @Query("SELECT p FROM PetLink p WHERE p.petId = ?1")
     List<PetLink> findLinkByPetId(Long petId);
 
     //boolean isAvailablePetLink(String owner, String inviter);

@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class PetLinkService {
@@ -20,22 +17,22 @@ public class PetLinkService {
         this.petLinkRepository = petLinkRepository;
     }
 
-    public List<PetLink> findLinkByOwner(String owner) {
+    public List<PetLink> findAllLinkByOwner(String owner) {
         return petLinkRepository.findLinkByOwner(owner);
     }
 
-    public List<PetLink> findLinkByInviter(String inviter) {
+    public List<PetLink> findAllLinkByInviter(String inviter) {
         return petLinkRepository.findLinkByInviter(inviter);
     }
 
-    public List<PetLink> findLinkByPetId(Long petId) {
+    public List<PetLink> findAllLinkByPetId(Long petId) {
         return petLinkRepository.findLinkByPetId(petId);
     }
 
     public boolean isAvailablePetLink(String owner, String inviter, Long petId) {
-        List<PetLink> ownerLink = findLinkByOwner(owner);
-        List<PetLink> inviterLink = findLinkByInviter(inviter);
-        List<PetLink> petIdLink = findLinkByPetId(petId);
+        List<PetLink> ownerLink = findAllLinkByOwner(owner);
+        List<PetLink> inviterLink = findAllLinkByInviter(inviter);
+        List<PetLink> petIdLink = findAllLinkByPetId(petId);
 
         if (petIdLink.isEmpty()) {
             System.out.println("new pet saved");
@@ -57,5 +54,22 @@ public class PetLinkService {
         }
 
         return true;
+    }
+
+    public List<PetLink> findAllLinkByOwnerAndPetId(String owner, Long petId) {
+        List<PetLink> petLinkFoundByOwner = findAllLinkByOwner(owner);
+        List<PetLink> petLinkFoundByPetId = findAllLinkByPetId(petId);
+        // 반드시 초기화를 해줘야 add할 때 에러 안남
+        List<PetLink> petLinkFoundByOwnerAndPetId = new ArrayList<>();
+
+        for (PetLink linkedByPerson : petLinkFoundByOwner) {
+            for (PetLink linkedByPet : petLinkFoundByPetId) {
+                if (linkedByPerson.getLinkId() == linkedByPet.getLinkId()) {
+                    petLinkFoundByOwnerAndPetId.add(linkedByPerson);
+                }
+            }
+        }
+
+        return petLinkFoundByOwnerAndPetId;
     }
 }

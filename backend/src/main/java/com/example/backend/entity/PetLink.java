@@ -15,5 +15,4 @@ public class PetLink implements Serializable {
     private String owner;
     private String inviter;
     private Long petId;
-
 }
