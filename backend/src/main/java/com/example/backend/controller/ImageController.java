@@ -72,10 +72,10 @@ public class ImageController {
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
 
-    @GetMapping("/profile/get/{email}")
+    @GetMapping("/profile/get/{email}/{imageName}")
     public ResponseEntity<Resource> getProfile(@PathVariable String email,
                                              @PathVariable String imageName) throws IOException {
-        String downloadDir = "profile/{email}";
+        String downloadDir = "profile/" + email;
 
         Optional<User> user = userRepository.findByEmail(email);
 

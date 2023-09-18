@@ -37,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/pet/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/pet/add").authenticated()
                 .antMatchers(HttpMethod.POST, "/pet/{email}/uploadImage").authenticated()
+                .antMatchers(HttpMethod.POST, "/pet/{email}/downloadImage/**").permitAll()
                 .antMatchers("/schedule/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/schedule/**").authenticated()//permitAll()
                 .antMatchers("/shared/**").authenticated()
