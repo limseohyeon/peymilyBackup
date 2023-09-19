@@ -45,9 +45,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/shared-images/{email}/**").permitAll()//.authenticated()
                 .antMatchers(HttpMethod.POST, "/link/**").permitAll()//.authenticated()
                 .antMatchers("/link/**").permitAll()//.authenticated()
-                .anyRequest().permitAll()
-                .and()
-                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
+                .anyRequest().permitAll();
+                // ; 없애고 아래꺼 추가
+                //.and()
+                //.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
