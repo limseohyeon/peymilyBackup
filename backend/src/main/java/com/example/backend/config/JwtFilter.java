@@ -21,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -83,7 +84,8 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = extractToken(request);
 
-        if (token == null && request.getRequestURI().startsWith("/auth/")) {
+        List<String> excludedPaths = Arrays.asList("/auth/", "/image-uploads/", "/profile/");
+        if (token == null || excludedPaths.stream().anyMatch(path -> request.getRequestURI().equals(path))) {
             filterChain.doFilter(request, response);
             return;
         }

@@ -32,23 +32,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/users/fetchAll").permitAll()//.authenticated()
-                .antMatchers("/users/**").permitAll()//.authenticated()
-                .antMatchers("/pet/**").permitAll()//.authenticated()
-                .antMatchers(HttpMethod.POST, "/pet/add").permitAll()//.authenticated()
-                .antMatchers(HttpMethod.POST, "/pet/{email}/uploadImage").permitAll()//.authenticated()
+                .antMatchers("/users/fetchAll").authenticated()
+                //.antMatchers("/users/**").authenticated()
+                //.antMatchers("/pet/**").permitAll()//.authenticated()
+                .antMatchers(HttpMethod.POST, "/pet/add").authenticated()
+                .antMatchers(HttpMethod.POST, "/pet/{email}/uploadImage").permitAll()
                 .antMatchers(HttpMethod.POST, "/pet/{email}/downloadImage/**").permitAll()
-                .antMatchers("/schedule/**").permitAll()//.authenticated()
-                .antMatchers(HttpMethod.DELETE, "/schedule/**").permitAll()//.authenticated()//permitAll()
-                .antMatchers("/shared/**").permitAll()//.authenticated()
-                .antMatchers("/shared-images/**").permitAll()//.authenticated()
-                .antMatchers(HttpMethod.POST, "/shared-images/{email}/**").permitAll()//.authenticated()
-                .antMatchers(HttpMethod.POST, "/link/**").permitAll()//.authenticated()
-                .antMatchers("/link/**").permitAll()//.authenticated()
-                .anyRequest().permitAll();
-                // ; 없애고 아래꺼 추가
-                //.and()
-                //.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
+                .antMatchers("/schedule/**").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/schedule/**").authenticated()
+                .antMatchers("/shared/**").authenticated()
+                .antMatchers("/shared-images/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/shared-images/{email}/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/link/**").authenticated()
+                .antMatchers("/link/**").authenticated()
+                .antMatchers("/comment/**").authenticated()
+                .antMatchers("/community/**").authenticated()
+                .antMatchers("/invitation/**").authenticated()
+                .anyRequest().permitAll()
+                .and()
+                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
