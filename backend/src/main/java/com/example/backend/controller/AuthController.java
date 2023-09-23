@@ -43,4 +43,18 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> logout(@RequestHeader("Authorization") String token) {
+        try {
+            // Remove the "Bearer " prefix from the token
+            String authToken = token.replace("Bearer ", "");
+            authService.logout(authToken); // Implement logout logic in the AuthService
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Logout successful");
+            return ResponseEntity.ok(response);
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
 }

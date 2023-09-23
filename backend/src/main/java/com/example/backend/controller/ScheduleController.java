@@ -2,8 +2,10 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.ScheduleRequest;
 import com.example.backend.entity.Pet;
+import com.example.backend.entity.PetLink;
 import com.example.backend.entity.Schedule;
 import com.example.backend.entity.User;
+import com.example.backend.repository.PetLinkRepository;
 import com.example.backend.repository.PetRepository;
 import com.example.backend.repository.ScheduleRepository;
 import com.example.backend.repository.UserRepository;
@@ -25,7 +27,7 @@ import java.util.stream.Collectors;
 import static org.hibernate.sql.InFragment.NULL;
 
 @RestController
-@RequestMapping("/schedule/{inviter}")
+@RequestMapping("/schedule/{email}")
 public class ScheduleController {
 
     @Autowired
@@ -36,18 +38,22 @@ public class ScheduleController {
     private ScheduleService scheduleService;
     @Autowired
     private ScheduleRepository scheduleRepository;
+    //수정
+    @Autowired
+    private PetLinkRepository petLinkRepository;
+
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping("/{petName}")
-    public ResponseEntity<Schedule> createSchedule(@PathVariable("petName") String petName,
-                                                   @PathVariable("inviter") String email,
+    @PostMapping("/add/{petId}")
+    public ResponseEntity<Schedule> createSchedule(@PathVariable("petId") Long petId,
+                                                   @PathVariable("email") String owner,
                                                    @RequestBody @Valid ScheduleRequest scheduleRequest) {
         try {
-            Optional<Pet> optionalPet = petRepository.findByPetName(petName);
+            Optional<PetLink> optionalPet = petLinkRepository.findLinkByOwner(owner);
 
-            if (optionalPet.get().getPetName().equals(petName) && optionalPet.get().getInviter().equals(email)) {
-                Schedule savedSchedule = scheduleService.saveSchedule(scheduleRequest, petName);
+            if (optionalPet.get().getPetId().equals(petId) && optionalPet.get().getOwner().equals(owner)) {
+                Schedule savedSchedule = scheduleService.saveSchedule(scheduleRequest, petId);
                 //Schedule schedule = modelMapper.map(scheduleService, Schedule.class);
                 //schedule.setPet(pet);
                 //Schedule savedSchedule = scheduleRepository.save(schedule);
@@ -63,12 +69,13 @@ public class ScheduleController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/{petName}")
-    public ResponseEntity<List<Schedule>> getSchedulesByPetId(@PathVariable("petName") String petName, @PathVariable("inviter") String email) {
-        Optional<Pet> optionalPet = petRepository.findByPetName(petName);
+    @GetMapping("/get-all/{petId}")
+    public ResponseEntity<List<Schedule>> getSchedulesByPetId(@PathVariable("petId") Long petId,
+                                                              @PathVariable("email") String owner) {
+        Optional<Pet> optionalPet = petRepository.findById(petId);
         try {
-            if (optionalPet != null && optionalPet.isPresent() && email != null) {
-                List<Schedule> schedules = scheduleRepository.findByPetPetName(petName);
+            if (optionalPet != null && optionalPet.isPresent() && owner != null) {
+                List<Schedule> schedules = scheduleRepository.findByPetId(petId);
                 /*List<ScheduleService> scheduleServices = schedules.stream()
                         .map(schedule -> modelMapper.map(schedule, ScheduleService.class))
                         .collect(Collectors.toList());
@@ -83,12 +90,12 @@ public class ScheduleController {
         }
     }
 
-    @PutMapping("/{petName}/{id}")
-    public ResponseEntity<ScheduleService> updateSchedule(@PathVariable("petName") String petName,
+    @PutMapping("/get-schedule/{petId}/{id}")
+    public ResponseEntity<ScheduleService> updateSchedule(@PathVariable("petId") Long petId,
                                                           @PathVariable("id") Long id,
                                                           @RequestBody ScheduleService scheduleService) {
         try {
-            List<Schedule> schedules = scheduleRepository.findByPetPetName(petName);
+            List<Schedule> schedules = scheduleRepository.findByPetId(petId);
             for (Schedule sch : schedules) {
                 if (sch.getId() == id) {
                     // 스케줄 엔티티 필드값 변경
@@ -124,11 +131,11 @@ public class ScheduleController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{petName}/{id}")
-    public ResponseEntity<Schedule> deleteSchedule(@PathVariable("petName") String petName,
+    @DeleteMapping("/delete/{petId}/{id}")
+    public ResponseEntity<Schedule> deleteSchedule(@PathVariable("petId") Long petId,
                                                    @PathVariable("id") Long id) {
         try {
-            List<Schedule> schedules = scheduleRepository.findByPetPetName(petName);
+            List<Schedule> schedules = scheduleRepository.findByPetId(petId);
             for (Schedule sch : schedules) {
                 if (sch.getId() == id) {
                     Schedule deletedSchedule = sch;

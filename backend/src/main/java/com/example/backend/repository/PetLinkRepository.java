@@ -19,5 +19,8 @@ public interface PetLinkRepository extends JpaRepository<PetLink, Long> {
     @Query("SELECT CASE WHEN p.inviter = ?1 OR p.owner = ?2 THEN true ELSE false END FROM PetLink p")
     boolean isAvailablePetLink(String owner, String inviter);
 
+    @Query("SELECT p FROM PetLink p WHERE p.owner = ?1")
+    List<PetLink> findAllLinkByOwner(String owner);
+
     //public List<PetLink> findAllLink(String owner, String inviter);
 }

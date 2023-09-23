@@ -3,7 +3,9 @@ package com.example.backend.controller;
 import com.example.backend.dto.PetRequest;
 import com.example.backend.dto.UserRequest;
 import com.example.backend.entity.Pet;
+import com.example.backend.entity.PetLink;
 import com.example.backend.entity.User;
+import com.example.backend.repository.PetLinkRepository;
 import com.example.backend.repository.PetRepository;
 import com.example.backend.service.PetService;
 import com.example.backend.service.UserService;
@@ -41,6 +43,8 @@ public class PetController {
     private HttpServletRequest request;
     @Autowired
     private PetService petService;
+    @Autowired
+    private PetLinkRepository petLinkRepository;
 
     @PostMapping("/add/{email}")
     public ResponseEntity<Pet> savePet(@RequestBody @Valid PetRequest petRequest,
@@ -61,79 +65,80 @@ public class PetController {
         return request.getHeader("inviter");
     }
 
+//      사용자가 속한 모든 펫계정 불러오기
     @GetMapping("/get-all/{email}")
-    public ResponseEntity<List<Pet>> getPet(@PathVariable("email") String email) {
+    public ResponseEntity<List<PetLink>> getAllPet(@PathVariable("email") String email) {
         //String currentUserEmail = authentication.getName(); // 현재 로그인한 사용자의 이메일
         Optional<User> optionalUser = userRepository.findByEmail(email);
 
         if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            String inviter = user.getInviter();
-            List<Pet> pets = petRepository.findByInviter(inviter);
-
-            return ResponseEntity.ok(pets);
+                List<PetLink> petLinks = petLinkRepository.findAllLinkByOwner(email);
+                return ResponseEntity.ok(petLinks);
         }
-
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/get-pet/{email}/{petName}")
-    public ResponseEntity<Pet> getPet(@PathVariable("email") String email,
-                                      @PathVariable("petName") String petName) {
+//    특정 펫 불러오기
+    @GetMapping("/get-pet/{email}/{petId}")
+    public ResponseEntity<PetLink> getPet(@PathVariable("email") String email,
+                                      @PathVariable("petId") Long petId) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            String inviter = user.getInviter();
-
-            List<Pet> pets = petRepository.findByInviter(inviter);
-            for (Pet pet : pets) {
-                if (pet.getPetName().equals(petName)) {
-                    return ResponseEntity.ok(pet);
+        if(optionalUser.isPresent()){
+            List<PetLink> pets = petLinkRepository.findAllLinkByOwner(email);
+            for(PetLink pet : pets){
+                if(pet.getPetId()==petId){
+                    return  ResponseEntity.ok(pet);
                 }
             }
-
-            return ResponseEntity.notFound().build(); // 등록된 petName이 없는 경우 404 응답 반환
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/put-pet/{email}/{petName}")
+//      펫계정 수정
+    @PutMapping("/put-pet/{email}/{petId}")
     public ResponseEntity<Pet> updatePet(@PathVariable("email") String email,
-                                         @PathVariable("petName") String petName,
+                                         @PathVariable("petId") Long petId,
                                          @RequestBody Pet pet) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent()) {
-            List<Pet> pets = optionalUser.get().getPets();
-            Optional<Pet> optionalPet = pets.stream().filter(p -> p.getPetName().equals(petName)).findFirst();
-
-            if (optionalPet.isPresent()) {
-                Pet existingPet = optionalPet.get();
-                existingPet.setPetName(pet.getPetName());
-                existingPet.setPetAge(pet.getPetAge());
-                existingPet.setDetailInfo(pet.getDetailInfo());
-                Pet updatedPet = petRepository.save(existingPet);
-                return ResponseEntity.ok(updatedPet);
+            List<PetLink> petLinks = petLinkRepository.findAllLinkByOwner(email);
+            for(PetLink p : petLinks){
+                if(p.getPetId()==petId){
+                    Optional<Pet> optionalPet = petRepository.findById(p.getPetId());
+                    if (optionalPet.isPresent()) {
+                        Pet existingPet = optionalPet.get();
+                        existingPet.setPetName(pet.getPetName());
+                        existingPet.setPetAge(pet.getPetAge());
+                        existingPet.setDetailInfo(pet.getDetailInfo());
+                        Pet updatedPet = petRepository.save(existingPet);
+                        return ResponseEntity.ok(updatedPet);
+                    }
+                }
             }
+//            Optional<Pet> optionalPet = pets.stream().filter(p -> p.getPetName().equals(petName)).findFirst();
         }
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/delete-pet/{email}/{petName}")
+    @DeleteMapping("/delete-pet/{email}/{petId}")
     @Transactional
     public ResponseEntity<Pet> deletePet(@PathVariable("email") String email,
-                                      @PathVariable("petName") String petName) {
+                                      @PathVariable("petId") Long petId) {
 
         Optional<User> optionalUser = userRepository.findByEmail(email);
 
         if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            String inviter = user.getInviter();
+            List<PetLink> pets = petLinkRepository.findAllLinkByOwner(email);
 
-            List<Pet> pets = petRepository.findByInviter(inviter);
-            for (Pet pet : pets) {
-                if (pet.getPetName().equals(petName)) {
-                    petRepository.deletePetByName(petName);
-                    return ResponseEntity.ok(pet);
+            for (PetLink pet : pets) {
+                if (pet.getPetId()==petId) {
+                    Optional<Pet> optionalPet = petRepository.findById(pet.getPetId());
+
+                    Pet existingPet = optionalPet.get();
+                    petRepository.deletePetByName(existingPet.getPetName());
+
+                    return ResponseEntity.ok(existingPet);
                 }
             }
             return ResponseEntity.notFound().build(); // 등록된 petName이 없는 경우 404 응답 반환

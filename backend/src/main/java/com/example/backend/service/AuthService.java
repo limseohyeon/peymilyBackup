@@ -32,6 +32,7 @@ public class AuthService {
         return userRepository.findByEmail(email);
     }
 
+    private Set<String> tokenBlacklist = new HashSet<>();
     public String login(String email, String password) throws AuthenticationException {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent()) {
@@ -43,6 +44,26 @@ public class AuthService {
             return JwtUtil.createJwt(email, secretKey, expiredMs);
         }
         throw new BadCredentialsException("Invalid email or password");
+    }
+
+    public void logout(String token) throws AuthenticationException {
+        // Remove the "Bearer " prefix from the token
+        String authToken = token.replace("Bearer ", "");
+
+        // Check if the token is valid and not already blacklisted
+        if (isValidToken(authToken) && !tokenBlacklist.contains(authToken)) {
+            // Blacklist the token to invalidate it
+            tokenBlacklist.add(authToken);
+        } else {
+            throw new AuthenticationException("Invalid token or already logged out") {
+            };
+        }
+    }
+
+    private boolean isValidToken(String token) {
+        // Check if the token is not expired and not in the blacklist
+        Date expirationDate = getExpirationDateFromToken(token);
+        return expirationDate != null && !tokenBlacklist.contains(token);
     }
 
     private String createToken(String email) {

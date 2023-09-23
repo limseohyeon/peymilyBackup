@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/shared-images/{email}")
-public class SharedPetImageController {
+public class  SharedPetImageController {
 
     @Autowired
     UserRepository userRepository;

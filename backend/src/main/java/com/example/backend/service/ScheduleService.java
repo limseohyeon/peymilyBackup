@@ -3,8 +3,10 @@ package com.example.backend.service;
 import com.example.backend.dto.PetRequest;
 import com.example.backend.dto.ScheduleRequest;
 import com.example.backend.entity.Pet;
+import com.example.backend.entity.PetLink;
 import com.example.backend.entity.Schedule;
 import com.example.backend.entity.User;
+import com.example.backend.repository.PetLinkRepository;
 import com.example.backend.repository.PetRepository;
 import com.example.backend.repository.ScheduleRepository;
 import lombok.*;
@@ -37,8 +39,11 @@ public class ScheduleService {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    public Schedule saveSchedule(ScheduleRequest schedulerequest, String petName) {
-        Optional<Pet> optionalPet = petRepository.findByPetName(petName);
+    @Autowired
+    private PetLinkRepository petLinkRepository;
+
+    public Schedule saveSchedule(ScheduleRequest schedulerequest, Long petId) {
+        Optional<Pet> optionalPet = petRepository.findById(petId);
 
         if (optionalPet.isPresent()) {
             Schedule schedule = Schedule.builder()

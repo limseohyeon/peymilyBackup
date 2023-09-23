@@ -25,4 +25,10 @@ public class PetLinkService {
     public List<PetLink> findLinkByInviter(String owner, String inviter) {
         return petLinkRepository.findLinkByInviter(owner, inviter);
     }
+
+    public List<PetLink> findAllLinkByOwner(String owner){
+        return petLinkRepository.findAllLinkByOwner(owner);
+    }
+
+
 }
