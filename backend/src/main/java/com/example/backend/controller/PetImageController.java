@@ -84,6 +84,10 @@ public class PetImageController {
         String fileName = petId.toString() + StringUtils.getFilenameExtension(originalFilename);
         String uploadDir = "image-uploads/";
         String userUploadDir = uploadDir + inviter + "/";
+
+        Path existingImagePath = Paths.get(userUploadDir, fileName);
+        Files.deleteIfExists(existingImagePath);
+
         FileUploadUtil.saveFile(userUploadDir, fileName, file);
 
         return new ResponseEntity<>("Image updated successfully", HttpStatus.OK);

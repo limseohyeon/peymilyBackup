@@ -1,6 +1,9 @@
 package com.example.backend.config;
 
 import com.example.backend.service.UserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +21,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -26,8 +31,8 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private UserService userService;
 
-    @Value("${jwt.secret}")
-    private String secretKey;
+    //@Value("${jwt.secret}")
+    private String secretKey = "CL2xeP3cZ0MDZQDmuWeHPajwAJSPwtBk0JI5t6KCdGnK6ckXxx";
 
     private String extractToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
@@ -37,24 +42,60 @@ public class JwtFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private boolean isAuthenticated(HttpServletRequest request) {
-        String token = extractToken(request);
+    private String extractEmailFromToken(String token) {
+        try {
+            // 토큰에서 클레임 정보 추출
+            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            Claims claims = claimsJws.getBody();
 
-        if (token == null || token.isEmpty()) {
+            return claims.getSubject();
+        } catch (Exception e) {
+            System.out.println("failed to extract email. Error : " + e);
+
+            return null;
+        }
+    }
+
+    public boolean isValidToken(String token) {
+        try {
+            // 토큰 디코딩 및 유효성 검사
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            Date expirationDate = claims.getExpiration();
+            Date now = new Date();
+            if (expirationDate != null && expirationDate.before(now)) {
+                System.out.println("Token Expired");
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
+            // 토큰 디코딩에 실패하거나 유효하지 않은 경우 예외 발생
+            System.out.println("Token decoding failed or token is null. Error : " + e.getMessage());
             return false;
         }
-
-        return true;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String email = "";
+        String token = extractToken(request);
 
-        if (!isAuthenticated(request)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+        List<String> excludedPaths = Arrays.asList("/auth/", "/image-uploads/", "/profile/");
+        if (token == null || excludedPaths.stream().anyMatch(path -> request.getRequestURI().equals(path))) {
+            filterChain.doFilter(request, response);
             return;
         }
+
+        if (token == null || token.isEmpty() || !isValidToken(token)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+            return;
+        }
+
+        String email = extractEmailFromToken(token);
 
         // 권한 부여
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -64,4 +105,5 @@ public class JwtFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request, response);
     }
+
 }

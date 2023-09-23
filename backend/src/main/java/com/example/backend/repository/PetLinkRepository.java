@@ -11,13 +11,15 @@ public interface PetLinkRepository extends JpaRepository<PetLink, Long> {
     //Optional<PetLink> findLinkByPetId(String petId);
 
     @Query("SELECT p FROM PetLink p WHERE p.owner = ?1")
-    Optional<PetLink> findLinkByOwner(String owner);
+    List<PetLink> findLinkByOwner(String owner);
 
-    @Query("SELECT p FROM PetLink p WHERE p.owner <> ?1 AND p.inviter = ?2")
-    List<PetLink> findLinkByInviter(String owner, String inviter);
+    @Query("SELECT p FROM PetLink p WHERE p.inviter = ?1")
+    List<PetLink> findLinkByInviter(String inviter);
 
-    @Query("SELECT CASE WHEN p.inviter = ?1 OR p.owner = ?2 THEN true ELSE false END FROM PetLink p")
-    boolean isAvailablePetLink(String owner, String inviter);
+    @Query("SELECT p FROM PetLink p WHERE p.petId = ?1")
+    List<PetLink> findLinkByPetId(Long petId);
+
+    //boolean isAvailablePetLink(String owner, String inviter);
 
     @Query("SELECT p FROM PetLink p WHERE p.owner = ?1")
     List<PetLink> findAllLinkByOwner(String owner);

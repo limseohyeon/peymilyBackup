@@ -24,38 +24,39 @@ public class PetLinkController {
     @Autowired
     private PetLinkService petLinkService;
 
-    @PostMapping("/post/{owner}/{inviter}")
+    @PostMapping("/post/{owner}/{inviter}/{id}")
     public ResponseEntity<PetLink> LinkPet(@PathVariable ("owner") String owner,
-                                           @PathVariable("inviter") String inviter) {
+                                           @PathVariable("inviter") String inviter,
+                                           @PathVariable("id") Long id) {
         try {
-            if (petLinkRepository.isAvailablePetLink(owner, inviter)) {
-                PetLink newPetLink = PetLink.builder()
-                        .owner(owner)
-                        .inviter(inviter)
-                        .build();
+            if (petLinkService.isAvailablePetLink(owner, inviter, id)) {
+                PetLink newPetLink = new PetLink();
+
+                newPetLink.setOwner(owner);
+                newPetLink.setInviter(inviter);
+                newPetLink.setPetId(id);
 
                 PetLink savedPetLink = petLinkRepository.save(newPetLink);
-                System.out.println("펫 저장 성공");
+                System.out.println("success");
 
                 return new ResponseEntity<>(savedPetLink, HttpStatus.OK);
             } else {
-                System.out.println("펫이 이미 존재합니다");
+                System.out.println("pet already exists");
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
-            System.out.println("펫 저장 실패");
+            System.out.println("unable to save pet. Error : " + e);
 
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/get/{owner}/{inviter}")
-    public ResponseEntity<List<PetLink>> GetLinkedPet(@PathVariable ("owner") String owner,
-                                                @PathVariable("inviter") String inviter) {
+    @GetMapping("/get/{owner}")
+    public ResponseEntity<List<PetLink>> GetLinkedPet(@PathVariable ("owner") String owner) {
 
         List<PetLink> allPetLinked = new ArrayList<>();
-        List<PetLink> allPetLinkedByOwner = petLinkRepository.findAll();
-        List<PetLink> allPetLinkedByInviter = petLinkRepository.findAll();
+        List<PetLink> allPetLinkedByOwner = petLinkRepository.findLinkByOwner(owner);
+        List<PetLink> allPetLinkedByInviter = petLinkRepository.findLinkByInviter(owner);
 
         for (PetLink petLink : allPetLinkedByOwner) {
             if (petLink.getOwner().equals(owner)) {
@@ -64,7 +65,7 @@ public class PetLinkController {
         }
 
         for (PetLink petLink : allPetLinkedByInviter) {
-            if (petLink.getInviter().equals(inviter)) {
+            if (petLink.getInviter().equals(owner)) {
                 allPetLinked.add(petLink);
             }
         }
