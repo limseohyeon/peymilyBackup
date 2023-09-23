@@ -4,6 +4,7 @@ import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.UserService;
 import com.example.backend.util.FileUploadUtil;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -14,6 +15,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,6 +37,14 @@ public class CommunityImageController {
                                               @PathVariable("email") String email) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String uploadDir = "communityImage/" + email;
+        String filePath = uploadDir + "/" + fileName;
+
+        // 이미지 크기 조절
+        BufferedImage originalImage = ImageIO.read(file.getInputStream());
+        BufferedImage resizedImage = Thumbnails.of(originalImage)
+                .size(300, 200) // 원하는 크기로 조절
+                .asBufferedImage();
+
         FileUploadUtil.saveFile(uploadDir, fileName, file);
 
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
