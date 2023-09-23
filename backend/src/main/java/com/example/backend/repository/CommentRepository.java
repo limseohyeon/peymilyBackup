@@ -16,7 +16,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Comment findCommentByCommentId(Long commentId);
 
     // postType에 맞는 댓글 모두 출력
-    @Query("SELECT ALL FROM Comment c WHERE c.postType = ?1")
+    @Query("SELECT c FROM Comment c WHERE c.postType = ?1")
     List<Comment> findAllCommentByPostType(Long postType);
 
     // @Query 어노테이션으로 DELETE 또는 UPDATE 쿼리를 실행할 때는 @Modifying 어노테이션도 함께 사용해야 합니다.
