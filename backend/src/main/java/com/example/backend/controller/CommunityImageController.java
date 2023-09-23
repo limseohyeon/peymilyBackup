@@ -14,6 +14,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,6 +25,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping(value = "/communityImage", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -34,6 +38,12 @@ public class CommunityImageController {
                                               @PathVariable("email") String email) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String uploadDir = "communityImage/" + email;
+        String filePath = uploadDir + "/" + fileName;
+
+        // 이미지 크기 조절
+        Image originalImage = ImageIO.read(file.getInputStream());
+        Image resizedImage = originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+
         FileUploadUtil.saveFile(uploadDir, fileName, file);
 
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);

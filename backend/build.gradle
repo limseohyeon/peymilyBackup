@@ -49,6 +49,11 @@ dependencies {
 	// 230510
 	implementation 'org.springframework.security:spring-security-crypto:5.5.1'
 
+	// 230923
+	implementation 'com.github.downgoon:marvin:1.5.5'
+	implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
+	implementation 'org.springframework:spring-test'
+
 	compileOnly 'org.projectlombok:lombok'
 	//runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
