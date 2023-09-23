@@ -50,17 +50,26 @@ public class ScheduleController {
                                                    @PathVariable("email") String owner,
                                                    @RequestBody @Valid ScheduleRequest scheduleRequest) {
         try {
-            Optional<PetLink> optionalPet = petLinkRepository.findLinkByOwner(owner);
+//            Optional<PetLink> optionalPet = petLinkRepository.findLinkByOwner(owner);
+            List<PetLink> petLinks = petLinkRepository.findLinkByOwner(owner);
 
-            if (optionalPet.get().getPetId().equals(petId) && optionalPet.get().getOwner().equals(owner)) {
-                Schedule savedSchedule = scheduleService.saveSchedule(scheduleRequest, petId);
-                //Schedule schedule = modelMapper.map(scheduleService, Schedule.class);
-                //schedule.setPet(pet);
-                //Schedule savedSchedule = scheduleRepository.save(schedule);
-                //ScheduleService savedScheduleService = modelMapper.map(savedSchedule, ScheduleService.class);
+           for(PetLink p : petLinks){
+               if(p.getPetId().equals(petId)){
+                   Schedule savedSchedule = scheduleService.saveSchedule(scheduleRequest, petId);
+                   return ResponseEntity.status(HttpStatus.CREATED).body(savedSchedule);
+               }
+           }
 
-                return ResponseEntity.status(HttpStatus.CREATED).body(savedSchedule);
-            }
+//기존 코드(petLinkX)
+//            if (optionalPet.get().getPetId().equals(petId) && optionalPet.get().getOwner().equals(owner)) {
+//                Schedule savedSchedule = scheduleService.saveSchedule(scheduleRequest, petId);
+//                //Schedule schedule = modelMapper.map(scheduleService, Schedule.class);
+//                //schedule.setPet(pet);
+//                //Schedule savedSchedule = scheduleRepository.save(schedule);
+//                //ScheduleService savedScheduleService = modelMapper.map(savedSchedule, ScheduleService.class);
+//
+//                return ResponseEntity.status(HttpStatus.CREATED).body(savedSchedule);
+//            }
         } catch (UsernameNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (Exception e) {
