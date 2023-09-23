@@ -73,9 +73,5 @@ public class PetLinkService {
         return petLinkFoundByOwnerAndPetId;
     }
 
-    public List<PetLink> findAllLinkByOwner(String owner){
-        return petLinkRepository.findAllLinkByOwner(owner);
-    }
-
 
 }
