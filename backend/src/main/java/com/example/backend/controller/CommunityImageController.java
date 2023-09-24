@@ -32,12 +32,13 @@ public class CommunityImageController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/uploadImage/{email}")
+    @PostMapping("/uploadImage/{email}/{postId}")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,
-                                              @PathVariable("email") String email) throws IOException {
+                                              @PathVariable("email") String email,
+                                              @PathVariable("postId") Long postId) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String uploadDir = "communityImage/" + email;
-        String filePath = uploadDir + "/" + fileName;
+        String filePath = uploadDir + "/" + postId.toString() + fileName.substring(fileName.lastIndexOf('.'));
 
         // 이미지 크기 조절
         BufferedImage originalImage = ImageIO.read(file.getInputStream());
@@ -45,10 +46,11 @@ public class CommunityImageController {
                 .size(200, 200) // 원하는 크기로 조절
                 .asBufferedImage();
 
-        FileUploadUtil.saveImage(uploadDir, fileName, resizedImage);
+        FileUploadUtil.saveImage(uploadDir, filePath, resizedImage);
 
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
+
 
     @GetMapping("/getAllImages")
     public List<String> getAllImages() throws IOException {
