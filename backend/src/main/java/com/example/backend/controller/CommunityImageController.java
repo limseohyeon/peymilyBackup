@@ -36,9 +36,11 @@ public class CommunityImageController {
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,
                                               @PathVariable("email") String email,
                                               @PathVariable("postId") Long postId) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String tmpFile = StringUtils.cleanPath(file.getOriginalFilename());
         String uploadDir = "communityImage/" + email;
-        String filePath = uploadDir + "/" + postId.toString() + fileName.substring(fileName.lastIndexOf('.'));
+        String fileName = postId.toString() + tmpFile.substring(tmpFile.lastIndexOf('.'));
+
+        System.out.println("File name : " + fileName);
 
         // 이미지 크기 조절
         BufferedImage originalImage = ImageIO.read(file.getInputStream());
@@ -46,7 +48,7 @@ public class CommunityImageController {
                 .size(200, 200) // 원하는 크기로 조절
                 .asBufferedImage();
 
-        FileUploadUtil.saveImage(uploadDir, filePath, resizedImage);
+        FileUploadUtil.saveImage(uploadDir, fileName, resizedImage);
 
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
