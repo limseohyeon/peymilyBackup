@@ -32,19 +32,6 @@ public class CommunityImageController {
     @Autowired
     UserService userService;
 
-    public static void saveImage(String uploadDir, String fileName, BufferedImage image) throws IOException {
-        // File 객체 생성
-        File dir = new File(uploadDir);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        File targetFile = new File(uploadDir + File.separator + fileName);
-
-        // 이미지를 파일로 저장
-        ImageIO.write(image, "jpg", targetFile);
-    }
-
     @PostMapping("/uploadImage/{email}")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,
                                               @PathVariable("email") String email) throws IOException {
