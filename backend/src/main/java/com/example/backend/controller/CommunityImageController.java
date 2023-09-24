@@ -32,6 +32,19 @@ public class CommunityImageController {
     @Autowired
     UserService userService;
 
+    public static void saveImage(String uploadDir, String fileName, BufferedImage image) throws IOException {
+        // File 객체 생성
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        File targetFile = new File(uploadDir + File.separator + fileName);
+
+        // 이미지를 파일로 저장
+        ImageIO.write(image, "jpg", targetFile);
+    }
+
     @PostMapping("/uploadImage/{email}")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,
                                               @PathVariable("email") String email) throws IOException {
@@ -42,10 +55,10 @@ public class CommunityImageController {
         // 이미지 크기 조절
         BufferedImage originalImage = ImageIO.read(file.getInputStream());
         BufferedImage resizedImage = Thumbnails.of(originalImage)
-                .size(300, 200) // 원하는 크기로 조절
+                .size(200, 200) // 원하는 크기로 조절
                 .asBufferedImage();
 
-        FileUploadUtil.saveFile(uploadDir, fileName, file);
+        FileUploadUtil.saveImage(uploadDir, fileName, resizedImage);
 
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
