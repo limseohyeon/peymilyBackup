@@ -51,6 +51,8 @@ public class PetService {
         return petRepository.findByPetName(petName);
     }
 
+    public Optional<Pet> getPetById(Long petId){return petRepository.findById(petId);}
+
     public void deletePet(Long id) {
         petRepository.deleteById(id);
     }

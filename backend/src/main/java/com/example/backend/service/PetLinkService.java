@@ -1,9 +1,14 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.PetRequest;
+import com.example.backend.entity.Pet;
 import com.example.backend.entity.PetLink;
+import com.example.backend.entity.User;
 import com.example.backend.repository.PetLinkRepository;
+import com.example.backend.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -17,10 +22,38 @@ public class PetLinkService {
         this.petLinkRepository = petLinkRepository;
     }
 
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PetService petService;
+    @Autowired
+    private PetRepository petRepository;
+
+    public PetLink savePetLink(PetRequest petRequest, String email, Long petId){
+
+        Optional<User> optionalUser = userService.findByEmail(email);
+        Optional<Pet> optionalPet = petService.getPetById(petId);
+        String owner = email;
+        String inviter = optionalPet.get().getInviter();
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            PetLink pet = PetLink.builder()
+                    .user(user)
+                    .owner(owner)
+                    .inviter(inviter)
+                    .petId(petId)
+                    .build();
+
+            return petLinkRepository.save(pet);
+        } else {
+            throw new UsernameNotFoundException("Invalid username or password");
+        }
+    }
+
     public List<PetLink> findAllLinkByOwner(String owner) {
         return petLinkRepository.findLinkByOwner(owner);
     }
-
     public List<PetLink> findAllLinkByInviter(String inviter) {
         return petLinkRepository.findLinkByInviter(inviter);
     }
