@@ -16,10 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-<<<<<<< HEAD
-import java.awt.*;
-=======
->>>>>>> dbd49753af5bd1197cd71f6ccab33de9aa78933e
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -43,15 +39,6 @@ public class CommunityImageController {
                                               @PathVariable("postId") Long postId) throws IOException {
         String tmpFile = StringUtils.cleanPath(file.getOriginalFilename());
         String uploadDir = "communityImage/" + email;
-<<<<<<< HEAD
-        String filePath = uploadDir + "/" + fileName;
-
-        // 이미지 크기 조절
-        Image originalImage = ImageIO.read(file.getInputStream());
-        Image resizedImage = originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-
-        FileUploadUtil.saveFile(uploadDir, fileName, file);
-=======
         String fileName = postId.toString() + tmpFile.substring(tmpFile.lastIndexOf('.'));
 
         System.out.println("File name : " + fileName);
@@ -64,7 +51,6 @@ public class CommunityImageController {
                 .asBufferedImage();
 
         FileUploadUtil.saveImage(uploadDir, fileName, resizedImage);
->>>>>>> dbd49753af5bd1197cd71f6ccab33de9aa78933e
 
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
