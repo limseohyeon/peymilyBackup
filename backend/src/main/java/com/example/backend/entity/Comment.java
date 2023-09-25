@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "build")
-@Table( name = "COMMENTS_TBL")
+@Table(name = "COMMENTS_TBL")
 @Data
 @Builder
 public class Comment implements Serializable {
@@ -24,11 +24,6 @@ public class Comment implements Serializable {
 //        @JoinColumn(name = "shared_pet_id")
 //        @JsonBackReference // 순환 참조 방지용 코드
 //        private SharedPet sharedPet;
-
-        // 게시물 타입
-        // 1 : sharedPet
-        // 2 : community
-        private Long postType;
         private Long communityId;
         private String userName;
         private String commentInfo;

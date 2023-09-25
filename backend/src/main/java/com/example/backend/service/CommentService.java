@@ -1,5 +1,7 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.CommentRequest;
+import com.example.backend.dto.CommunityRequest;
 import com.example.backend.entity.Comment;
 import com.example.backend.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +18,23 @@ public class CommentService {
 
     public Comment findCommentById(Long commentId) { return commentRepository.findCommentByCommentId(commentId); }
 
-    // 동일 커뮤니티에서 모든 댓글을 불러오기 위해 필요
-    public List<Comment> findAllCommentByPostType(Long postType) { return commentRepository.findAllCommentByPostType(postType); }
+    // communityId를 바탕으로 커뮤니티 게시글의 댓글을 불러옴
+    public List<Comment> findAllCommentByCommunityId(Long communityId) {
+        return commentRepository.findAllCommentByCommunityId(communityId);
+    }
 
+    public Comment updateCommentByCommunityId(CommentRequest commentRequest, Long commentId) {
+        Comment commentToChange = findCommentById(commentId);
 
+        // 댓글 내용 수정
+        commentToChange.setCommentInfo(commentRequest.getCommentInfo());
+
+        if (commentToChange.getCommentInfo().length() == 0) {
+            System.out.println("내용을 입력하세요!");
+
+            return null;
+        }
+
+        return commentRepository.save(commentToChange);
+    }
 }

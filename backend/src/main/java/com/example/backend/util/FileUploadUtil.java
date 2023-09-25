@@ -2,6 +2,8 @@ package com.example.backend.util;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,5 +46,18 @@ public class FileUploadUtil {
                 .filter(File::isFile)
                 .forEach(file -> fileNames.add(file.getName()));
         return fileNames;
+    }
+
+    public static void saveImage(String uploadDir, String fileName, BufferedImage image) throws IOException {
+        // File 객체 생성
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        File targetFile = new File(uploadDir + File.separator + fileName);
+
+        // 이미지를 파일로 저장
+        ImageIO.write(image, "jpg", targetFile);
     }
 }
