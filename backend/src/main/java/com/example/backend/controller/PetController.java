@@ -7,6 +7,7 @@ import com.example.backend.entity.PetLink;
 import com.example.backend.entity.User;
 import com.example.backend.repository.PetLinkRepository;
 import com.example.backend.repository.PetRepository;
+import com.example.backend.service.PetLinkService;
 import com.example.backend.service.PetService;
 import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,8 @@ public class PetController {
     @Autowired
     private PetService petService;
     @Autowired
+    private PetLinkService petLinkService;
+    @Autowired
     private PetLinkRepository petLinkRepository;
 
     @PostMapping("/add/{email}")
@@ -51,7 +54,9 @@ public class PetController {
                                        @PathVariable("email") String email) {
         try {
             Optional<User> user = userRepository.findByEmail(email);
+
             Pet savedPet = petService.savePet(petRequest, user.get().getInviter());
+
 
             return ResponseEntity.status(HttpStatus.CREATED).body(savedPet);
         } catch (UsernameNotFoundException e) {

@@ -24,17 +24,17 @@ public class PetLinkController {
     @Autowired
     private PetLinkService petLinkService;
 
-    @PostMapping("/post/{owner}/{inviter}/{id}")
-    public ResponseEntity<PetLink> LinkPet(@PathVariable ("owner") String owner,
+    @PostMapping("/post/{email}/{inviter}/{petId}")
+    public ResponseEntity<PetLink> CreateLinkPet(@PathVariable ("email") String owner,
                                            @PathVariable("inviter") String inviter,
-                                           @PathVariable("id") Long id) {
+                                           @PathVariable("petId") Long petId) {
         try {
-            if (petLinkService.isAvailablePetLink(owner, inviter, id)) {
+            if (petLinkService.isAvailablePetLink(owner, inviter, petId)) {
                 PetLink newPetLink = new PetLink();
 
                 newPetLink.setOwner(owner);
                 newPetLink.setInviter(inviter);
-                newPetLink.setPetId(id);
+                newPetLink.setPetId(petId);
 
                 PetLink savedPetLink = petLinkRepository.save(newPetLink);
                 System.out.println("success");
@@ -52,7 +52,7 @@ public class PetLinkController {
     }
 
     @GetMapping("/get/{owner}")
-    public ResponseEntity<List<PetLink>> GetLinkedPet(@PathVariable ("owner") String owner) {
+    public ResponseEntity<List<PetLink>> ReadLinkedPet(@PathVariable ("owner") String owner) {
 
         List<PetLink> allPetLinked = new ArrayList<>();
         List<PetLink> allPetLinkedByOwner = petLinkRepository.findLinkByOwner(owner);

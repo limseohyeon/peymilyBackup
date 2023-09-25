@@ -39,7 +39,7 @@ public class PetImageController {
         String inviter = user.get().getInviter();
 
         // 유저 정보를 기반으로 업로드 디렉토리 생성
-        String userUploadDir = uploadDir + inviter + "/";
+        String userUploadDir = uploadDir + petId;
         FileUploadUtil.saveFile(userUploadDir, fileName, file);
 
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);

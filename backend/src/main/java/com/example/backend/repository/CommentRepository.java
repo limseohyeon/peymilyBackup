@@ -13,9 +13,9 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("SELECT c FROM Comment c WHERE c.commentId = ?1")
-    Comment findCommentByCommentId(Long commentId);
+     Comment findCommentByCommentId(Long commentId);
 
-    @Query("SELECT c FROM Comment c WHERE c.communityId = ?1")
+    @Query("SELECT c FROM Comment c WHERE c.commentId = ?1")
     List<Comment> findAllCommentByCommunityId(Long commentId);
 
     // @Query 어노테이션으로 DELETE 또는 UPDATE 쿼리를 실행할 때는 @Modifying 어노테이션도 함께 사용해야 합니다.
