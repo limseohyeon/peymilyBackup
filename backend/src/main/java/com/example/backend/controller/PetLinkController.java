@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/link", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -24,6 +25,7 @@ public class PetLinkController {
     @Autowired
     private PetLinkService petLinkService;
 
+//PetLink 생성하기
     @PostMapping("/post/{email}/{inviter}/{petId}")
     public ResponseEntity<PetLink> CreateLinkPet(@PathVariable ("email") String owner,
                                            @PathVariable("inviter") String inviter,
@@ -50,9 +52,22 @@ public class PetLinkController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+//owner 를 이용해서 특정 petLink 찾아오기
+    @GetMapping("/get/{owner}/{petId}")
+    public ResponseEntity <PetLink> ReadLinkedPet(@PathVariable("owner") String owner,
+                                                  @PathVariable("petId") Long petId){
+        List <PetLink> petLinks = petLinkRepository.findAllLinkByOwner(owner);
+        for(PetLink petLink : petLinks){
+            if(petLink.getPetId().equals(petId)){
+                return  ResponseEntity.ok(petLink);
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
 
-    @GetMapping("/get/{owner}")
-    public ResponseEntity<List<PetLink>> ReadLinkedPet(@PathVariable ("owner") String owner) {
+//owner 를 이용해서 모든 petLink 찾아오기
+    @GetMapping("/getAll/{owner}")
+    public ResponseEntity<List<PetLink>> ReadAllLinkedPet(@PathVariable ("owner") String owner) {
 
         List<PetLink> allPetLinked = new ArrayList<>();
         List<PetLink> allPetLinkedByOwner = petLinkRepository.findLinkByOwner(owner);
@@ -73,6 +88,7 @@ public class PetLinkController {
         return ResponseEntity.ok(allPetLinked);
     }
 
+//특정 petLink 수정하기
     @PutMapping("/put/{linkId}")
     public ResponseEntity<PetLink> UpdateLinkedPet(@PathVariable("linkId") Long linkId,
                                                    @Valid @RequestBody PetLinkRequest updatedPetLinkData) {
@@ -95,7 +111,7 @@ public class PetLinkController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+// 특정 petLink 삭제하기
     @DeleteMapping("/delete/{linkId}")
     public ResponseEntity<Void> DeleteLinkedPet(@PathVariable("linkId") Long linkId) {
         try {
