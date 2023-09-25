@@ -4,6 +4,7 @@ import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.UserService;
 import com.example.backend.util.FileUploadUtil;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+<<<<<<< HEAD
 import java.awt.*;
+=======
+>>>>>>> dbd49753af5bd1197cd71f6ccab33de9aa78933e
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -33,11 +37,13 @@ public class CommunityImageController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/uploadImage/{email}")
+    @PostMapping("/uploadImage/{email}/{postId}")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file,
-                                              @PathVariable("email") String email) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+                                              @PathVariable("email") String email,
+                                              @PathVariable("postId") Long postId) throws IOException {
+        String tmpFile = StringUtils.cleanPath(file.getOriginalFilename());
         String uploadDir = "communityImage/" + email;
+<<<<<<< HEAD
         String filePath = uploadDir + "/" + fileName;
 
         // 이미지 크기 조절
@@ -45,9 +51,24 @@ public class CommunityImageController {
         Image resizedImage = originalImage.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
 
         FileUploadUtil.saveFile(uploadDir, fileName, file);
+=======
+        String fileName = postId.toString() + tmpFile.substring(tmpFile.lastIndexOf('.'));
+
+        System.out.println("File name : " + fileName);
+
+        // 이미지 크기 조절
+        BufferedImage originalImage = ImageIO.read(file.getInputStream());
+        BufferedImage resizedImage = Thumbnails.of(originalImage)
+                .size(300, 300) // 원하는 크기로 조절
+                .rotate(90)
+                .asBufferedImage();
+
+        FileUploadUtil.saveImage(uploadDir, fileName, resizedImage);
+>>>>>>> dbd49753af5bd1197cd71f6ccab33de9aa78933e
 
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
+
 
     @GetMapping("/getAllImages")
     public List<String> getAllImages() throws IOException {
@@ -103,13 +124,14 @@ public class CommunityImageController {
                 .body(resource);
     }
 
-    @PutMapping("update/{email}")
+    @PutMapping("update/{email}/{postId}")
     public ResponseEntity<String> updateImage(@PathVariable("email") String email,
+                                              @PathVariable("postId") Long postId,
                                               @RequestParam("file") MultipartFile file) throws IOException {
         //Optional<User> user = userService.findByEmail(email);
 
         String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
-        String fileName = email.toString() + "." + StringUtils.getFilenameExtension(originalFilename);
+        String fileName = postId.toString() + "." + StringUtils.getFilenameExtension(originalFilename);
         String uploadDir = "communityImage/" + email;
 
         Path existingImagePath = Paths.get(uploadDir, fileName);
@@ -117,12 +139,14 @@ public class CommunityImageController {
 
         FileUploadUtil.saveFile(uploadDir, fileName, file);
 
-        return new ResponseEntity<>("Image updated successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Image" + fileName + " updated in" + uploadDir + " successfully"
+                , HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{email}")
-    public ResponseEntity<String> deleteImage(@PathVariable("email") String email) throws IOException {
-        String fileName = email.toString() + ".jpg";    // 일단 하드코딩... 추후에 고치자
+    @DeleteMapping("/delete/{email}/{postId}")
+    public ResponseEntity<String> deleteImage(@PathVariable("email") String email,
+                                              @PathVariable("postId") Long postId) throws IOException {
+        String fileName = postId.toString() + ".jpg";    // 일단 하드코딩... 추후에 고치자
         String uploadDir = "communityImage/" + email;
         //Optional<User> user = userService.findByEmail(email);
 
