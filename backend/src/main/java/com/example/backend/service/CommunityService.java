@@ -47,15 +47,15 @@ public class CommunityService {
         }
     }
 
+    // 230925 기준
+    // 잘못 저장하고 있음. 수정 필요.
     public Community updateCommunity(CommunityRequest communityRequest) {
         Community communityFound = communityRepository.findPostById(communityRequest.getCommunityId());
-        Optional<Community> optionalCommunity = Optional.of(communityFound);
 
-        if (!optionalCommunity.isEmpty()) {
-            return communityRepository.save(communityFound);
-        } else {
-            throw new UsernameNotFoundException("Invalid community request");
-        }
+        communityFound.setTitle(communityRequest.getTitle());
+        communityFound.setWrote(communityRequest.getWrote());
+
+        return communityRepository.save(communityFound);
     }
 
     public Community deleteCommunity(Long communityId) {
