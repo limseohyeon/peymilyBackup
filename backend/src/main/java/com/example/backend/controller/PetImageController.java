@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.util.FileUploadUtil;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -13,6 +14,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,14 +36,26 @@ public class PetImageController {
         // 파일 이름에서 확장자 추출
         String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
         String fileName = petId.toString() + ".jpg"; // petId를 기준으로 파일 이름을 정함
-        String uploadDir = "image-uploads/";
+        String uploadDir = "image-uploads/" + email + "/";
 
         Optional<User> user = userRepository.findByEmail(email);
-        String inviter = user.get().getInviter();
+        //String inviter = user.get().getInviter();
 
         // 유저 정보를 기반으로 업로드 디렉토리 생성
-        String userUploadDir = uploadDir + petId;
+        String userUploadDir = uploadDir;
+
+        System.out.println("File name : " + fileName);
+
+        // 이미지 크기 조절
+        BufferedImage originalImage = ImageIO.read(file.getInputStream());
+        BufferedImage resizedImage = Thumbnails.of(originalImage)
+                .size(300, 300) // 원하는 크기로 조절
+                //.rotate(90)
+                .asBufferedImage();
+
         FileUploadUtil.saveFile(userUploadDir, fileName, file);
+
+        System.out.println("Image posted in directory " + userUploadDir);
 
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }

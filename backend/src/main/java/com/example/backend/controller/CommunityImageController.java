@@ -47,7 +47,7 @@ public class CommunityImageController {
         BufferedImage originalImage = ImageIO.read(file.getInputStream());
         BufferedImage resizedImage = Thumbnails.of(originalImage)
                 .size(300, 300) // 원하는 크기로 조절
-                .rotate(90)
+                //.rotate(90)
                 .asBufferedImage();
 
         FileUploadUtil.saveImage(uploadDir, fileName, resizedImage);

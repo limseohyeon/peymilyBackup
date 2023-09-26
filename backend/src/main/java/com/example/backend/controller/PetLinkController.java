@@ -56,7 +56,7 @@ public class PetLinkController {
     @GetMapping("/get/{owner}/{petId}")
     public ResponseEntity <PetLink> ReadLinkedPet(@PathVariable("owner") String owner,
                                                   @PathVariable("petId") Long petId){
-        List <PetLink> petLinks = petLinkRepository.findAllLinkByOwner(owner);
+        List<PetLink> petLinks = petLinkRepository.findAllLinkByOwner(owner);
         for(PetLink petLink : petLinks){
             if(petLink.getPetId().equals(petId)){
                 return  ResponseEntity.ok(petLink);
