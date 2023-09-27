@@ -39,7 +39,7 @@ public class PetLinkService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             PetLink pet = PetLink.builder()
-                    .user(user)
+                    //.user(user)
                     .owner(owner)
                     .inviter(inviter)
                     .petId(petId)

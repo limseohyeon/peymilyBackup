@@ -32,13 +32,14 @@ public class PetLinkController {
                                            @PathVariable("petId") Long petId) {
         try {
             if (petLinkService.isAvailablePetLink(owner, inviter, petId)) {
-                PetLink newPetLink = new PetLink();
+                PetLink petLink = PetLink.builder()
+                        //.user(user)
+                        .owner(owner)
+                        .inviter(inviter)
+                        .petId(petId)
+                        .build();
 
-                newPetLink.setOwner(owner);
-                newPetLink.setInviter(inviter);
-                newPetLink.setPetId(petId);
-
-                PetLink savedPetLink = petLinkRepository.save(newPetLink);
+                PetLink savedPetLink = petLinkRepository.save(petLink);
                 System.out.println("success");
 
                 return new ResponseEntity<>(savedPetLink, HttpStatus.OK);
