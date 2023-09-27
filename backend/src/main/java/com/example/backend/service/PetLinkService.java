@@ -63,27 +63,10 @@ public class PetLinkService {
     }
 
     public boolean isAvailablePetLink(String owner, String inviter, Long petId) {
-        List<PetLink> ownerLink = findAllLinkByOwner(owner);
-        List<PetLink> inviterLink = findAllLinkByInviter(inviter);
-        List<PetLink> petIdLink = findAllLinkByPetId(petId);
+        List<PetLink> foundPetLinks = petLinkRepository.findSamePetLinks(owner, inviter, petId);
 
-        if (petIdLink.isEmpty()) {
-            System.out.println("new pet saved");
-            return true;
-        }
-
-        Set<PetLink> petIdSet = new HashSet<>(petIdLink);
-
-        for (PetLink ownerPetLink : ownerLink) {
-            if (petIdSet.contains(ownerPetLink)) {
-                return false;
-            }
-        }
-
-        for (PetLink inviterPetLink : inviterLink) {
-            if (petIdSet.contains(inviterPetLink)) {
-                return false;
-            }
+        if (foundPetLinks.size() > 0) {
+            return false;
         }
 
         return true;
