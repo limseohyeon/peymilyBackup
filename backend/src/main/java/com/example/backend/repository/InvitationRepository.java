@@ -17,4 +17,7 @@ public interface InvitationRepository extends JpaRepository<Invitation, Long> {
 
     @Query("SELECT i FROM Invitation i WHERE i.petId = ?1")
     List<Invitation> findAllInvitationByPetId(Long PetId);
+
+    @Query("SELECT i FROM Invitation i WHERE i.inviter = ?1 AND i.receiver = ?2 AND i.petId = ?3")
+    List<Invitation> findSameInvitation(String inviter, String receiver, Long petId);
 }

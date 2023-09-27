@@ -29,17 +29,7 @@ public class InvitationController {
                                            @PathVariable("petId") Long petId) {
         try {
             // 이미 초대장을 보낸 사람은 초대 불가
-            List<Invitation> invitationFound = invitationService.findAllInvitationByInviterAndReceiver(inviter, receiver);
-            // - 이미 추가 되어 있는 사람은 초대 불가
-            // - receiver와 petId가 동시에 똑같은 사람이 petLink에 있다면,
-            // 그 사람은 이미 초대를 받았다는 소리이다
-            List<PetLink> petLinkFound = petLinkService.findAllLinkByOwnerAndPetId(receiver, petId);
-
-            if (petLinkFound.size() > 0) {
-                System.out.println("Already accepted invitation");
-
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+            List<Invitation> invitationFound = invitationService.findSameInvitation(inviter, receiver, petId);
 
             // invitationFound가 1 이상이면 이미 전에 보냈다는 소리이다
             if (invitationFound.size() < 1) {

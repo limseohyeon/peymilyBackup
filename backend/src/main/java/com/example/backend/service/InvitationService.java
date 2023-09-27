@@ -32,6 +32,10 @@ public class InvitationService {
         return invitationRepository.save(invitation);
     }
 
+    public List<Invitation> findSameInvitation(String inviter, String receiver, Long petId) {
+        return invitationRepository.findSameInvitation(inviter, receiver, petId);
+    }
+
     public List<Invitation> findAllInvitationByInviterAndReceiver(String inviter, String receiver) {
         List<Invitation> invitationFoundByInviter = findAllInvitationByInviter(inviter);
         List<Invitation> invitationFoundByReceiver = findAllInvitationByReceiver(receiver);
