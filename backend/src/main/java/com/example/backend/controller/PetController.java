@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -72,13 +73,26 @@ public class PetController {
 
 //      사용자가 속한 모든 펫계정 불러오기
     @GetMapping("/get-all/{email}")
-    public ResponseEntity<List<PetLink>> getAllPet(@PathVariable("email") String email) {
+    public ResponseEntity<List<Pet>> getAllPet(@PathVariable("email") String email) {
         //String currentUserEmail = authentication.getName(); // 현재 로그인한 사용자의 이메일
         Optional<User> optionalUser = userRepository.findByEmail(email);
+        List<Pet> myPets = new ArrayList<>();
 
         if (optionalUser.isPresent()) {
                 List<PetLink> petLinks = petLinkRepository.findAllLinkByOwner(email);
-                return ResponseEntity.ok(petLinks);
+                System.out.println("petLinks : " + petLinks);
+
+                for (PetLink petLink : petLinks) {
+                    System.out.println("petLink : " + petLink);
+                    myPets.add(petRepository.findByPetId(petLink.getPetId()));
+                }
+
+                if (myPets.equals(null)) {
+                    System.out.println("펫을 찾을 수 없습니다.");
+                    return ResponseEntity.notFound().build();
+                }
+
+                return ResponseEntity.ok(myPets);
         }
         return ResponseEntity.notFound().build();
     }

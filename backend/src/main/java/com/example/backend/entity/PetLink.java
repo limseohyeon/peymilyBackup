@@ -30,12 +30,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "build")
-@Table(
-        name = "PET_LINK_TBL",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"petId"})
-        }
-)
+@Table(name = "PET_LINK_TBL")
 @Data
 @Builder
 public class PetLink implements Serializable {

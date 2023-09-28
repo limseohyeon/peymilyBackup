@@ -20,6 +20,9 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 
     List<Pet> findByInviter(String inviter);
 
+    @Query("SELECT p FROM Pet p WHERE p.id = ?1")
+    Pet findByPetId(Long petId);
+
     @Modifying
     @Query("DELETE FROM Pet p WHERE p.petName = :petName")
     void deletePetByName(@Param("petName") String petName);
