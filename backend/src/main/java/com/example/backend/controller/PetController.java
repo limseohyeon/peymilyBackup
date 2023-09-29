@@ -99,14 +99,14 @@ public class PetController {
 
 //    특정 펫 불러오기
     @GetMapping("/get-pet/{email}/{petId}")
-    public ResponseEntity<PetLink> getPet(@PathVariable("email") String email,
+    public ResponseEntity<Pet> getPet(@PathVariable("email") String email,
                                       @PathVariable("petId") Long petId) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if(optionalUser.isPresent()){
-            List<PetLink> pets = petLinkRepository.findAllLinkByOwner(email);
-            for(PetLink pet : pets){
-                if(pet.getPetId()==petId){
-                    return  ResponseEntity.ok(pet);
+            List<PetLink> petLinks = petLinkRepository.findAllLinkByOwner(email);
+            for(PetLink petLink : petLinks){
+                if(petLink.getPetId()==petId){
+                    return  ResponseEntity.ok(petRepository.findByPetId(petId));
                 }
             }
             return ResponseEntity.notFound().build();
