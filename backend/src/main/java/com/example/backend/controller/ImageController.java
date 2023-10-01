@@ -92,7 +92,7 @@ public class ImageController {
     @GetMapping("/get/{email}/{imageName}")
     public ResponseEntity<Resource> getProfile(@PathVariable String email,
                                                @PathVariable String imageName) throws IOException {
-        String downloadDir = "profile/" + email + "/imageName";
+        String downloadDir = "profile/" + email + "/" + imageName;
 
         Optional<User> user = userRepository.findByEmail(email);
 
