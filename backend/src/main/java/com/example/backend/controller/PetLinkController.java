@@ -53,6 +53,17 @@ public class PetLinkController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+//DB에 저장된 모든 petLink 찾아오기
+    @GetMapping("/getAll")
+   public ResponseEntity<List<PetLink>> ReadAllPetLinks(){
+        List <PetLink> petLinks = petLinkRepository.findAllPetLinks();
+        if(!petLinks.isEmpty()){
+            return ResponseEntity.ok(petLinks);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 //owner 를 이용해서 특정 petLink 찾아오기
     @GetMapping("/get/{owner}/{petId}")
     public ResponseEntity <PetLink> ReadLinkedPet(@PathVariable("owner") String owner,
