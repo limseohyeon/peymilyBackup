@@ -70,7 +70,6 @@ public class PetController {
     private String getCurrentUserInviter(HttpServletRequest request) {
         return request.getHeader("inviter");
     }
-
 //      사용자가 속한 모든 펫계정 불러오기
     @GetMapping("/get-all/{email}")
     public ResponseEntity<List<Pet>> getAllPet(@PathVariable("email") String email) {
