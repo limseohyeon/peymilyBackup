@@ -72,6 +72,11 @@ public class ImageController {
 
         System.out.println("File name : " + fileName);
 
+        File directory = new File(uploadDir);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
         // 이미지 크기 조절
         BufferedImage originalImage = ImageIO.read(file.getInputStream());
         BufferedImage resizedImage = Thumbnails.of(originalImage)
@@ -87,7 +92,7 @@ public class ImageController {
     @GetMapping("/get/{email}/{imageName}")
     public ResponseEntity<Resource> getProfile(@PathVariable String email,
                                                @PathVariable String imageName) throws IOException {
-        String downloadDir = "profile/" + email;
+        String downloadDir = "profile/" + email + "/imageName";
 
         Optional<User> user = userRepository.findByEmail(email);
 
