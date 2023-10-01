@@ -68,7 +68,7 @@ public class ImageController {
                                               @PathVariable("email") String email) throws IOException {
         String tmpFile = StringUtils.cleanPath(file.getOriginalFilename());
         String uploadDir = "profile/" + email;
-        String fileName = email.toString() + tmpFile.substring(tmpFile.lastIndexOf('.'));
+        String fileName = email.toString() + ".jpg";
 
         System.out.println("File name : " + fileName);
 
