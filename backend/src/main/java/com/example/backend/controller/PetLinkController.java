@@ -143,8 +143,22 @@ public class PetLinkController {
         }
     }
 
-//해당 petLink 양육자 읽기
-//    @GetMapping("/rearer")
+//해당 petLink 모든 양육자 읽기
+    @GetMapping("/rearer/{petId}")
+    public ResponseEntity<List<PetLink>> ReadAllRearer(@PathVariable("petId") Long petId){
+        List <PetLink> petLinks = petLinkRepository.findAllPetLinks();
+        List <PetLink> allRearerLinks = new ArrayList<>();
+
+        if(!petLinks.isEmpty()){
+            for(PetLink p : petLinks){
+                if(p.getLinkId().equals(petId)){
+                    allRearerLinks.add(p);
+                }
+            }
+            return ResponseEntity.ok(allRearerLinks);
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 //부양육자 읽기
     @GetMapping("/sub-rearer/{petId}/{inviter}")
