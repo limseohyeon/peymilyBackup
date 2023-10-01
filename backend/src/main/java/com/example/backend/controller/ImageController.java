@@ -86,13 +86,13 @@ public class ImageController {
 
         FileUploadUtil.saveImage(uploadDir, fileName, resizedImage);
 
-        return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Image uploaded successfully. Directory : " + uploadDir, HttpStatus.OK);
     }
 
     @GetMapping("/get/{email}/{imageName}")
     public ResponseEntity<Resource> getProfile(@PathVariable String email,
                                                @PathVariable String imageName) throws IOException {
-        String downloadDir = "profile/" + email + "/" + imageName;
+        String downloadDir = "profile/" + email + "/";
 
         Optional<User> user = userRepository.findByEmail(email);
 
