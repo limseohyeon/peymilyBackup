@@ -72,6 +72,11 @@ public class ImageController {
 
         System.out.println("File name : " + fileName);
 
+        File directory = new File(uploadDir);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
         // 이미지 크기 조절
         BufferedImage originalImage = ImageIO.read(file.getInputStream());
         BufferedImage resizedImage = Thumbnails.of(originalImage)

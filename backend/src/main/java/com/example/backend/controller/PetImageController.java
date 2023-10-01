@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,6 +44,11 @@ public class PetImageController {
 
         // 유저 정보를 기반으로 업로드 디렉토리 생성
         String userUploadDir = uploadDir;
+
+        File directory = new File(uploadDir);
+        if (!directory.exists()) {
+            directory.mkdirs(); // 디렉토리가 없으면 생성
+        }
 
         System.out.println("File name : " + fileName);
 
