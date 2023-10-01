@@ -147,7 +147,7 @@ public class PetLinkController {
 //    @GetMapping("/rearer")
 
 //부양육자 읽기
-    @GetMapping("/sub-rearer/{petId}/{owner}/{inviter}")
+    @GetMapping("/sub-rearer/{petId}/{inviter}")
     public ResponseEntity<List<PetLink>> ReadSubRearer(@PathVariable("petId") Long petId,
                                                        @PathVariable("owner") String owner,
                                                        @PathVariable("inviter") String inviter
