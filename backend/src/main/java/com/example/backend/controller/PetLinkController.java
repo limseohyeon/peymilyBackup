@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -140,5 +141,27 @@ public class PetLinkController {
             System.out.println("펫 링크 삭제 실패");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+//부양육자 읽기
+    @GetMapping("sub-rearer/{petId}/{owner}/{inviter}")
+    public ResponseEntity<List<PetLink>> ReadSubRearer(@PathVariable("petId") Long petId,
+                                                       @PathVariable("owner") String owner,
+                                                       @PathVariable("inviter") String inviter
+                                                       ){
+        List <PetLink> petLinks = petLinkRepository.findAllPetLinks();
+        List <PetLink> subRearerLinks=new ArrayList<>();
+        if(!petLinks.isEmpty()){
+            for(PetLink p : petLinks){
+                if(p.getPetId().equals(petId)){
+                    if(!p.getOwner().equals(inviter)){
+                        subRearerLinks.add(p);
+                    }
+                }
+            }
+            return ResponseEntity.ok(subRearerLinks);
+        }
+        return ResponseEntity.notFound().build();
+
     }
 }
