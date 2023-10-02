@@ -12,4 +12,5 @@ public class PetLinkRequest {
     private String owner;
     private String inviter;
     private Long petId;
+    private String ownerName;
 }

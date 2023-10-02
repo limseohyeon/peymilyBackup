@@ -51,14 +51,16 @@ public class PetLink implements Serializable {
     private String owner;
     private String inviter;
     private Long petId;
+    private String ownerName;
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
 
-    public static PetLink build(User user, String owner, String inviter, Long petId) {
+    public static PetLink build(User user, String owner, String inviter, Long petId, String ownerName) {
         return PetLink.builder()
                 .owner(owner)
                 .inviter(inviter)
                 .petId(petId)
+                .ownerName(ownerName)
                 .build();
     }
 }
