@@ -65,7 +65,8 @@ public class PetLinkController {
         return ResponseEntity.notFound().build();
     }
 
-//owner 를 이용해서 특정 petLink 찾아오기
+//사용자가 포함된 petLink 중 특정 petLink 찾아오기
+
     @GetMapping("/get/{owner}/{petId}")
     public ResponseEntity <PetLink> ReadLinkedPet(@PathVariable("owner") String owner,
                                                   @PathVariable("petId") Long petId){
@@ -78,7 +79,7 @@ public class PetLinkController {
         return ResponseEntity.notFound().build();
     }
 
-//owner 를 이용해서 모든 petLink 찾아오기
+//사용자가 포함된 이용해서 모든 petLink 찾아오기
     @GetMapping("/getAll/{owner}")
     public ResponseEntity<List<PetLink>> ReadAllLinkedPet(@PathVariable ("owner") String owner) {
 
@@ -151,7 +152,7 @@ public class PetLinkController {
 
         if(!petLinks.isEmpty()){
             for(PetLink p : petLinks){
-                if(p.getLinkId().equals(petId)){
+                if(p.getPetId().equals(petId)){
                     allRearerLinks.add(p);
                 }
             }
@@ -163,11 +164,11 @@ public class PetLinkController {
 //부양육자 읽기
     @GetMapping("/sub-rearer/{petId}/{inviter}")
     public ResponseEntity<List<PetLink>> ReadSubRearer(@PathVariable("petId") Long petId,
-                                                       @PathVariable("owner") String owner,
                                                        @PathVariable("inviter") String inviter
                                                        ){
         List <PetLink> petLinks = petLinkRepository.findAllPetLinks();
         List <PetLink> subRearerLinks=new ArrayList<>();
+
         if(!petLinks.isEmpty()){
             for(PetLink p : petLinks){
                 if(p.getPetId().equals(petId)){
