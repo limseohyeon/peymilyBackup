@@ -3,8 +3,11 @@ package com.example.backend.controller;
 import com.example.backend.dto.PetLinkRequest;
 import com.example.backend.dto.PetRequest;
 import com.example.backend.entity.PetLink;
+import com.example.backend.entity.User;
 import com.example.backend.repository.PetLinkRepository;
+import com.example.backend.repository.UserRepository;
 import com.example.backend.service.PetLinkService;
+import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,15 +25,20 @@ import java.util.Optional;
 public class PetLinkController {
     @Autowired
     private PetLinkRepository petLinkRepository;
-
     @Autowired
     private PetLinkService petLinkService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
 
 //PetLink 생성하기
     @PostMapping("/post/{email}/{inviter}/{petId}")
     public ResponseEntity<PetLink> CreateLinkPet(@PathVariable ("email") String owner,
                                            @PathVariable("inviter") String inviter,
                                            @PathVariable("petId") Long petId) {
+        Optional<User> optionalUser = userRepository.findByEmail(owner);
+        String ownerName = optionalUser.get().getUserName();
         try {
             if (petLinkService.isAvailablePetLink(owner, inviter, petId)) {
                 PetLink petLink = PetLink.builder()
@@ -38,6 +46,7 @@ public class PetLinkController {
                         .owner(owner)
                         .inviter(inviter)
                         .petId(petId)
+                        .ownerName(ownerName)
                         .build();
 
                 PetLink savedPetLink = petLinkRepository.save(petLink);
@@ -102,6 +111,22 @@ public class PetLinkController {
         return ResponseEntity.ok(allPetLinked);
     }
 
+//해당 pet 에 속한 모든 petLink 찾아오기
+    @GetMapping("/rearer/{petId}")
+    public ResponseEntity<List<PetLink>> ReadAllRearer(@PathVariable("petId") Long petId){
+        List <PetLink> petLinks = petLinkRepository.findAllPetLinks();
+        List <PetLink> allRearerLinks = new ArrayList<>();
+
+        if(!petLinks.isEmpty()){
+            for(PetLink p : petLinks){
+                if(p.getPetId().equals(petId)){
+                    allRearerLinks.add(p);
+                }
+            }
+            return ResponseEntity.ok(allRearerLinks);
+        }
+        return ResponseEntity.notFound().build();
+    }
 //특정 petLink 수정하기
     @PutMapping("/put/{linkId}")
     public ResponseEntity<PetLink> UpdateLinkedPet(@PathVariable("linkId") Long linkId,
@@ -144,42 +169,7 @@ public class PetLinkController {
         }
     }
 
-//해당 petLink 모든 양육자 읽기
-    @GetMapping("/rearer/{petId}")
-    public ResponseEntity<List<PetLink>> ReadAllRearer(@PathVariable("petId") Long petId){
-        List <PetLink> petLinks = petLinkRepository.findAllPetLinks();
-        List <PetLink> allRearerLinks = new ArrayList<>();
 
-        if(!petLinks.isEmpty()){
-            for(PetLink p : petLinks){
-                if(p.getPetId().equals(petId)){
-                    allRearerLinks.add(p);
-                }
-            }
-            return ResponseEntity.ok(allRearerLinks);
-        }
-        return ResponseEntity.notFound().build();
-    }
 
-//부양육자 읽기
-    @GetMapping("/sub-rearer/{petId}/{inviter}")
-    public ResponseEntity<List<PetLink>> ReadSubRearer(@PathVariable("petId") Long petId,
-                                                       @PathVariable("inviter") String inviter
-                                                       ){
-        List <PetLink> petLinks = petLinkRepository.findAllPetLinks();
-        List <PetLink> subRearerLinks=new ArrayList<>();
 
-        if(!petLinks.isEmpty()){
-            for(PetLink p : petLinks){
-                if(p.getPetId().equals(petId)){
-                    if(!p.getOwner().equals(inviter)){
-                        subRearerLinks.add(p);
-                    }
-                }
-            }
-            return ResponseEntity.ok(subRearerLinks);
-        }
-        return ResponseEntity.notFound().build();
-
-    }
 }
