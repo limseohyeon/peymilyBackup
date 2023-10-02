@@ -35,6 +35,7 @@ public class PetLinkService {
         Optional<Pet> optionalPet = petService.getPetById(petId);
         String owner = email;
         String inviter = optionalPet.get().getInviter();
+        String ownerName = optionalUser.get().getUserName();
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -43,6 +44,7 @@ public class PetLinkService {
                     .owner(owner)
                     .inviter(inviter)
                     .petId(petId)
+                    .ownerName(ownerName)
                     .build();
 
             return petLinkRepository.save(pet);
