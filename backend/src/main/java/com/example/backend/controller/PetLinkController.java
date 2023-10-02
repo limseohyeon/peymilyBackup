@@ -151,7 +151,7 @@ public class PetLinkController {
 
         if(!petLinks.isEmpty()){
             for(PetLink p : petLinks){
-                if(p.getLinkId().equals(petId)){
+                if(p.getPetId().equals(petId)){
                     allRearerLinks.add(p);
                 }
             }
@@ -163,11 +163,11 @@ public class PetLinkController {
 //부양육자 읽기
     @GetMapping("/sub-rearer/{petId}/{inviter}")
     public ResponseEntity<List<PetLink>> ReadSubRearer(@PathVariable("petId") Long petId,
-                                                       @PathVariable("owner") String owner,
                                                        @PathVariable("inviter") String inviter
                                                        ){
         List <PetLink> petLinks = petLinkRepository.findAllPetLinks();
         List <PetLink> subRearerLinks=new ArrayList<>();
+
         if(!petLinks.isEmpty()){
             for(PetLink p : petLinks){
                 if(p.getPetId().equals(petId)){
