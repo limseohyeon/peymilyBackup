@@ -79,7 +79,7 @@ public class PetLinkController {
         return ResponseEntity.notFound().build();
     }
 
-//사용자가 포함된 이용해서 모든 petLink 찾아오기
+//사용자가 포함된 모든 petLink 찾아오기
     @GetMapping("/getAll/{owner}")
     public ResponseEntity<List<PetLink>> ReadAllLinkedPet(@PathVariable ("owner") String owner) {
 
