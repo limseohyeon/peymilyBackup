@@ -104,7 +104,7 @@ public class PetController {
         if(optionalUser.isPresent()){
             List<PetLink> petLinks = petLinkRepository.findAllLinkByOwner(email);
             for(PetLink petLink : petLinks){
-                if(petLink.getPetId()==petId){
+                if(petLink.getPetId().equals(petId)){
                     return  ResponseEntity.ok(petRepository.findByPetId(petId));
                 }
             }
