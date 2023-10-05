@@ -25,12 +25,13 @@ public class CommunityController {
     public ResponseEntity<Community> PostCommunity(@PathVariable("email") String email,
                                                     @RequestBody @Valid CommunityRequest communityRequest) {
         try {
-            communityService.saveCommunity(communityRequest, email);
+            Community newPost = communityService.saveCommunity(communityRequest, email);
+
+            return ResponseEntity.ok(newPost);
         } catch(Exception e) {
             System.out.println("Can't save community request. Error : " + e);
+            return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/get/{communityId}")
