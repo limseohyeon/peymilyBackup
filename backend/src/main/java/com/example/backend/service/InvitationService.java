@@ -44,7 +44,7 @@ public class InvitationService {
 
         for (Invitation invitedPerson : invitationFoundByInviter) {
             for (Invitation receivedPerson : invitationFoundByReceiver) {
-                if (invitedPerson.getInvitationId() == receivedPerson.getInvitationId()) {
+                if (invitedPerson.getInvitationId().equals(receivedPerson.getInvitationId())) {
                     invitationFoundByInviterAndReceiver.add(invitedPerson);
                 }
             }
