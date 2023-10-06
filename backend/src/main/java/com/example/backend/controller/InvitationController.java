@@ -76,7 +76,7 @@ public class InvitationController {
             if (i.getPetId().equals(petId)) {
                 invitationService.deleteInvitation(i);
 
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(i);
             }
         }
 
