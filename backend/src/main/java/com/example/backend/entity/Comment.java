@@ -18,13 +18,8 @@ public class Comment implements Serializable {
         @Id
         @GeneratedValue
         private Long commentId;
-
-        // 이하 삭제
-//        @ManyToOne(fetch = FetchType.LAZY)
-//        @JoinColumn(name = "shared_pet_id")
-//        @JsonBackReference // 순환 참조 방지용 코드
-//        private SharedPet sharedPet;
         private Long communityId;
-        private String userName;
+        private String email;
         private String commentInfo;
+        private String date;
 }

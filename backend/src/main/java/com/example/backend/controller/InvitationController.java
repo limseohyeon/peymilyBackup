@@ -80,6 +80,6 @@ public class InvitationController {
             }
         }
 
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
     }
 }

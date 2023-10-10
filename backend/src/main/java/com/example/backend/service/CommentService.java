@@ -16,6 +16,16 @@ public class CommentService {
     @Autowired
     private final CommentRepository commentRepository;
 
+    public Comment saveComment(CommentRequest commentRequest) {
+        Comment comment = Comment.builder()
+                .communityId(commentRequest.getCommunityId())
+                .email(commentRequest.getEmail())
+                .commentInfo(commentRequest.getCommentInfo())
+                .date(commentRequest.getDate())
+                .build();
+
+        return commentRepository.save(comment);
+    }
     public Comment findCommentById(Long commentId) { return commentRepository.findCommentByCommentId(commentId); }
 
     // communityId를 바탕으로 커뮤니티 게시글의 댓글을 불러옴
