@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentRequest {
     private Long commentId;
-    private SharedPet sharedPet;
-    private String userName;
+    private Long communityId;
+    private String email;
     private String commentInfo;
+    private String date;
 }

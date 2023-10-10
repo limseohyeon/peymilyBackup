@@ -57,11 +57,11 @@ public class CommunityController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Community> GetCommunity(@Valid @RequestBody CommunityRequest updatedCommunityData) {
+    public ResponseEntity<Community> UpdateCommunity(@Valid @RequestBody CommunityRequest updatedCommunityData) {
         try {
             Community existingCommunity = communityService.findPostById(updatedCommunityData.getCommunityId());
 
-            if (existingCommunity == null) {
+            if (existingCommunity.equals(null)) {
                 System.out.println("수정할 게시글을 찾을 수 없습니다");
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -72,6 +72,30 @@ public class CommunityController {
             return new ResponseEntity<>(newCommunity, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("게시글 수정 실패");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/updateLikes/{email}")
+    public ResponseEntity<Community> UpdateLikes(@Valid @RequestBody CommunityRequest updatedCommunityData,
+                                                 @PathVariable("email") String email) {
+        try {
+            Community communityFound = communityService.findPostById(updatedCommunityData.getCommunityId());
+
+            if (!communityFound.getLikedBy().contains(email)) {
+                communityFound.getLikedBy().add(email);
+                communityFound.setLikes(communityFound.getLikes() + 1);
+            } else {
+                communityFound.getLikedBy().remove(email);
+                communityFound.setLikes(communityFound.getLikes() - 1);
+            }
+
+            Community newCommunity = communityService.updateCommunity(updatedCommunityData);
+            System.out.println("좋아요 수정 성공");
+
+            return new ResponseEntity<>(newCommunity, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("좋아요 수정 실패");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

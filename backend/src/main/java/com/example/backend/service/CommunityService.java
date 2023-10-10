@@ -52,6 +52,7 @@ public class CommunityService {
     public Community updateCommunity(CommunityRequest communityRequest) {
         Community communityFound = communityRepository.findPostById(communityRequest.getCommunityId());
 
+        communityFound.setLikes(communityRequest.getLikes());
         communityFound.setTitle(communityRequest.getTitle());
         communityFound.setWrote(communityRequest.getWrote());
 
