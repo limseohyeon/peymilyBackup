@@ -73,10 +73,10 @@ public class InvitationController {
         List<Invitation> invitationFound = invitationService.findAllInvitationByInviterAndReceiver(inviter, receiver);
 
         for (Invitation i : invitationFound) {
-            if (i.getPetId() == petId) {
+            if (i.getPetId().equals(petId)) {
                 invitationService.deleteInvitation(i);
 
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(i);
             }
         }
 

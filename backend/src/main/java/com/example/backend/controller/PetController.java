@@ -104,7 +104,7 @@ public class PetController {
         if(optionalUser.isPresent()){
             List<PetLink> petLinks = petLinkRepository.findAllLinkByOwner(email);
             for(PetLink petLink : petLinks){
-                if(petLink.getPetId()==petId){
+                if(petLink.getPetId().equals(petId)){
                     return  ResponseEntity.ok(petRepository.findByPetId(petId));
                 }
             }
@@ -122,7 +122,7 @@ public class PetController {
         if (optionalUser.isPresent()) {
             List<PetLink> petLinks = petLinkRepository.findAllLinkByOwner(email);
             for(PetLink p : petLinks){
-                if(p.getPetId()==petId){
+                if(p.getPetId().equals(petId)){
                     Optional<Pet> optionalPet = petRepository.findById(p.getPetId());
                     if (optionalPet.isPresent()) {
                         Pet existingPet = optionalPet.get();
@@ -150,7 +150,7 @@ public class PetController {
             List<PetLink> pets = petLinkRepository.findAllLinkByOwner(email);
 
             for (PetLink pet : pets) {
-                if (pet.getPetId()==petId) {
+                if (pet.getPetId().equals(petId)) {
                     Optional<Pet> optionalPet = petRepository.findById(pet.getPetId());
 
                     Pet existingPet = optionalPet.get();
