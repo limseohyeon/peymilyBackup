@@ -4,6 +4,7 @@ import com.example.backend.dto.CommentRequest;
 import com.example.backend.entity.Comment;
 import com.example.backend.entity.Invitation;
 import com.example.backend.service.CommentService;
+import com.example.backend.service.CommunityService;
 import org.hibernate.service.spi.InjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,9 +35,19 @@ public class CommentController {
         }
     }
 
-    @GetMapping("/get/{communityId}/{commentId}")
-    public ResponseEntity<Comment> getComment(@PathVariable("communityId") Long communityId,
-                                              @PathVariable("commentId") String commentId) {
+    @GetMapping("/get/{commentId}")
+    public ResponseEntity<Comment> getComment(@PathVariable("commentId") Long commentId) {
         return ResponseEntity.ok(commentService.findCommentById(commentId));
+    }
+
+    @GetMapping("/getAll/{communityId}")
+    public ResponseEntity<List<Comment>> getComments(@PathVariable("communityId") Long communityId) {
+        List<Comment> allComments = commentService.findAllCommentByCommunityId(communityId);
+
+        if (allComments.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(allComments);
     }
 }
