@@ -130,19 +130,17 @@ public class PetLinkController {
     //해당 pet 에 속한 모든 petLink 삭제하기
     @DeleteMapping("/deleteAll/{petId}")
     public ResponseEntity<Void> DeleteAllLinkedPet(@PathVariable("petId") Long petId) {
-        List <PetLink> allPetLinks = petLinkRepository.findAllPetLinks();
-        List <PetLink> petLinks = new ArrayList<>();
+        List <PetLink> petLinks = petLinkRepository.findAllPetLinks();
+        List <PetLink> allPetLinks = new ArrayList<>();
 
-        if(!allPetLinks.isEmpty()){
+        if(!petLinks.isEmpty()){
             for(PetLink p : allPetLinks){
                 if(p.getPetId().equals(petId)){
-                    petLinks.add(p);
+                    allPetLinks.add(p);
                 }
             }
-        }
-        if(!petLinks.isEmpty()){
             try {
-                for(PetLink p : petLinks){
+                for(PetLink p : allPetLinks){
                     if (!petLinkRepository.existsById(p.getLinkId())) {
                         System.out.println("삭제할 펫 링크를 찾을 수 없습니다");
                         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -150,14 +148,16 @@ public class PetLinkController {
                     petLinkRepository.deleteById(p.getLinkId());
                     System.out.println("펫 링크 삭제 성공");
 
-                    return new ResponseEntity<>(HttpStatus.OK);
                 }
+                return new ResponseEntity<>(HttpStatus.OK);
             } catch (Exception e) {
                 System.out.println("펫 링크 삭제 실패");
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        return null;
     }
 //특정 petLink 수정하기
     @PutMapping("/put/{linkId}")
