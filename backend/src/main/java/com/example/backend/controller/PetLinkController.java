@@ -133,7 +133,7 @@ public class PetLinkController {
         List <PetLink> allPetLinks = petLinkRepository.findAllPetLinks();
         List <PetLink> petLinks = new ArrayList<>();
 
-        if(!petLinks.isEmpty()){
+        if(!allPetLinks.isEmpty()){
             for(PetLink p : allPetLinks){
                 if(p.getPetId().equals(petId)){
                     petLinks.add(p);
