@@ -139,6 +139,8 @@ public class PetLinkController {
                     petLinks.add(p);
                 }
             }
+        }
+        if(!petLinks.isEmpty()){
             try {
                 for(PetLink p : petLinks){
                     if (!petLinkRepository.existsById(p.getLinkId())) {
@@ -155,6 +157,7 @@ public class PetLinkController {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
+
          return null;
     }
 //특정 petLink 수정하기
