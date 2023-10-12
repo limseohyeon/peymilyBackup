@@ -157,8 +157,7 @@ public class PetLinkController {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
-         return null;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 //특정 petLink 수정하기
     @PutMapping("/put/{linkId}")
