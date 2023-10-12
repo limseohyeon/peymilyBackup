@@ -33,6 +33,7 @@ public class PetLinkService {
 
         Optional<User> optionalUser = userService.findByEmail(email);
         Optional<Pet> optionalPet = petService.getPetById(petId);
+
         String owner = email;
         String inviter = optionalPet.get().getInviter();
         String ownerName = optionalUser.get().getUserName();
@@ -82,7 +83,7 @@ public class PetLinkService {
 
         for (PetLink linkedByPerson : petLinkFoundByOwner) {
             for (PetLink linkedByPet : petLinkFoundByPetId) {
-                if (linkedByPerson.getLinkId() == linkedByPet.getLinkId()) {
+                if (linkedByPerson.getLinkId().equals(linkedByPet.getLinkId())) {
                     petLinkFoundByOwnerAndPetId.add(linkedByPerson);
                 }
             }
