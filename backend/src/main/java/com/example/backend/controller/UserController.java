@@ -7,6 +7,7 @@ import com.example.backend.repository.UserRepository;
 import com.example.backend.service.AuthService;
 import com.example.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import com.example.backend.service.UserService;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -72,5 +74,35 @@ public class UserController {
             return ResponseEntity.ok(userRequest);
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<User> updateUser(@RequestBody @Valid UserRequest userRequest) {
+        // email로 유저를 찾음
+        Optional<User> userFound = userService.findByEmail(userRequest.getEmail());
+
+        if (userFound.isEmpty()) {
+            System.out.println("유저 정보를 찾을 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        userService.updateUser(userRequest.getUserId(), userRequest.getUserName(), userRequest.getPhoneNumber());
+
+        Optional<User> userUpdated = userService.findByEmail(userRequest.getEmail());
+
+        if (userUpdated.isPresent()) {
+            return ResponseEntity.ok(userUpdated.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @DeleteMapping("/delete/{email}")
+    public ResponseEntity<User> deleteUser(@PathVariable("email") String email) {
+        Optional<User> userToDelete = userService.findByEmail(email);
+
+        userService.deleteUser(email);
+
+        return ResponseEntity.status(HttpStatus.OK).body(userToDelete.get());
     }
 }

@@ -81,5 +81,13 @@ public class UserService {
 
     public Optional<User> findByEmail(String email) { return repository.findByEmail(email); }
 
+    public void updateUser(Long userId, String newUserName, String newPhoneNumber) {
+        repository.updateUser(userId, newUserName, newPhoneNumber);
+    }
+
+    public void deleteUser(String email) {
+        repository.deleteUser(email);
+    }
+
     //public User getInviter(Long inviterId) { return repository.findByInviterId(inviterId); }
 }
