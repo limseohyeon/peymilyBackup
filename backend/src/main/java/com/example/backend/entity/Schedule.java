@@ -21,10 +21,8 @@ public class Schedule {
     @GeneratedValue
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumns({
-            @JoinColumn(name="petName", referencedColumnName="petName"),
-            @JoinColumn(name="inviter", referencedColumnName="inviter")
-    })
+    // 2023-10-15 수정
+    @JoinColumn(name = "pet_id", referencedColumnName = "id")
     @JsonBackReference
     private Pet pet;
     private String schedule;
