@@ -18,7 +18,7 @@ import java.util.ArrayList;
 @Table(
         name = "PET_TBL",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"petName", "inviter"})
+                @UniqueConstraint(columnNames = {"id"})
         }
 )
 @Data
