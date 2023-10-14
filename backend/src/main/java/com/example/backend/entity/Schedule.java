@@ -30,9 +30,9 @@ public class Schedule {
     private String schedule;
     private String date;
     private String hm;
-    private String executer;
+    private String executor;
     private Integer period;
-    private Integer notice;
+    private String complete;
     private Integer isCompleted;
 
     // EqualsAndHashCode 메서드 오버라이딩
@@ -49,15 +49,15 @@ public class Schedule {
         return Objects.hash(pet);
     }
 
-    public Schedule build(Pet pet, String schedule, String date, String hm, String executer, Integer period, Integer notice, Integer isCompleted) {
+    public Schedule build(Pet pet, String schedule, String date, String hm, String executor, Integer period, String complete, Integer isCompleted) {
         return builder()
                 .pet(pet)
                 .schedule(schedule)
                 .date(date)
                 .hm(hm)
-                .executer(executer)
+                .executor(executor)
                 .period(period)
-                .notice(notice)
+                .complete(complete)
                 .isCompleted(isCompleted)
                 .build();
     }

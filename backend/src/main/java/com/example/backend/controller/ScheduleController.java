@@ -44,7 +44,7 @@ public class ScheduleController {
 
     @Autowired
     private ModelMapper modelMapper;
-
+//일정 생성
     @PostMapping("/add/{petId}")
     public ResponseEntity<Schedule> createSchedule(@PathVariable("petId") Long petId,
                                                    @PathVariable("email") String owner,
@@ -77,9 +77,9 @@ public class ScheduleController {
         }
         return ResponseEntity.notFound().build();
     }
-
+// 모든 일정 불러오기
     @GetMapping("/get-all/{petId}")
-    public ResponseEntity<List<Schedule>> getSchedulesByPetId(@PathVariable("petId") Long petId,
+    public ResponseEntity<List<Schedule>> getAllSchedulesByPetId(@PathVariable("petId") Long petId,
                                                               @PathVariable("email") String owner) {
         Optional<Pet> optionalPet = petRepository.findById(petId);
         try {
@@ -98,8 +98,29 @@ public class ScheduleController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while saving pet.");
         }
     }
+//특정 일정 불러오기
+@GetMapping("/get/{petId}/{id}")
+public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long petId,
+                                                          @PathVariable("id") Long id) {
 
-    @PutMapping("/get-schedule/{petId}/{id}")
+    Optional<Pet> optionalPet = petRepository.findById(petId);
+
+    try {
+        if (optionalPet != null && optionalPet.isPresent()) {
+            List<Schedule> schedules = scheduleRepository.findByPetId(petId);
+            for(Schedule s : schedules){
+                if(s.getId().equals(id)) return ResponseEntity.ok(s);
+            }
+        }
+        return ResponseEntity.notFound().build();
+    } catch (UsernameNotFoundException e) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+    } catch (Exception e) {
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while saving pet.");
+    }
+}
+//일정 수정
+    @PutMapping("/update/{petId}/{id}")
     public ResponseEntity<ScheduleService> updateSchedule(@PathVariable("petId") Long petId,
                                                           @PathVariable("id") Long id,
                                                           @RequestBody ScheduleService scheduleService) {
@@ -112,7 +133,8 @@ public class ScheduleController {
                     sch.setDate(scheduleService.getDate());
                     sch.setHm(scheduleService.getHm());
                     sch.setPeriod(scheduleService.getPeriod());
-                    sch.setNotice(scheduleService.getNotice());
+                    sch.setComplete(scheduleService.getComplete());
+                    sch.setExecutor(scheduleService.getExecutor());
                     sch.setIsCompleted(scheduleService.getIsCompleted());
 
                     // 변경된 스케줄 엔티티 저장
@@ -124,7 +146,7 @@ public class ScheduleController {
                             .date(sch.getDate())
                             .hm(sch.getHm())
                             .period(sch.getPeriod())
-                            .notice(sch.getNotice())
+                            .complete(sch.getComplete())
                             .isCompleted(sch.getIsCompleted())
                             .build();
 
@@ -139,7 +161,7 @@ public class ScheduleController {
         // 해당 id에 대한 스케줄이 없는 경우 Not Found 반환
         return ResponseEntity.notFound().build();
     }
-
+//일정 삭제
     @DeleteMapping("/delete/{petId}/{id}")
     public ResponseEntity<Schedule> deleteSchedule(@PathVariable("petId") Long petId,
                                                    @PathVariable("id") Long id) {
@@ -162,4 +184,25 @@ public class ScheduleController {
         // 해당 id에 대한 스케줄이 없는 경우 Not Found 반환
         return ResponseEntity.notFound().build();
     }
+    //일정 수행
+    @PutMapping("/complete/{petId}/{id}")
+    public ResponseEntity<String> completeSchedule(@PathVariable("petId") Long petId,
+                                                          @PathVariable("id") Long id,
+                                                          @RequestBody ScheduleService scheduleService) {
+        // 스케줄 업데이트를 수행
+        Optional<Schedule> optionalSchedule = scheduleRepository.findById(id);
+
+        if (optionalSchedule.isPresent()) {
+            Schedule schedule = optionalSchedule.get();
+            schedule.setIsCompleted(scheduleService.getIsCompleted());
+            schedule.setComplete(scheduleService.getComplete());
+
+            scheduleRepository.save(schedule); // 업데이트된 스케줄 저장
+
+            return ResponseEntity.ok("Schedule updated successfully");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

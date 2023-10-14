@@ -28,9 +28,9 @@ public class ScheduleService {
     private String schedule;
     private String date;
     private String hm;
-    private String executer;
+    private String executor;
     private Integer period;
-    private Integer notice;
+    private String complete;
     private Integer isCompleted;
     @Autowired
     private PetService petService;
@@ -51,9 +51,9 @@ public class ScheduleService {
                     .schedule(schedulerequest.getSchedule())
                     .date(schedulerequest.getDate())
                     .hm(schedulerequest.getHm())
-                    .executer(schedulerequest.getExecuter())
+                    .executor(schedulerequest.getExecutor())
                     .period(schedulerequest.getPeriod())
-                    .notice(schedulerequest.getNotice())
+                    .complete(schedulerequest.getComplete())
                     .isCompleted(schedulerequest.getIsCompleted())
                     .build();
 
