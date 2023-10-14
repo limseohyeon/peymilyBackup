@@ -27,8 +27,8 @@ public class ScheduleRequest {
     private String schedule;
     private String date;
     private String hm;
-    private String executer;
+    private String executor;
     private Integer period;
-    private Integer notice;
+    private String complete;
     private Integer isCompleted;
 }
