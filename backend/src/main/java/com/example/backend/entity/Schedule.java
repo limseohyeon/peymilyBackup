@@ -6,7 +6,9 @@ import lombok.*;
 
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -19,7 +21,7 @@ import java.util.Objects;
 public class Schedule {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long scheduleId;
     @ManyToOne(fetch = FetchType.LAZY)
     // 2023-10-15 수정
     @JoinColumn(name = "pet_id", referencedColumnName = "id")
@@ -30,8 +32,11 @@ public class Schedule {
     private String hm;
     private String executor;
     private Integer period;
-    private String complete;
-    private Integer isCompleted;
+    //private Integer isCompleted;
+
+    // 날짜와 스케줄ID
+    @ElementCollection
+    private Map<String, Long> complete;
 
     // EqualsAndHashCode 메서드 오버라이딩
     @Override
@@ -47,7 +52,7 @@ public class Schedule {
         return Objects.hash(pet);
     }
 
-    public Schedule build(Pet pet, String schedule, String date, String hm, String executor, Integer period, String complete, Integer isCompleted) {
+    public Schedule build(Pet pet, String schedule, String date, String hm, String executor, Integer period, Integer isCompleted) {
         return builder()
                 .pet(pet)
                 .schedule(schedule)
@@ -55,8 +60,6 @@ public class Schedule {
                 .hm(hm)
                 .executor(executor)
                 .period(period)
-                .complete(complete)
-                .isCompleted(isCompleted)
                 .build();
     }
 }

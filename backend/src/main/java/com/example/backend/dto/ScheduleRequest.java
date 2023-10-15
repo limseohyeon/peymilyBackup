@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.Map;
 
 @Table(name="SCHEDULE_TBL")
 @Data
@@ -14,21 +16,21 @@ import javax.persistence.*;
 public class ScheduleRequest {
     @Id
     @GeneratedValue
-    private Long id;
-    /*
+    private Long scheduleId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
-            @JoinColumn(name="petName", referencedColumnName="petName"),
-            @JoinColumn(name="inviter", referencedColumnName="inviter")
+            @JoinColumn(name="userId", referencedColumnName="userId"),
     })
-    private Pet pet;*/
-    private String petName;
-    private String inviter;
+    private Pet pet;
+//    private String petName;
+//    private String inviter;
     private String schedule;
     private String date;
     private String hm;
     private String executor;
     private Integer period;
-    private String complete;
-    private Integer isCompleted;
+//    private String complete;
+//    private Integer isCompleted;
+    @ElementCollection
+    private Map<String, Long> complete;
 }

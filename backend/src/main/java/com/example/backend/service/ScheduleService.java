@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service
@@ -23,15 +24,6 @@ import java.util.Optional;
 @AllArgsConstructor
 @Builder // ScheduleController.java에서 build()가 가능하게 해줌
 public class ScheduleService {
-
-    private Long id;
-    private String schedule;
-    private String date;
-    private String hm;
-    private String executor;
-    private Integer period;
-    private String complete;
-    private Integer isCompleted;
     @Autowired
     private PetService petService;
     @Autowired
@@ -42,6 +34,22 @@ public class ScheduleService {
     @Autowired
     private PetLinkRepository petLinkRepository;
 
+    public Schedule findByScheduleId(Long scheduleId) {
+        return findByScheduleId(scheduleId);
+    }
+
+    public Schedule save(ScheduleRequest scheduleRequest) {
+        Schedule schedule = Schedule.builder()
+                .pet(scheduleRequest.getPet())
+                .schedule(scheduleRequest.getSchedule())
+                .date(scheduleRequest.getDate())
+                .hm(scheduleRequest.getHm())
+                .executor(scheduleRequest.getExecutor())
+                .period(scheduleRequest.getPeriod())
+                .build();
+
+        return scheduleRepository.save(schedule);
+    }
     public Schedule saveSchedule(ScheduleRequest schedulerequest, Long petId) {
         Optional<Pet> optionalPet = petRepository.findById(petId);
 
@@ -53,13 +61,33 @@ public class ScheduleService {
                     .hm(schedulerequest.getHm())
                     .executor(schedulerequest.getExecutor())
                     .period(schedulerequest.getPeriod())
-                    .complete(schedulerequest.getComplete())
-                    .isCompleted(schedulerequest.getIsCompleted())
                     .build();
 
             return scheduleRepository.save(schedule);
         } else {
             throw new UsernameNotFoundException("Invalid pet");
+        }
+    }
+
+    public Optional<Schedule> updateSchedule(Schedule newSchedule) {
+        Optional<Schedule> oldScheduleOptional = scheduleRepository.findById(newSchedule.getScheduleId());
+
+        if (oldScheduleOptional.isPresent()) {
+            Schedule oldSchedule = oldScheduleOptional.get();
+
+            scheduleRepository.updateSchedule(
+                    newSchedule.getScheduleId(),
+                    newSchedule.getSchedule(),
+                    newSchedule.getDate(),
+                    newSchedule.getHm(),
+                    newSchedule.getExecutor(),
+                    newSchedule.getPeriod());
+
+            Optional<Schedule> updatedSchedule = scheduleRepository.findById(newSchedule.getScheduleId());
+
+            return updatedSchedule;
+        } else {
+            throw new UsernameNotFoundException("Invalid schedule");
         }
     }
 }

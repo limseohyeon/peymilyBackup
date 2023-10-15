@@ -22,6 +22,8 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
+    public Optional<User> getUserByEmail(String email) { return repository.findByEmail(email); }
+
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }

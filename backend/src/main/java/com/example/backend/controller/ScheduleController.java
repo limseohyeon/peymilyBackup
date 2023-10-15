@@ -10,6 +10,7 @@ import com.example.backend.repository.PetRepository;
 import com.example.backend.repository.ScheduleRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.ScheduleService;
+import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -32,6 +38,8 @@ public class ScheduleController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
     @Autowired
     private PetRepository petRepository;
     @Autowired
@@ -109,7 +117,7 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
         if (optionalPet != null && optionalPet.isPresent()) {
             List<Schedule> schedules = scheduleRepository.findByPetId(petId);
             for(Schedule s : schedules){
-                if(s.getId().equals(id)) return ResponseEntity.ok(s);
+                if(s.getScheduleId().equals(id)) return ResponseEntity.ok(s);
             }
         }
         return ResponseEntity.notFound().build();
@@ -123,34 +131,13 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
     @PutMapping("/update/{petId}/{id}")
     public ResponseEntity<ScheduleService> updateSchedule(@PathVariable("petId") Long petId,
                                                           @PathVariable("id") Long id,
-                                                          @RequestBody ScheduleService scheduleService) {
+                                                          @RequestBody Schedule scheduleBody) {
         try {
             List<Schedule> schedules = scheduleRepository.findByPetId(petId);
             for (Schedule sch : schedules) {
-                if (sch.getId() == id) {
+                if (sch.getScheduleId() == id) {
                     // 스케줄 엔티티 필드값 변경
-                    sch.setSchedule(scheduleService.getSchedule());
-                    sch.setDate(scheduleService.getDate());
-                    sch.setHm(scheduleService.getHm());
-                    sch.setPeriod(scheduleService.getPeriod());
-                    sch.setComplete(scheduleService.getComplete());
-                    sch.setExecutor(scheduleService.getExecutor());
-                    sch.setIsCompleted(scheduleService.getIsCompleted());
-
-                    // 변경된 스케줄 엔티티 저장
-                    scheduleRepository.save(sch);
-
-                    // 변경된 스케줄 정보를 반환
-                    ScheduleService updatedScheduleService = ScheduleService.builder()
-                            .schedule(sch.getSchedule())
-                            .date(sch.getDate())
-                            .hm(sch.getHm())
-                            .period(sch.getPeriod())
-                            .complete(sch.getComplete())
-                            .isCompleted(sch.getIsCompleted())
-                            .build();
-
-                    return ResponseEntity.ok(updatedScheduleService);
+                    scheduleService.updateSchedule(scheduleBody);
                 }
             }
         } catch (UsernameNotFoundException e) {
@@ -168,9 +155,9 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
         try {
             List<Schedule> schedules = scheduleRepository.findByPetId(petId);
             for (Schedule sch : schedules) {
-                if (sch.getId() == id) {
+                if (sch.getScheduleId() == id) {
                     Schedule deletedSchedule = sch;
-                    scheduleRepository.deleteById(sch.getId());
+                    scheduleRepository.deleteById(sch.getScheduleId());
 
                     return ResponseEntity.ok(deletedSchedule);
                 }
@@ -185,23 +172,36 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
         return ResponseEntity.notFound().build();
     }
     //일정 수행
-    @PutMapping("/complete/{petId}/{id}")
-    public ResponseEntity<String> completeSchedule(@PathVariable("petId") Long petId,
+    @PutMapping("/complete/{id}")
+    public ResponseEntity<String> completeSchedule(@PathVariable("email") String email,
                                                           @PathVariable("id") Long id,
-                                                          @RequestBody ScheduleService scheduleService) {
-        // 스케줄 업데이트를 수행
-        Optional<Schedule> optionalSchedule = scheduleRepository.findById(id);
+                                                          @RequestBody ScheduleRequest scheduleRequest) {
+        try {
+            Optional<User> user = userService.getUserByEmail(email);
+            if (user == null) {
+                return ResponseEntity.notFound().build();
+            }
 
-        if (optionalSchedule.isPresent()) {
-            Schedule schedule = optionalSchedule.get();
-            schedule.setIsCompleted(scheduleService.getIsCompleted());
-            schedule.setComplete(scheduleService.getComplete());
+            Schedule schedule = scheduleService.findByScheduleId(id);
+            if (schedule == null) {
+                return ResponseEntity.notFound().build();
+            }
 
-            scheduleRepository.save(schedule); // 업데이트된 스케줄 저장
+            // 현재 날짜 가져오기
+            LocalDate currentDate = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String formattedDate = currentDate.format(formatter);
 
-            return ResponseEntity.ok("Schedule updated successfully");
-        } else {
-            return ResponseEntity.notFound().build();
+            Map<String, Long> complete = schedule.getComplete();
+
+            Long newValue = id;
+            complete.put(formattedDate, newValue);
+
+            scheduleService.save(scheduleRequest);
+
+            return ResponseEntity.ok(email); // 유저 이메일을 반환합니다.
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while completing schedule.");
         }
     }
 
