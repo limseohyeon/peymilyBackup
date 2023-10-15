@@ -52,8 +52,15 @@ public class Schedule {
         return Objects.hash(pet);
     }
 
-    public Schedule build(Pet pet, String schedule, String date, String hm, String executor, Integer period, Integer isCompleted) {
+    public Schedule build(Long scheduleId,
+                          Pet pet,
+                          String schedule,
+                          String date,
+                          String hm,
+                          String executor,
+                          Integer period) {
         return builder()
+                .scheduleId(scheduleId)
                 .pet(pet)
                 .schedule(schedule)
                 .date(date)
