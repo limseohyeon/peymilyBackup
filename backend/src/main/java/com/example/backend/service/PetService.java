@@ -81,7 +81,13 @@ public class PetService {
     }
 
     public void updatePetName(String oldPetName, String newPetName) {
-        petRepository.updatePetName(oldPetName, newPetName);
+        int updatedSchedules = petRepository.updateSchedulesWithNewPetName(oldPetName, newPetName);
+
+        System.out.println(updatedSchedules);
+
+        int updatedPet = petRepository.updatePetName(oldPetName, newPetName);
+
+        System.out.println(updatedPet);
     }
 
     public void uploadPetImage(String petName, MultipartFile file) throws IOException {
