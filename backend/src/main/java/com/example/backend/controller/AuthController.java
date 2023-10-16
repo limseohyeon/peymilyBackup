@@ -13,7 +13,9 @@ import org.springframework.security.core.AuthenticationException;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -56,5 +58,18 @@ public class AuthController {
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+    //이메일 중복 확인
+    @GetMapping("/{email}")
+    public ResponseEntity<Boolean> overlapCheck(@PathVariable("email") String email) {
+
+        List<User> allUsers = userService.getAllUsers();
+        for(User u : allUsers){
+            if(u.getEmail().equals(email)){
+                return ResponseEntity.ok(false);
+            }
+        }
+        return ResponseEntity.ok(true);
     }
 }
