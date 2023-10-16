@@ -29,12 +29,6 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     @Query("UPDATE Pet p SET p.petName = :newPetName WHERE p.petName = :oldPetName")
     int updatePetName(@Param("oldPetName") String oldPetName, @Param("newPetName") String newPetName);
 
-    @Transactional
-    @Modifying
-    @Query("UPDATE Schedule s SET s.pet.petName = :newPetName WHERE s.pet.petName = :oldPetName")
-    int updateSchedulesWithNewPetName(@Param("oldPetName") String oldPetName, @Param("newPetName") String newPetName);
-
-
     @Modifying
     @Query("DELETE FROM Pet p WHERE p.petName = :petName")
     void deletePetByName(@Param("petName") String petName);
