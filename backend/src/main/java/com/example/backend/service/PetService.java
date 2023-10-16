@@ -5,7 +5,6 @@ import com.example.backend.dto.UserRequest;
 import com.example.backend.entity.Pet;
 import com.example.backend.entity.User;
 import com.example.backend.repository.PetRepository;
-import com.example.backend.repository.ScheduleRepository;
 import com.example.backend.repository.UserRepository;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +35,6 @@ public class PetService {
 
     @Autowired
     private final PetRepository petRepository;
-
-    @Autowired
-    private final ScheduleRepository scheduleRepository;
 
     @Autowired
     private final UserService userService;
@@ -82,16 +78,6 @@ public class PetService {
         } else {
             throw new UsernameNotFoundException("Invalid username or password");
         }
-    }
-
-    public void updatePetName(String oldPetName, String newPetName) {
-        int updatedSchedules = scheduleRepository.updateSchedulesWithNewPetName(oldPetName, newPetName);
-
-        System.out.println(updatedSchedules);
-
-        int updatedPet = petRepository.updatePetName(oldPetName, newPetName);
-
-        System.out.println(updatedPet);
     }
 
     public void uploadPetImage(String petName, MultipartFile file) throws IOException {

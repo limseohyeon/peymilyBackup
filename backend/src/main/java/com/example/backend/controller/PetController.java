@@ -113,38 +113,20 @@ public class PetController {
         return ResponseEntity.notFound().build();
     }
 
-    //      펫계정 수정
+//      펫계정 수정
     @PutMapping("/put-pet/{email}/{petId}")
     public ResponseEntity<Pet> updatePet(@PathVariable("email") String email,
                                          @PathVariable("petId") Long petId,
                                          @RequestBody Pet pet) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
-        List<Pet> allPets = petService.getAllPets();
-
-        Pet foundPet = null;
-
-        for (Pet p : allPets) {
-            if (!p.getPetName().equals(pet.getPetName()) || !p.getUser().getEmail().equals(email)) {
-                foundPet = p;
-                break;
-            }
-        }
-
-        if (foundPet != null) {
-            foundPet.setPetAge(pet.getPetAge());
-            foundPet.setDetailInfo(pet.getDetailInfo());
-            petService.updatePetName(foundPet.getPetName(), pet.getPetName());
-            Pet updatedPet = petRepository.save(foundPet);
-            return ResponseEntity.ok(updatedPet);
-        }
-
         if (optionalUser.isPresent()) {
             List<PetLink> petLinks = petLinkRepository.findAllLinkByOwner(email);
-            for (PetLink p : petLinks) {
-                if (p.getPetId().equals(petId)) {
+            for(PetLink p : petLinks){
+                if(p.getPetId().equals(petId)){
                     Optional<Pet> optionalPet = petRepository.findById(p.getPetId());
                     if (optionalPet.isPresent()) {
                         Pet existingPet = optionalPet.get();
+                        existingPet.setPetName(pet.getPetName());
                         existingPet.setPetAge(pet.getPetAge());
                         existingPet.setDetailInfo(pet.getDetailInfo());
                         Pet updatedPet = petRepository.save(existingPet);
@@ -152,6 +134,7 @@ public class PetController {
                     }
                 }
             }
+//            Optional<Pet> optionalPet = pets.stream().filter(p -> p.getPetName().equals(petName)).findFirst();
         }
         return ResponseEntity.notFound().build();
     }

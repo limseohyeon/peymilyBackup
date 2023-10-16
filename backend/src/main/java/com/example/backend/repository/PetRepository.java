@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,11 +22,6 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 
     @Query("SELECT p FROM Pet p WHERE p.id = ?1")
     Pet findByPetId(Long petId);
-
-    @Transactional
-    @Modifying
-    @Query("UPDATE Pet p SET p.petName = :newPetName WHERE p.petName = :oldPetName")
-    int updatePetName(@Param("oldPetName") String oldPetName, @Param("newPetName") String newPetName);
 
     @Modifying
     @Query("DELETE FROM Pet p WHERE p.petName = :petName")
