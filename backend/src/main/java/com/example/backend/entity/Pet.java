@@ -33,8 +33,7 @@ public class Pet implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName="userId") // 230709 긴급 수정
     @JsonBackReference
     private User user;
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true)
     private String petCode;
     private String petName;
     private Integer petAge;

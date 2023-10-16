@@ -69,6 +69,7 @@ public class PetService {
             Pet pet = Pet.builder()
                     .user(user)
                     .petName(petRequest.getPetName())
+                    .petCode(petRequest.getPetCode())
                     .petAge(petRequest.getPetAge())
                     .detailInfo(petRequest.getDetailInfo())
                     .inviter(petRequest.getInviter())

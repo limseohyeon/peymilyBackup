@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class PetRequest {
     private Long userId; // User 객체를 참조하는 필드
     private String petName;
+    private String petCode;
     private Integer petAge;
     private String detailInfo;
     private String inviter;
