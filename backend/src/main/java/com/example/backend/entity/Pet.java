@@ -34,7 +34,7 @@ public class Pet implements Serializable {
     @JsonBackReference
     private User user;
     @Column(unique = true)
-    private String petCode;
+    private Long petCode;
     private String petName;
     private Integer petAge;
     private String detailInfo;
