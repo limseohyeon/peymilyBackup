@@ -44,6 +44,7 @@ public class ScheduleService {
                 .schedule(scheduleRequest.getSchedule())
                 .date(scheduleRequest.getDate())
                 .hm(scheduleRequest.getHm())
+                .executorEmail(scheduleRequest.getExecutorEmail())
                 .executor(scheduleRequest.getExecutor())
                 .period(scheduleRequest.getPeriod())
                 .build();
@@ -59,6 +60,7 @@ public class ScheduleService {
                     .schedule(schedulerequest.getSchedule())
                     .date(schedulerequest.getDate())
                     .hm(schedulerequest.getHm())
+                    .executorEmail(schedulerequest.getExecutorEmail())
                     .executor(schedulerequest.getExecutor())
                     .period(schedulerequest.getPeriod())
                     .build();
@@ -80,6 +82,7 @@ public class ScheduleService {
                     newSchedule.getSchedule(),
                     newSchedule.getDate(),
                     newSchedule.getHm(),
+                    newSchedule.getExecutorEmail(),
                     newSchedule.getExecutor(),
                     newSchedule.getPeriod());
 

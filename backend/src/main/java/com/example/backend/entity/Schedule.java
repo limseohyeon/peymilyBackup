@@ -30,13 +30,16 @@ public class Schedule {
     private String schedule;
     private String date;
     private String hm;
+    // 실행자 이메일
+    private String executorEmail;
+    // 실행자
     private String executor;
     private Integer period;
     //private Integer isCompleted;
 
-    // 날짜와 스케줄ID
-    @ElementCollection
-    private Map<String, Long> complete;
+    // 날짜와 스케줄ID -> email
+//    @ElementCollection
+//    private Map<String, Map<Long, String>> complete;
 
     // EqualsAndHashCode 메서드 오버라이딩
     @Override
@@ -52,21 +55,23 @@ public class Schedule {
         return Objects.hash(pet);
     }
 
-    public Schedule build(Long scheduleId,
-                          Pet pet,
-                          String schedule,
-                          String date,
-                          String hm,
-                          String executor,
-                          Integer period) {
-        return builder()
-                .scheduleId(scheduleId)
-                .pet(pet)
-                .schedule(schedule)
-                .date(date)
-                .hm(hm)
-                .executor(executor)
-                .period(period)
-                .build();
-    }
+//    public Schedule build(Long scheduleId,
+//                          Pet pet,
+//                          String schedule,
+//                          String date,
+//                          String hm,
+//                          String executorEmail,
+//                          String executor,
+//                          Integer period) {
+//        return builder()
+//                .scheduleId(scheduleId)
+//                .pet(pet)
+//                .schedule(schedule)
+//                .date(date)
+//                .hm(hm)
+//                .executorEmail(executorEmail)
+//                .executor(executor)
+//                .period(period)
+//                .build();
+//    }
 }

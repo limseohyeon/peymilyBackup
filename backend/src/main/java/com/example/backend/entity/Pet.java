@@ -35,6 +35,8 @@ public class Pet implements Serializable {
     private User user;
     @Column(unique = true)
     private String petName;
+    // 2023-10-16 changeablePetName 추가
+    private String changeablePetName;
     private Integer petAge;
     private String detailInfo;
     private String inviter;
@@ -47,6 +49,7 @@ public class Pet implements Serializable {
         return Pet.builder()
                 .user(user)
                 .petName(petName)
+                .changeablePetName(petName)
                 .petAge(petAge)
                 .detailInfo(detailInfo)
                 .inviter(inviter)

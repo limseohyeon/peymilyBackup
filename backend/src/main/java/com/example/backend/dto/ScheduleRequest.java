@@ -4,6 +4,7 @@ import com.example.backend.entity.Pet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.modelmapper.internal.Pair;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -27,10 +28,9 @@ public class ScheduleRequest {
     private String schedule;
     private String date;
     private String hm;
+    private String executorEmail;
     private String executor;
     private Integer period;
 //    private String complete;
 //    private Integer isCompleted;
-    @ElementCollection
-    private Map<String, Long> complete;
 }

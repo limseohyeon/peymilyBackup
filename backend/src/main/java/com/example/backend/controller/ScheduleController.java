@@ -1,16 +1,15 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.ScheduleRequest;
-import com.example.backend.entity.Pet;
-import com.example.backend.entity.PetLink;
-import com.example.backend.entity.Schedule;
-import com.example.backend.entity.User;
+import com.example.backend.entity.*;
 import com.example.backend.repository.PetLinkRepository;
 import com.example.backend.repository.PetRepository;
 import com.example.backend.repository.ScheduleRepository;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.service.ExecutedScheduleService;
 import com.example.backend.service.ScheduleService;
 import com.example.backend.service.UserService;
+import com.mysql.cj.conf.ConnectionUrlParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +23,11 @@ import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hibernate.sql.InFragment.NULL;
-
+import org.modelmapper.internal.Pair;
 @RestController
 @RequestMapping("/schedule/{email}")
 public class ScheduleController {
@@ -52,6 +48,10 @@ public class ScheduleController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private ExecutedScheduleService executedScheduleService;
+
 //일정 생성
     @PostMapping("/add/{petId}")
     public ResponseEntity<Schedule> createSchedule(@PathVariable("petId") Long petId,
@@ -172,14 +172,14 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
         return ResponseEntity.notFound().build();
     }
     //일정 수행
-    @PutMapping("/complete/{petId}/{id}")
-    public ResponseEntity<String> completeSchedule(@PathVariable("email") String email,
-                                                          @PathVariable("petId") Long petId,
-                                                          @PathVariable("id") Long id,
-                                                          @RequestBody ScheduleRequest scheduleRequest) {
+    @PutMapping("/complete/{id}")
+    public ResponseEntity<String> completeSchedule(
+            @PathVariable("email") String email,
+            @PathVariable("id") Long id, // 스케줄 아이디
+            @RequestBody ScheduleRequest scheduleRequest) {
         try {
             Optional<User> user = userService.getUserByEmail(email);
-            if (user == null) {
+            if (!user.isPresent()) {
                 return ResponseEntity.notFound().build();
             }
 
@@ -193,17 +193,19 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String formattedDate = currentDate.format(formatter);
 
-            Map<String, Long> complete = schedule.getComplete();
+            List<ExecutedSchedule> executedSchedules = executedScheduleService.findByScheduleId(id);
 
-            Long newValue = id;
-            complete.put(formattedDate, newValue);
+            // 추가만 하는 이유는 이미 돼있는 상태에서 다시 누를 경우 삭제 코드가 실행되게 하려고
+            ExecutedSchedule executedSchedule = new ExecutedSchedule();
+            executedSchedule.setScheduleId(id);
+            executedSchedule.setDate(formattedDate);
+            executedScheduleService.save(executedSchedule);
 
-            scheduleService.save(scheduleRequest);
-
-            return ResponseEntity.ok(email); // 유저 이메일을 반환합니다.
+            return ResponseEntity.ok(email);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while completing schedule.");
         }
     }
+
 
 }
