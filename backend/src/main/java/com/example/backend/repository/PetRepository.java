@@ -24,6 +24,10 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     Pet findByPetId(Long petId);
 
     @Modifying
+    @Query("UPDATE Pet p SET p.petName = :newPetName WHERE p.petName = :oldPetName")
+    int updatePetName(@Param("oldPetName") String oldPetName, @Param("newPetName") String newPetName);
+
+    @Modifying
     @Query("DELETE FROM Pet p WHERE p.petName = :petName")
     void deletePetByName(@Param("petName") String petName);
 }

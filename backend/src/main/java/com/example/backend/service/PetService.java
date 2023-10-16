@@ -80,6 +80,10 @@ public class PetService {
         }
     }
 
+    public void updatePetName(String oldPetName, String newPetName) {
+        petRepository.updatePetName(oldPetName, newPetName);
+    }
+
     public void uploadPetImage(String petName, MultipartFile file) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         Path uploadDir = Paths.get("image-uploads", petName);
