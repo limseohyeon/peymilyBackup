@@ -172,8 +172,9 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
         return ResponseEntity.notFound().build();
     }
     //일정 수행
-    @PutMapping("/complete/{id}")
+    @PutMapping("/complete/{petId}/{id}")
     public ResponseEntity<String> completeSchedule(@PathVariable("email") String email,
+                                                          @PathVariable("petId") Long petId,
                                                           @PathVariable("id") Long id,
                                                           @RequestBody ScheduleRequest scheduleRequest) {
         try {

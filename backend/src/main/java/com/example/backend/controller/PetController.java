@@ -4,9 +4,11 @@ import com.example.backend.dto.PetRequest;
 import com.example.backend.dto.UserRequest;
 import com.example.backend.entity.Pet;
 import com.example.backend.entity.PetLink;
+import com.example.backend.entity.Schedule;
 import com.example.backend.entity.User;
 import com.example.backend.repository.PetLinkRepository;
 import com.example.backend.repository.PetRepository;
+import com.example.backend.repository.ScheduleRepository;
 import com.example.backend.service.PetLinkService;
 import com.example.backend.service.PetService;
 import com.example.backend.service.UserService;
@@ -49,6 +51,9 @@ public class PetController {
     private PetLinkService petLinkService;
     @Autowired
     private PetLinkRepository petLinkRepository;
+
+    @Autowired
+    private ScheduleRepository scheduleRepository;
 
     @PostMapping("/add/{email}")
     public ResponseEntity<Pet> savePet(@RequestBody @Valid PetRequest petRequest,
@@ -114,30 +119,42 @@ public class PetController {
     }
 
 //      펫계정 수정
+    @Transactional
     @PutMapping("/put-pet/{email}/{petId}")
     public ResponseEntity<Pet> updatePet(@PathVariable("email") String email,
                                          @PathVariable("petId") Long petId,
                                          @RequestBody Pet pet) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
+
         if (optionalUser.isPresent()) {
-            List<PetLink> petLinks = petLinkRepository.findAllLinkByOwner(email);
-            for(PetLink p : petLinks){
-                if(p.getPetId().equals(petId)){
-                    Optional<Pet> optionalPet = petRepository.findById(p.getPetId());
-                    if (optionalPet.isPresent()) {
-                        Pet existingPet = optionalPet.get();
-                        existingPet.setPetName(pet.getPetName());
-                        existingPet.setPetAge(pet.getPetAge());
-                        existingPet.setDetailInfo(pet.getDetailInfo());
-                        Pet updatedPet = petRepository.save(existingPet);
-                        return ResponseEntity.ok(updatedPet);
+            Optional<Pet> optionalPet = petRepository.findById(petId);
+            if (optionalPet.isPresent()) {
+                Pet existingPet = optionalPet.get();
+
+                // Pet 정보 업데이트
+                existingPet.setPetName(pet.getPetName());
+                existingPet.setPetAge(pet.getPetAge());
+                existingPet.setDetailInfo(pet.getDetailInfo());
+
+                // Schedules의 petName 업데이트
+                List<Schedule> allSchedules = existingPet.getSchedules();
+                if (allSchedules != null) {
+                    for (Schedule sch : allSchedules) {
+                        if (sch.getPet() != null) {
+                            sch.getPet().setPetName(pet.getPetName());
+                        }
                     }
                 }
+
+                // Pet와 Schedules 엔티티를 저장
+                petRepository.save(existingPet);
+
+                return ResponseEntity.ok(existingPet);
             }
-//            Optional<Pet> optionalPet = pets.stream().filter(p -> p.getPetName().equals(petName)).findFirst();
         }
         return ResponseEntity.notFound().build();
     }
+
 
     @DeleteMapping("/delete-pet/{email}/{petId}")
     @Transactional
