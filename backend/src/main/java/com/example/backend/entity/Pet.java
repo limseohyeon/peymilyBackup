@@ -44,7 +44,7 @@ public class Pet implements Serializable {
     @JsonManagedReference
     private List<Schedule> schedules = new ArrayList<>();
 
-    public static Pet build(User user, String petName, String petCode, Integer petAge, String detailInfo, String inviter) {
+    public static Pet build(User user, String petName, Long petCode, Integer petAge, String detailInfo, String inviter) {
         return Pet.builder()
                 .user(user)
                 .petName(petName)
