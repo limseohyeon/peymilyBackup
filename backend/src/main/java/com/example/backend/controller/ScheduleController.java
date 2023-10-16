@@ -193,10 +193,7 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String formattedDate = currentDate.format(formatter);
 
-            Map<String, Long> complete = schedule.getComplete();
-
             Long newValue = id;
-            complete.put(formattedDate, newValue);
 
             scheduleService.save(scheduleRequest);
 

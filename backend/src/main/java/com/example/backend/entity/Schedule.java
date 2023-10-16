@@ -24,7 +24,7 @@ public class Schedule {
     private Long scheduleId;
     @ManyToOne(fetch = FetchType.LAZY)
     // 2023-10-15 수정
-    @JoinColumn(name = "petName", referencedColumnName = "petName")
+    @JoinColumn(name = "petCode", referencedColumnName = "petCode")
     @JsonBackReference
     private Pet pet;
     private String schedule;
@@ -33,10 +33,6 @@ public class Schedule {
     private String executor;
     private Integer period;
     //private Integer isCompleted;
-
-    // 날짜와 스케줄ID
-    @ElementCollection
-    private Map<String, Long> complete;
 
     // EqualsAndHashCode 메서드 오버라이딩
     @Override
@@ -50,23 +46,5 @@ public class Schedule {
     @Override
     public int hashCode() {
         return Objects.hash(pet);
-    }
-
-    public Schedule build(Long scheduleId,
-                          Pet pet,
-                          String schedule,
-                          String date,
-                          String hm,
-                          String executor,
-                          Integer period) {
-        return builder()
-                .scheduleId(scheduleId)
-                .pet(pet)
-                .schedule(schedule)
-                .date(date)
-                .hm(hm)
-                .executor(executor)
-                .period(period)
-                .build();
     }
 }
