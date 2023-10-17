@@ -50,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/community/**").authenticated()
                 .antMatchers("/communityImage/**").permitAll()
                 .antMatchers("/invitation/**").authenticated()
+                .antMatchers("executed/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
