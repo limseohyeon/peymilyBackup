@@ -25,7 +25,6 @@ public class ExecutedScheduleController {
                                    @PathVariable("date") String date) {
 
         List<ExecutedSchedule> executedSchedule = executedScheduleService.findByScheduleId(scheduleId);
-        ExecutedSchedule returnValue = new ExecutedSchedule();
 
         if (executedSchedule.size() == 0) {
             ExecutedSchedule newExecutedSchedule =
