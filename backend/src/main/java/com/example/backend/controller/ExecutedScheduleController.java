@@ -37,7 +37,7 @@ public class ExecutedScheduleController {
                     .email(email)
                     .build();
 
-            executedScheduleService.updateEmailByScheduleIdAndDate(scheduleId, currentDate, email);
+            executedScheduleService.save(newExecutedSchedule);
             existingExecutedSchedule = newExecutedSchedule;
         }
 

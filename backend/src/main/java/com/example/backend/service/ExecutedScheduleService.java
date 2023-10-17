@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -34,6 +35,7 @@ public class ExecutedScheduleService {
         return executedScheduleRepository.findExecutedScheduleByScheduleIdAndDate(scheduleId, date);
     }
 
+    @Transactional
     public void updateEmailByScheduleIdAndDate(Long scheduleId, String date, String email) {
         executedScheduleRepository.updateEmailByScheduleIdAndDate(scheduleId, date, email);
     }
