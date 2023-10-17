@@ -39,4 +39,8 @@ public class ExecutedScheduleService {
     public void updateEmailByScheduleIdAndDate(Long scheduleId, String date, String email) {
         executedScheduleRepository.updateEmailByScheduleIdAndDate(scheduleId, date, email);
     }
+
+    public List<ExecutedSchedule> getAll() {
+       return executedScheduleRepository.getAll();
+    }
 }

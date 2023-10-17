@@ -23,4 +23,6 @@ public interface ExecutedScheduleRepository  extends JpaRepository<ExecutedSched
                                         @Param("date") String date,
                                         @Param("email") String email);
 
+    @Query("SELECT es FROM ExecutedSchedule es")
+    List<ExecutedSchedule> getAll();
 }

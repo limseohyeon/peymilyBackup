@@ -18,22 +18,25 @@ public class ExecutedScheduleController {
     @Autowired
     private ExecutedScheduleService executedScheduleService;
 
-    @GetMapping("/{email}/{scheduleId}")
-    public ResponseEntity<ExecutedSchedule> getEmail(@PathVariable("email") String email,
-                                                     @PathVariable("scheduleId") Long scheduleId) {
+    @GetMapping("/getAll")
+    public List<ExecutedSchedule> getAll() {
+        return executedScheduleService.getAll();
+    }
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDate = dateFormat.format(new Date());
+    @GetMapping("/{email}/{scheduleId}/{date}")
+    public ResponseEntity<ExecutedSchedule> getEmail(@PathVariable("email") String email,
+                                                     @PathVariable("scheduleId") Long scheduleId,
+                                                     @PathVariable("date") String date) {
 
         ExecutedSchedule existingExecutedSchedule =
-                executedScheduleService.findExecutedScheduleByScheduleIdAndDate(scheduleId, currentDate);
+                executedScheduleService.findExecutedScheduleByScheduleIdAndDate(scheduleId, date);
 
         if (existingExecutedSchedule != null) {
             existingExecutedSchedule.setEmail(email);
         } else {
             ExecutedSchedule newExecutedSchedule = ExecutedSchedule.builder()
                     .scheduleId(scheduleId)
-                    .date(currentDate)
+                    .date(date)
                     .email(email)
                     .build();
 
