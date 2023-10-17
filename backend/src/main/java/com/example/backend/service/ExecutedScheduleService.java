@@ -29,5 +29,8 @@ public class ExecutedScheduleService {
     public void deleteByExecutedId(Long executedId) {
         executedScheduleRepository.deleteByExecutedId(executedId);
     }
-}
 
+    public ExecutedSchedule findExecutedScheduleByScheduleIdAndDate(Long scheduleId, String date) {
+        return executedScheduleRepository.findExecutedScheduleByScheduleIdAndDate(scheduleId, date);
+    }
+}

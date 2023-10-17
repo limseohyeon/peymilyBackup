@@ -194,6 +194,7 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
             String formattedDate = currentDate.format(formatter);
 
             List<ExecutedSchedule> executedSchedules = executedScheduleService.findByScheduleId(id);
+            Long newValue = id;
 
             // 추가만 하는 이유는 이미 돼있는 상태에서 다시 누를 경우 삭제 코드가 실행되게 하려고
             ExecutedSchedule executedSchedule = new ExecutedSchedule();

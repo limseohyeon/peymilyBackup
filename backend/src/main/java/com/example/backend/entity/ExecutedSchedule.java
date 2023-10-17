@@ -20,4 +20,5 @@ public class ExecutedSchedule {
     private Long executedId;
     private Long scheduleId;
     private String date;
+    private String email;
 }

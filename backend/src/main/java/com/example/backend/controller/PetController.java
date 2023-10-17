@@ -58,6 +58,7 @@ public class PetController {
     @PostMapping("/add/{email}")
     public ResponseEntity<Pet> savePet(@RequestBody @Valid PetRequest petRequest,
                                        @PathVariable("email") String email) {
+        System.out.println(petRequest);
         try {
             Optional<User> user = userRepository.findByEmail(email);
 

@@ -5,10 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="468c939b-b27d-4fe5-a85f-8359097931c9" name="Changes" comment="">
+<<<<<<< HEAD
+=======
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/controller/ExecutedScheduleController.java" afterDir="false" />
+>>>>>>> sangyoun
       <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/entity/ExecutedSchedule.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/repository/ExecutedScheduleRepository.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/service/ExecutedScheduleService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/controller/ScheduleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/controller/ScheduleController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/dto/PetRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/dto/PetRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/dto/ScheduleRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/dto/ScheduleRequest.java" afterDir="false" />
@@ -17,6 +22,8 @@
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/repository/ScheduleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/repository/ScheduleRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/service/PetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/service/PetService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/service/ScheduleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/example/backend/service/ScheduleService.java" afterDir="false" />
+=======
+>>>>>>> sangyoun
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
