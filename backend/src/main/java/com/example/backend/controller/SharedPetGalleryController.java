@@ -13,27 +13,38 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/sharedPetGallery", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/sharedPetGallery/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SharedPetGalleryController {
 
     @Autowired
     private SharedPetGalleryService sharedPetGalleryService;
 
-    @PostMapping("/post/{email}")
-    public ResponseEntity<SharedPetGallery> PostCommunity(@PathVariable("email") String email,
-                                                          @RequestBody @Valid SharedPetGalleryRequest sharedPetGalleryRequest) {
+//사진 올리기
+    @PostMapping("/post/{petId}")
+    public ResponseEntity<SharedPetGallery> PostSharedPetGallery(@PathVariable("email") String email,
+                                                                 @PathVariable("petId") Long petId,
+                                                                 @RequestBody @Valid SharedPetGalleryRequest sharedPetGalleryRequest) {
         try {
-            SharedPetGallery newPost = sharedPetGalleryService.savePhoto(sharedPetGalleryRequest, email);
-
+            SharedPetGallery newPost = sharedPetGalleryService.savePhoto(sharedPetGalleryRequest, email, petId);
             return ResponseEntity.ok(newPost);
         } catch(Exception e) {
             System.out.println("Can't save photo request. Error : " + e);
             return ResponseEntity.notFound().build();
         }
     }
+//해당 펫에 속한 모든 사진 가져오기
+@GetMapping("/get/{petId}")
+public ResponseEntity<List<SharedPetGallery>> GetAllSharedPetGalleryByPetId(@PathVariable("petId") Long petId) {
+    List<SharedPetGallery> sharedAllPetGallery = sharedPetGalleryService.findAllPostByPetId(petId);
 
+    if (sharedAllPetGallery.equals(null)) {
+        return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(sharedAllPetGallery);
+}
+//특정 사진 가져오기
     @GetMapping("/get/{photoId}")
-    public ResponseEntity<SharedPetGallery> GetCommunity(@PathVariable("photoId") Long photoId) {
+    public ResponseEntity<SharedPetGallery> GetSharedPetGallery(@PathVariable("photoId") Long photoId) {
         SharedPetGallery sharedPetGalleryPosted = sharedPetGalleryService.findPostById(photoId);
 
         if (sharedPetGalleryPosted.equals(null)) {
@@ -42,19 +53,8 @@ public class SharedPetGalleryController {
 
         return ResponseEntity.ok(sharedPetGalleryPosted);
     }
-
-    @GetMapping("/getAll")
-    public ResponseEntity<List<SharedPetGallery>> GetAllSharedPetGallery() {
-        List<SharedPetGallery> allOfSharedPetGalleryPosted = sharedPetGalleryService.findAllPost();
-
-        if (allOfSharedPetGalleryPosted.size() == 0) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(allOfSharedPetGalleryPosted);
-    }
-
-    @PutMapping("/update")
+//특정 사진 수정하기
+    @PutMapping("/update/{photoId}")
     public ResponseEntity<SharedPetGallery> UpdateSharedPetGallery(@Valid @RequestBody SharedPetGalleryRequest updatedGalleryData) {
         try {
             SharedPetGallery existingSharedPetGallery = sharedPetGalleryService.findPostById(updatedGalleryData.getPhotoId());
@@ -63,7 +63,6 @@ public class SharedPetGalleryController {
                 System.out.println("수정할 게시글을 찾을 수 없습니다");
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-
             SharedPetGallery newCommunity = sharedPetGalleryService.updateSharedPetGallery(updatedGalleryData);
             System.out.println("게시글 수정 성공");
 
@@ -73,8 +72,8 @@ public class SharedPetGalleryController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @PutMapping("/updateLikes/{email}")
+//좋아요 업데이트
+    @PutMapping("/updateLikes/{petId}")
     public ResponseEntity<SharedPetGallery> UpdateLikes(@Valid @RequestBody SharedPetGalleryRequest updatedGalleryData,
                                                  @PathVariable("email") String email) {
         try {
@@ -97,7 +96,7 @@ public class SharedPetGalleryController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+//특정 사진 삭제하기
     @DeleteMapping("/delete/{photoId}")
     public ResponseEntity<SharedPetGallery> DeleteSharedPetGallery(@PathVariable("photoId") Long photoId) {
         SharedPetGallery GalleryToDelete = sharedPetGalleryService.findPostById(photoId);
@@ -106,4 +105,28 @@ public class SharedPetGalleryController {
 
         return ResponseEntity.ok(GalleryToDelete);
     }
+    //사용자에 속한 모든 사진 삭제하기(계정 탈퇴)
+    @DeleteMapping("/deleteByEmail")
+    public ResponseEntity<List<SharedPetGallery>> DeleteSharedPetGalleryByEmail(@PathVariable("email") String email) {
+        List<SharedPetGallery> GalleryToDelete = sharedPetGalleryService.findAllPostByEmail(email);
+        sharedPetGalleryService.deleteSharedPetGalleryByEmail(email);
+
+        return ResponseEntity.ok(GalleryToDelete);
+    }
+    //펫에 속한 모든 사진 삭제하기(펫 계정 삭제)
+    @DeleteMapping("/deleteByPetId/{petId}")
+    public ResponseEntity<List<SharedPetGallery>> DeleteSharedPetGalleryByPetId(@PathVariable("petId") Long petId) {
+        List<SharedPetGallery> GalleryToDelete = sharedPetGalleryService.findAllPostByPetId(petId);
+        sharedPetGalleryService.deleteSharedPetGalleryByPetId(petId);
+
+        return ResponseEntity.ok(GalleryToDelete);
+    }
+    //사용자 && 펫에 속한 모든 사진 삭제하기(양육자 나가기)
+    @DeleteMapping("/deleteByEmailAndPetId/{petId}")
+        public ResponseEntity<List<SharedPetGallery>> DeleteSharedPetGalleryByEmailAndPetId(@PathVariable("email") String email,
+                                                                                            @PathVariable("petId") Long petId) {
+            List<SharedPetGallery> GalleryToDelete = sharedPetGalleryService.findAllPostByUserAndPetId(email,petId);
+            sharedPetGalleryService.deleteSharedPetGalleryByPetIdAndEmail(email,petId);
+
+            return ResponseEntity.ok(GalleryToDelete);}
 }

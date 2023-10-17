@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SharedPetGalleryRequest {
     private Long photoId;
+    private Long petId;
     private String email;
     private Long likes;
     private String title;

@@ -20,6 +20,7 @@ public class SharedPetGallery {
     @Id
     @GeneratedValue
     private Long photoId;
+    private Long petId;
     private String email;
     private Long likes;
     private String title;
