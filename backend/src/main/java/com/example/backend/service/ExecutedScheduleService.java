@@ -33,4 +33,8 @@ public class ExecutedScheduleService {
     public ExecutedSchedule findExecutedScheduleByScheduleIdAndDate(Long scheduleId, String date) {
         return executedScheduleRepository.findExecutedScheduleByScheduleIdAndDate(scheduleId, date);
     }
+
+    public void updateEmailByScheduleIdAndDate(Long scheduleId, String date, String email) {
+        executedScheduleRepository.updateEmailByScheduleIdAndDate(scheduleId, date, email);
+    }
 }

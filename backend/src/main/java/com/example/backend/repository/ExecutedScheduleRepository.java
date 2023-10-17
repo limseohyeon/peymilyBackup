@@ -18,4 +18,10 @@ public interface ExecutedScheduleRepository  extends JpaRepository<ExecutedSched
     ExecutedSchedule findExecutedScheduleByScheduleIdAndDate(@Param("scheduleId") Long scheduleId,
                                                              @Param("date") String date);
 
+    @Modifying
+    @Query("UPDATE ExecutedSchedule es SET es.email = :email WHERE es.scheduleId = :scheduleId AND es.date = :date")
+    void updateEmailByScheduleIdAndDate(@Param("scheduleId") Long scheduleId,
+                                        @Param("date") String date,
+                                        @Param("email") String email);
+
 }
