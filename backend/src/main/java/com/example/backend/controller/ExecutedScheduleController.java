@@ -3,10 +3,12 @@ package com.example.backend.controller;
 import com.example.backend.entity.ExecutedSchedule;
 import com.example.backend.service.ExecutedScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -50,10 +52,16 @@ public class ExecutedScheduleController {
     @DeleteMapping("/delete/{scheduleId}/{date}")
     public ResponseEntity<ExecutedSchedule> deleteExecution(@PathVariable("scheduleId") Long scheduleId,
                                                             @PathVariable("date") String date) {
-        ExecutedSchedule toDelete = executedScheduleService.findExecutedScheduleByScheduleIdAndDate(scheduleId, date);
+        try {
+            ExecutedSchedule toDelete =
+                    executedScheduleService.findExecutedScheduleByScheduleIdAndDate(scheduleId, date);
 
-        executedScheduleService.deleteByExecutedId(toDelete.getExecutedId());
+            executedScheduleService.deleteByExecutedId(toDelete.getExecutedId());
 
-        return ResponseEntity.ok(toDelete);
+            return ResponseEntity.ok(toDelete);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
+
 }

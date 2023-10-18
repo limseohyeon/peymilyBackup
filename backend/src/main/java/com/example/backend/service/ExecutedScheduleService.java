@@ -27,6 +27,7 @@ public class ExecutedScheduleService {
         executedScheduleRepository.save(executedSchedule);
     }
 
+    @Transactional
     public void deleteByExecutedId(Long executedId) {
         executedScheduleRepository.deleteByExecutedId(executedId);
     }
