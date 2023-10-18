@@ -46,4 +46,14 @@ public class ExecutedScheduleController {
 
         return ResponseEntity.ok(existingExecutedSchedule);
     }
+
+    @DeleteMapping("/delete/{scheduleId}/{date}")
+    public ResponseEntity<ExecutedSchedule> deleteExecution(@PathVariable("scheduleId") Long scheduleId,
+                                                            @PathVariable("date") String date) {
+        ExecutedSchedule toDelete = executedScheduleService.findExecutedScheduleByScheduleIdAndDate(scheduleId, date);
+
+        executedScheduleService.deleteByExecutedId(toDelete.getExecutedId());
+
+        return ResponseEntity.ok(toDelete);
+    }
 }
