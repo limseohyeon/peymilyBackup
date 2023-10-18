@@ -16,6 +16,7 @@ public class CommentService {
     @Autowired
     private final CommentRepository commentRepository;
 
+    //댓글 저장
     public Comment saveComment(CommentRequest commentRequest) {
         Comment comment = Comment.builder()
                 .communityId(commentRequest.getCommunityId())
@@ -23,28 +24,49 @@ public class CommentService {
                 .commentInfo(commentRequest.getCommentInfo())
                 .date(commentRequest.getDate())
                 .build();
-
         return commentRepository.save(comment);
     }
     public Comment findCommentById(Long commentId) { return commentRepository.findCommentByCommentId(commentId); }
 
-    // communityId를 바탕으로 커뮤니티 게시글의 댓글을 불러옴
+    // 해당 게시글에 속한 모든 댓글 불러오기
     public List<Comment> findAllCommentByCommunityId(Long communityId) {
         return commentRepository.findAllCommentByCommunityId(communityId);
     }
+    // 특정 댓글 불러오기
+    public Comment findAllCommentByCommentId(Long commentId) {
+        return commentRepository.findCommentByCommentId(commentId);
+    }
+    // 사용자에 속한 모든 댓글 불러오기
+    public List<Comment> findAllCommentByEmail(String email) {
+        return commentRepository.findAllCommentByCommunityEmail(email);
+    }
 
+    // 댓글 내용 수정
     public Comment updateCommentByCommunityId(CommentRequest commentRequest, Long commentId) {
         Comment commentToChange = findCommentById(commentId);
-
-        // 댓글 내용 수정
         commentToChange.setCommentInfo(commentRequest.getCommentInfo());
-
         if (commentToChange.getCommentInfo().length() == 0) {
             System.out.println("내용을 입력하세요!");
-
             return null;
         }
-
         return commentRepository.save(commentToChange);
+    }
+    //특정 댓글 삭제
+    public Comment deleteCommentByCommentId( Long commentId) {
+        Comment commentToDelete = findCommentById(commentId);
+        commentRepository.deleteByCommentId(commentId);
+        return commentToDelete;
+    }
+    // 게시글에 속한 모든 댓글 삭제
+    public List<Comment> deleteAllCommentByCommunityId( Long communityId) {
+        List<Comment> commentToDelete = findAllCommentByCommunityId(communityId);
+        commentRepository.deleteByCommunityId(communityId);
+        return commentToDelete;
+    }
+    // 사용자에 속한 모든 댓글 삭제
+    public List<Comment> deleteAllCommentByEmail( String email) {
+        List<Comment> commentToDelete = findAllCommentByEmail(email);
+        commentRepository.deleteByEmail(email);
+        return commentToDelete;
     }
 }

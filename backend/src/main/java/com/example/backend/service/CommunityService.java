@@ -61,9 +61,7 @@ public class CommunityService {
 
     public Community deleteCommunity(Long communityId) {
         Community communityToDelete = findPostById(communityId);
-
         communityRepository.deleteByCommunityId(communityId);
-
         return communityToDelete;
     }
 }
