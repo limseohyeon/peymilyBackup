@@ -2,9 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.CommunityRequest;
 import com.example.backend.dto.ScheduleRequest;
-import com.example.backend.entity.Community;
-import com.example.backend.entity.Invitation;
-import com.example.backend.entity.PetLink;
+import com.example.backend.entity.*;
 import com.example.backend.service.CommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/community", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -101,12 +100,17 @@ public class CommunityController {
     }
 
     @DeleteMapping("/delete/{communityId}")
-    public ResponseEntity<Void> deleteCommunity(@PathVariable("communityId") Long communityId) {
-        Community deletedCommunity = communityService.deleteCommunity(communityId);
-        if (deletedCommunity == null) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Community> deleteCommunity(@PathVariable("communityId") Long communityId) {
+
+        Community community = communityService.findPostById(communityId);
+
+        if(community!= null){
+            communityService.deleteCommunity(communityId);
+            return ResponseEntity.ok(community);
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.notFound().build();
+
     }
+
 
 }
