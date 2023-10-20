@@ -24,8 +24,6 @@ public class CommunityController {
     @Autowired
     private CommunityRepository communityRepository;
 
-
-
     @PostMapping("/post/{email}")
     public ResponseEntity<Community> PostCommunity(@PathVariable("email") String email,
                                                     @RequestBody @Valid CommunityRequest communityRequest) {
@@ -107,9 +105,8 @@ public class CommunityController {
 
     @DeleteMapping("/delete/{communityId}")
     public ResponseEntity<Void> deleteCommunity(@PathVariable("communityId") Long communityId) {
-
         try {
-                communityRepository.deleteByCommunityId(communityId);
+            communityRepository.deleteById(communityId);
             return ResponseEntity.noContent().build(); // 삭제 성공 시 204 No Content 반환
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build(); // 커뮤니티를 찾을 수 없을 때 404 Not Found 반환
