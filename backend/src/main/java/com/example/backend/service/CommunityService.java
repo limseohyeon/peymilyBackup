@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +62,9 @@ public class CommunityService {
 
     public Community deleteCommunity(Long communityId) {
         Community communityToDelete = findPostById(communityId);
+        if (communityToDelete == null) {
+            throw new EntityNotFoundException("Community with ID " + communityId + " not found");
+        }
         communityRepository.deleteByCommunityId(communityId);
         return communityToDelete;
     }
