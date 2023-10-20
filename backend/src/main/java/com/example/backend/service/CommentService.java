@@ -56,7 +56,7 @@ public class CommentService {
         Comment commentToDelete = commentRepository.findCommentByCommentId(commentId);
 
         if (commentToDelete != null) {
-            commentRepository.deleteByCommentId(commentId);
+            commentRepository.deleteById(commentId);
         } else {
             throw new EntityNotFoundException("Comment not found"); // 댓글을 찾을 수 없을 때 예외 던지기
         }
