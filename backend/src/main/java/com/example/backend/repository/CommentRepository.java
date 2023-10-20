@@ -6,6 +6,7 @@ import com.example.backend.entity.Pet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,8 +26,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     //특정 댓글 삭제하기
     @Modifying
-    @Query("DELETE FROM Comment c WHERE c.commentId = ?1")
-    int deleteByCommentId(Long commentId);
+    @Query("DELETE FROM Comment c WHERE c.commentId = :commentId")
+    int deleteByCommentId(@Param("commentId") Long commentId);
+
 
     //게시글 삭제시 속한 모든 댓글 지우기
     @Modifying
