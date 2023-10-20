@@ -60,12 +60,13 @@ public class CommunityService {
         return communityRepository.save(communityFound);
     }
 
-    public Community deleteCommunity(Long communityId) {
+
+    public void deleteCommunity(Long communityId) {
         Community communityToDelete = findPostById(communityId);
         if (communityToDelete == null) {
             throw new EntityNotFoundException("Community with ID " + communityId + " not found");
         }
         communityRepository.deleteByCommunityId(communityId);
-        return communityToDelete;
     }
+
 }

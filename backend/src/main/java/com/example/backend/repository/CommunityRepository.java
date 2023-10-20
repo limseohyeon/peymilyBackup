@@ -15,5 +15,6 @@ public interface CommunityRepository extends JpaRepository<Community, Long> {
 
     @Modifying
     @Query("DELETE FROM Community c WHERE c.communityId = ?1")
-    int deleteByCommunityId(Long communityId);
+    void deleteByCommunityId(Long communityId);
+
 }

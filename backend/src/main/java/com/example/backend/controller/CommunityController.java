@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -100,17 +101,15 @@ public class CommunityController {
     }
 
     @DeleteMapping("/delete/{communityId}")
-    public ResponseEntity<Community> deleteCommunity(@PathVariable("communityId") Long communityId) {
-
-        Community community = communityService.findPostById(communityId);
-
-        if(community!= null){
+    public ResponseEntity<Void> deleteCommunity(@PathVariable("communityId") Long communityId) {
+        try {
             communityService.deleteCommunity(communityId);
-            return ResponseEntity.ok(community);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
-
     }
+
 
 
 }
