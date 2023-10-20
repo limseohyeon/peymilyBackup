@@ -101,8 +101,11 @@ public class CommunityController {
     }
 
     @DeleteMapping("/delete/{communityId}")
-    public ResponseEntity<Void> DeleteCommunity(@PathVariable("communityId") Long communityId) {
-        communityService.deleteCommunity(communityId);
+    public ResponseEntity<Void> deleteCommunity(@PathVariable("communityId") Long communityId) {
+        Community deletedCommunity = communityService.deleteCommunity(communityId);
+        if (deletedCommunity == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.noContent().build();
     }
 
