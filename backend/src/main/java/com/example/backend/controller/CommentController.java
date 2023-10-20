@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -50,4 +51,15 @@ public class CommentController {
 
         return ResponseEntity.ok(allComments);
     }
+
+    @DeleteMapping("/delete/{commentId}")
+    public ResponseEntity<Void> deleteCommentById(@PathVariable("commentId") Long commentId) {
+        try {
+            commentService.deleteCommentByCommentId(commentId);
+            return ResponseEntity.noContent().build(); // 삭제 성공 시 204 No Content 반환
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build(); // 댓글을 찾을 수 없을 때 404 Not Found 반환
+        }
+    }
+
 }

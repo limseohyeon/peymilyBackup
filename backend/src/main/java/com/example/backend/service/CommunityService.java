@@ -62,7 +62,7 @@ public class CommunityService {
 
 
     public void deleteCommunity(Long communityId) {
-        Community communityToDelete = findPostById(communityId);
+        Community communityToDelete = communityRepository.findPostById(communityId);
         if (communityToDelete == null) {
             throw new EntityNotFoundException("Community with ID " + communityId + " not found");
         }

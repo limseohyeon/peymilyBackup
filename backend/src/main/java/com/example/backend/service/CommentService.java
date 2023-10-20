@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -51,12 +52,16 @@ public class CommentService {
         }
         return commentRepository.save(commentToChange);
     }
-    //특정 댓글 삭제
-    public Comment deleteCommentByCommentId( Long commentId) {
-        Comment commentToDelete = findCommentById(commentId);
-        commentRepository.deleteByCommentId(commentId);
-        return commentToDelete;
+    public void deleteCommentByCommentId(Long commentId) {
+        Comment commentToDelete = commentRepository.findCommentByCommentId(commentId);
+
+        if (commentToDelete != null) {
+            commentRepository.deleteByCommentId(commentId);
+        } else {
+            throw new EntityNotFoundException("Comment not found"); // 댓글을 찾을 수 없을 때 예외 던지기
+        }
     }
+
     // 게시글에 속한 모든 댓글 삭제
     public List<Comment> deleteAllCommentByCommunityId( Long communityId) {
         List<Comment> commentToDelete = findAllCommentByCommunityId(communityId);
