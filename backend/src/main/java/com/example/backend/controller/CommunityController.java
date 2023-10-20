@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.dto.CommunityRequest;
 import com.example.backend.dto.ScheduleRequest;
 import com.example.backend.entity.*;
+import com.example.backend.repository.CommunityRepository;
 import com.example.backend.service.CommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,10 @@ import java.util.Optional;
 public class CommunityController {
     @Autowired
     private CommunityService communityService;
+    @Autowired
+    private CommunityRepository communityRepository;
+
+
 
     @PostMapping("/post/{email}")
     public ResponseEntity<Community> PostCommunity(@PathVariable("email") String email,
@@ -102,8 +107,9 @@ public class CommunityController {
 
     @DeleteMapping("/delete/{communityId}")
     public ResponseEntity<Void> deleteCommunity(@PathVariable("communityId") Long communityId) {
+
         try {
-            communityService.deleteCommunity(communityId);
+                communityRepository.deleteByCommunityId(communityId);
             return ResponseEntity.noContent().build(); // 삭제 성공 시 204 No Content 반환
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build(); // 커뮤니티를 찾을 수 없을 때 404 Not Found 반환
