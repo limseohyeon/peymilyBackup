@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.dto.CommentRequest;
 import com.example.backend.entity.Comment;
 import com.example.backend.entity.Invitation;
+import com.example.backend.repository.CommentRepository;
 import com.example.backend.service.CommentService;
 import com.example.backend.service.CommunityService;
 import org.hibernate.service.spi.InjectService;
@@ -21,6 +22,8 @@ import java.util.List;
 public class CommentController {
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private CommentRepository commentRepository;
 
     @PostMapping("/post/{email}")
     public ResponseEntity<Comment> PostComment(@RequestBody @Valid CommentRequest commentRequest,
@@ -55,11 +58,21 @@ public class CommentController {
     @DeleteMapping("/delete/{commentId}")
     public ResponseEntity<Void> deleteCommentById(@PathVariable("commentId") Long commentId) {
         try {
-            commentService.deleteCommentByCommentId(commentId);
+            commentRepository.deleteById(commentId);
             return ResponseEntity.noContent().build(); // 삭제 성공 시 204 No Content 반환
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build(); // 댓글을 찾을 수 없을 때 404 Not Found 반환
         }
     }
+    @DeleteMapping("/delete/{communityId}")
+    public ResponseEntity<Void> deleteCommentByCommunityId(@PathVariable("communityId") Long communityId) {
+        try {
+            commentService.deleteAllCommentByCommunityId(communityId);
+            return ResponseEntity.noContent().build(); // 삭제 성공 시 204 No Content 반환
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build(); // 댓글을 찾을 수 없을 때 404 Not Found 반환
+        }
+    }
+
 
 }

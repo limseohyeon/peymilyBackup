@@ -63,10 +63,9 @@ public class CommentService {
     }
 
     // 게시글에 속한 모든 댓글 삭제
-    public List<Comment> deleteAllCommentByCommunityId( Long communityId) {
+    public void deleteAllCommentByCommunityId( Long communityId) {
         List<Comment> commentToDelete = findAllCommentByCommunityId(communityId);
         commentRepository.deleteByCommunityId(communityId);
-        return commentToDelete;
     }
     // 사용자에 속한 모든 댓글 삭제
     public List<Comment> deleteAllCommentByEmail( String email) {
