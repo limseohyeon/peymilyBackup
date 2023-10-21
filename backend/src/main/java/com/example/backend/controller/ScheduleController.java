@@ -92,7 +92,7 @@ public class ScheduleController {
         Optional<Pet> optionalPet = petRepository.findById(petId);
         try {
             if (optionalPet != null && optionalPet.isPresent() && owner != null) {
-                List<Schedule> schedules = scheduleRepository.findByPetId(petId);
+                List<Schedule> schedules = scheduleRepository.findSchedulesByPetId(petId);
                 /*List<ScheduleService> scheduleServices = schedules.stream()
                         .map(schedule -> modelMapper.map(schedule, ScheduleService.class))
                         .collect(Collectors.toList());
@@ -115,7 +115,7 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
 
     try {
         if (optionalPet != null && optionalPet.isPresent()) {
-            List<Schedule> schedules = scheduleRepository.findByPetId(petId);
+            List<Schedule> schedules = scheduleRepository.findSchedulesByPetId(petId);
             for(Schedule s : schedules){
                 if(s.getScheduleId().equals(id)) return ResponseEntity.ok(s);
             }
@@ -133,7 +133,7 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
                                                           @PathVariable("id") Long id,
                                                           @RequestBody Schedule scheduleBody) {
         try {
-            List<Schedule> schedules = scheduleRepository.findByPetId(petId);
+            List<Schedule> schedules = scheduleRepository.findSchedulesByPetId(petId);
             for (Schedule sch : schedules) {
                 if (sch.getScheduleId().equals(id)) {
                     // 스케줄 엔티티 필드값 변경
@@ -156,7 +156,7 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
     public ResponseEntity<Schedule> deleteSchedule(@PathVariable("petId") Long petId,
                                                    @PathVariable("id") Long id) {
         try {
-            List<Schedule> schedules = scheduleRepository.findByPetId(petId);
+            List<Schedule> schedules = scheduleRepository.findSchedulesByPetId(petId);
             for (Schedule sch : schedules) {
                 if (sch.getScheduleId() == id) {
                     Schedule deletedSchedule = sch;

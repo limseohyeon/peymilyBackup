@@ -14,8 +14,8 @@ import java.util.List;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findAll();
 
-    @Query("SELECT s FROM Schedule s WHERE s.pet.petId = :petId")
-    List<Schedule> findByPetId(Long petId);
+    @Query("SELECT s FROM Schedule s WHERE s.pet.id = :petId")
+    List<Schedule> findSchedulesByPetId(@Param("petId") Long petId);
     //findByPetName (x) findByPetName (o)
     List<Schedule> findByPetPetName(String petName);
     @Transactional  // 모든 작업이 성공하거나 실패할 때까지 적용이 안됨! 원자성 만족
