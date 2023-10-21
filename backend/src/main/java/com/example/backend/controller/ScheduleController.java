@@ -127,31 +127,36 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while saving pet.");
     }
 }
-//일정 수정
+    //일정 수정
     @PutMapping("/update/{petId}/{id}")
     public ResponseEntity<Schedule> updateSchedule(@PathVariable("petId") Long petId,
-                                                          @PathVariable("id") Long id,
-                                                          @RequestBody Schedule scheduleBody) {
+                                                   @PathVariable("id") Long id,
+                                                   @RequestBody Schedule scheduleBody) {
         try {
             List<Schedule> schedules = scheduleRepository.findSchedulesByPetId(petId);
             for (Schedule sch : schedules) {
                 if (sch.getScheduleId().equals(id)) {
                     // 스케줄 엔티티 필드값 변경
-                    scheduleService.updateSchedule(scheduleBody);
-                    System.out.println("schedule entity updated : " + scheduleService.findByScheduleId(id));
+                    sch.setSchedule(scheduleBody.getSchedule());
+                    sch.setDate(scheduleBody.getDate());
+                    sch.setHm(scheduleBody.getHm());
+                    sch.setExecutorEmail(scheduleBody.getExecutorEmail());
+                    sch.setExecutor(scheduleBody.getExecutor());
+                    sch.setPeriod(scheduleBody.getPeriod());
 
-                    return ResponseEntity.ok(scheduleService.findByScheduleId(id));
+                    scheduleRepository.save(sch);
+                    System.out.println("Schedule entity updated: " + sch);
+
+                    return ResponseEntity.ok(sch);
                 }
             }
-        } catch (UsernameNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while saving pet.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while updating the schedule.");
         }
-        // 해당 id에 대한 스케줄이 없는 경우 Not Found 반환
         return ResponseEntity.notFound().build();
     }
-//일정 삭제
+
+    //일정 삭제
     @DeleteMapping("/delete/{petId}/{id}")
     public ResponseEntity<Schedule> deleteSchedule(@PathVariable("petId") Long petId,
                                                    @PathVariable("id") Long id) {
