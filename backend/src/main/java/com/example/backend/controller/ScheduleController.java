@@ -138,7 +138,7 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
                 if (sch.getScheduleId().equals(id)) {
                     // 스케줄 엔티티 필드값 변경
                     scheduleService.updateSchedule(scheduleBody);
-                    System.out.println("스케줄 엔티티 변경 완료 : " + scheduleService.findByScheduleId(id));
+                    System.out.println("schedule entity updated : " + scheduleService.findByScheduleId(id));
 
                     return ResponseEntity.ok(scheduleService.findByScheduleId(id));
                 }

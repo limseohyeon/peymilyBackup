@@ -13,6 +13,8 @@ import java.util.List;
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findAll();
+
+    @Query("SELECT s FROM Schedule s WHERE s.pet.petId = :petId")
     List<Schedule> findByPetId(Long petId);
     //findByPetName (x) findByPetName (o)
     List<Schedule> findByPetPetName(String petName);
