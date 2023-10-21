@@ -62,15 +62,15 @@ public class CommentService {
         }
     }
 
-    // 게시글에 속한 모든 댓글 삭제
-    public void deleteAllCommentByCommunityId( Long communityId) {
-        List<Comment> commentToDelete = findAllCommentByCommunityId(communityId);
-        commentRepository.deleteByCommunityId(communityId);
-    }
-    // 사용자에 속한 모든 댓글 삭제
-    public List<Comment> deleteAllCommentByEmail( String email) {
-        List<Comment> commentToDelete = findAllCommentByEmail(email);
-        commentRepository.deleteByEmail(email);
-        return commentToDelete;
-    }
+//    // 게시글에 속한 모든 댓글 삭제
+//    public void deleteAllCommentByCommunityId( Long communityId) {
+//        List<Comment> commentToDelete = findAllCommentByCommunityId(communityId);
+//        commentRepository.deleteByCommunityId(communityId);
+//    }
+//    // 사용자에 속한 모든 댓글 삭제
+//    public List<Comment> deleteAllCommentByEmail( String email) {
+//        List<Comment> commentToDelete = findAllCommentByEmail(email);
+//        commentRepository.deleteByEmail(email);
+//        return commentToDelete;
+//    }
 }
