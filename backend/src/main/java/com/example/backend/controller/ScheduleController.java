@@ -129,7 +129,7 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
 }
 //일정 수정
     @PutMapping("/update/{petId}/{id}")
-    public ResponseEntity<ScheduleService> updateSchedule(@PathVariable("petId") Long petId,
+    public ResponseEntity<Schedule> updateSchedule(@PathVariable("petId") Long petId,
                                                           @PathVariable("id") Long id,
                                                           @RequestBody Schedule scheduleBody) {
         try {
@@ -138,6 +138,8 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
                 if (sch.getScheduleId().equals(id)) {
                     // 스케줄 엔티티 필드값 변경
                     scheduleService.updateSchedule(scheduleBody);
+
+                    return ResponseEntity.ok(scheduleService.findByScheduleId(id));
                 }
             }
         } catch (UsernameNotFoundException e) {
