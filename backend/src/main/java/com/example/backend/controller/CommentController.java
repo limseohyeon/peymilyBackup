@@ -54,7 +54,7 @@ public class CommentController {
 
         return ResponseEntity.ok(allComments);
     }
-
+//특정 댓글 삭제
     @DeleteMapping("/delete/{commentId}")
     public ResponseEntity<Void> deleteCommentById(@PathVariable("commentId") Long commentId) {
         try {
@@ -64,14 +64,23 @@ public class CommentController {
             return ResponseEntity.notFound().build(); // 댓글을 찾을 수 없을 때 404 Not Found 반환
         }
     }
-    @DeleteMapping("/delete/{communityId}")
-    public ResponseEntity<Void> deleteCommentByCommunityId(@PathVariable("communityId") Long communityId) {
-        try {
-            commentService.deleteAllCommentByCommunityId(communityId);
-            return ResponseEntity.noContent().build(); // 삭제 성공 시 204 No Content 반환
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build(); // 댓글을 찾을 수 없을 때 404 Not Found 반환
+    // 게시글에 속한 모든 댓글 삭제
+    @DeleteMapping("/deleteByCommunityId/{communityId}")
+    public ResponseEntity<Void> deleteCommentsByCommunityId(@PathVariable("communityId") Long communityId) {
+        List<Comment> comments = commentService.findAllCommentByCommunityId(communityId);
+        for (Comment comment : comments) {
+            commentRepository.deleteById(comment.getCommentId());
         }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    //사용자에 속한 모든 댓글 삭제
+    @DeleteMapping("/deleteByCommunityId/{email}")
+    public ResponseEntity<Void> deleteCommentsByEmail(@PathVariable("email") String email) {
+        List<Comment> comments = commentService.findAllCommentByEmail(email);
+        for (Comment comment : comments) {
+            commentRepository.deleteById(comment.getCommentId());
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 

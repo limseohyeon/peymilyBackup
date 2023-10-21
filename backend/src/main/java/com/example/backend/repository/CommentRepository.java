@@ -24,19 +24,19 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("SELECT c FROM Comment c WHERE c.communityId = ?1")
     List<Comment> findAllCommentByCommunityEmail(String email);
 
-    //특정 댓글 삭제하기
-    @Modifying
-    @Query("DELETE FROM Comment c WHERE c.commentId = :commentId")
-    int deleteByCommentId(@Param("commentId") Long commentId);
-
-
-    //게시글 삭제시 속한 모든 댓글 지우기
-    @Modifying
-    @Query("DELETE FROM Comment c WHERE c.communityId = ?1")
-    List<Comment> deleteByCommunityId(Long communityId);
-
-    //사용자 탈퇴시 모든 댓글 지우기
-    @Modifying
-    @Query("DELETE FROM Comment c WHERE c.email = ?1")
-    List<Comment> deleteByEmail(String email);
+//    //특정 댓글 삭제하기
+//    @Modifying
+//    @Query("DELETE FROM Comment c WHERE c.commentId = :commentId")
+//    int deleteByCommentId(@Param("commentId") Long commentId);
+//
+//
+//    //게시글 삭제시 속한 모든 댓글 지우기
+//    @Modifying
+//    @Query("DELETE FROM Comment c WHERE c.communityId = ?1")
+//    List<Comment> deleteByCommunityId(Long communityId);
+//
+//    //사용자 탈퇴시 모든 댓글 지우기
+//    @Modifying
+//    @Query("DELETE FROM Comment c WHERE c.email = ?1")
+//    List<Comment> deleteByEmail(String email);
 }
