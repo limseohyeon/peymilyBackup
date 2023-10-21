@@ -135,7 +135,7 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
         try {
             List<Schedule> schedules = scheduleRepository.findByPetId(petId);
             for (Schedule sch : schedules) {
-                if (sch.getScheduleId() == id) {
+                if (sch.getScheduleId().equals(id)) {
                     // 스케줄 엔티티 필드값 변경
                     scheduleService.updateSchedule(scheduleBody);
                 }
