@@ -55,7 +55,6 @@ public class CommunityImageController {
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
 
-
     @GetMapping("/getAllImages")
     public List<String> getAllImages() throws IOException {
         String baseDir = "communityImage";
