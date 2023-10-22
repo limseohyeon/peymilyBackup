@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.util.FileUploadUtil;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -13,6 +14,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,41 +40,36 @@ public class  SharedPetImageController {
         // 파일 이름에서 확장자 추출
         String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
         String fileName = sharedPetId.toString() + ".jpg"; // petId를 기준으로 파일 이름을 정함
-        String uploadDir = "shared-images";
+        String uploadDir = "shared-images/" + petId + "/";
 
-        Optional<User> user = userRepository.findByEmail(email);
+        // 이미지 리사이징
+        BufferedImage originalImage = ImageIO.read(file.getInputStream());
+        BufferedImage resizedImage = Thumbnails.of(originalImage)
+                .size(300, 300) // 원하는 크기로 조절
+                .asBufferedImage();
 
-        // inviter 정보를 기반으로 업로드 디렉토리 생성
-        String sharedUploadDir = uploadDir + "/" + petId + "/";
-        FileUploadUtil.saveFile(sharedUploadDir, fileName, file);
+        FileUploadUtil.saveImage(uploadDir, fileName, resizedImage);
 
-        return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Image uploaded successfully in " + uploadDir, HttpStatus.OK);
     }
 
     @GetMapping("/getAllImages")
     public List<String> getAllImages(@PathVariable("petId") Long petId) throws IOException {
         String baseDir = "shared-images/" + petId;
         File fileDir = new File(baseDir);
-        String[] fileNames = fileDir.list();
         List<String> imageUrls = new ArrayList<>();
 
-        File[] emailDirectories = fileDir.listFiles(File::isDirectory);
+        if (fileDir.exists() && fileDir.isDirectory()) {
+            File[] imageFiles = fileDir.listFiles((dir, name) ->
+                    name.toLowerCase().endsWith(".jpg") ||
+                            name.toLowerCase().endsWith(".jpeg") ||
+                            name.toLowerCase().endsWith(".png")
+            );
 
-        if (emailDirectories != null) {
-            for (File emailDir : emailDirectories) {
-                File[] imageFiles = emailDir.listFiles((dir, name) ->
-                        name.toLowerCase().endsWith(".jpg") ||
-                                name.toLowerCase().endsWith(".jpeg") ||
-                                name.toLowerCase().endsWith(".png")
-                );
-
-                if (imageFiles != null) {
-                    for (File imageFile : imageFiles) {
-                        String constUrl = "http://43.200.8.47:8080/";
-                        String imageUrl = constUrl + "shared-images/" + petId + "/" + imageFile.getName();
-                        imageUrls.add(imageUrl);
-                    }
-                }
+            for (File imageFile : imageFiles) {
+                String constUrl = "http://43.200.8.47:8080/";
+                String imageUrl = constUrl + "shared-images/" + petId + "/" + imageFile.getName();
+                imageUrls.add(imageUrl);
             }
         }
 
