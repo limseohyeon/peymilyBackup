@@ -70,27 +70,4 @@ public class ScheduleService {
             throw new UsernameNotFoundException("Invalid pet");
         }
     }
-
-    public Optional<Schedule> updateSchedule(Schedule newSchedule) {
-        Optional<Schedule> oldScheduleOptional = scheduleRepository.findById(newSchedule.getScheduleId());
-
-        if (oldScheduleOptional.isPresent()) {
-            Schedule oldSchedule = oldScheduleOptional.get();
-
-            scheduleRepository.updateSchedule(
-                    newSchedule.getScheduleId(),
-                    newSchedule.getSchedule(),
-                    newSchedule.getDate(),
-                    newSchedule.getHm(),
-                    newSchedule.getExecutorEmail(),
-                    newSchedule.getExecutor(),
-                    newSchedule.getPeriod());
-
-            Optional<Schedule> updatedSchedule = scheduleRepository.findById(newSchedule.getScheduleId());
-
-            return updatedSchedule;
-        } else {
-            throw new UsernameNotFoundException("Invalid schedule");
-        }
-    }
 }

@@ -163,9 +163,9 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
         try {
             List<Schedule> schedules = scheduleRepository.findSchedulesByPetId(petId);
             for (Schedule sch : schedules) {
-                if (sch.getScheduleId() == id) {
+                if (sch.getScheduleId().equals(id)) {
                     Schedule deletedSchedule = sch;
-                    scheduleRepository.deleteById(sch.getScheduleId());
+                    scheduleRepository.deleteScheduleById(sch.getScheduleId());
 
                     return ResponseEntity.ok(deletedSchedule);
                 }
@@ -173,7 +173,7 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
         } catch (UsernameNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while saving pet.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while deleting pet.");
         }
 
         // 해당 id에 대한 스케줄이 없는 경우 Not Found 반환
