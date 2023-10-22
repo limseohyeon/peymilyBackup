@@ -34,7 +34,6 @@ public class  SharedPetImageController {
 
     @PostMapping("/uploadImage/{email}/{sharedPetId}")
     public ResponseEntity<String> uploadImage(@PathVariable("petId") Long petId,
-                                              @PathVariable("email") String email,
                                               @PathVariable("sharedPetId") Long sharedPetId,
                                               @RequestParam("file") MultipartFile file) throws IOException {
         // 파일 이름에서 확장자 추출
