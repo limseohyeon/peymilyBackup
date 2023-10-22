@@ -34,6 +34,7 @@ public class  SharedPetImageController {
 
     @PostMapping("/uploadImage/{email}/{sharedPetId}")
     public ResponseEntity<String> uploadImage(@PathVariable("petId") Long petId,
+                                              @PathVariable("email") String email,
                                               @PathVariable("sharedPetId") Long sharedPetId,
                                               @RequestParam("file") MultipartFile file) throws IOException {
         // 파일 이름에서 확장자 추출
@@ -79,11 +80,10 @@ public class  SharedPetImageController {
 
     @GetMapping("/{imageName:.+}") // 이미지 확장자를 포함하기 위해 ".+"를 추가
     public ResponseEntity<Resource> downloadImage(@PathVariable("petId") Long petId,
-                                                  @PathVariable("email") String email,
                                                   @PathVariable String imageName) throws IOException {
         String downloadDir = "shared-images";
 
-        Optional<User> user = userRepository.findByEmail(email);
+        //Optional<User> user = userRepository.findByEmail(email);
         //String inviter = user.get().getInviter();
 
         // 유저 정보를 기반으로 다운로드 디렉토리 지정
