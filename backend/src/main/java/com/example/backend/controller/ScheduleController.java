@@ -158,16 +158,17 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
 
     //일정 삭제
     @DeleteMapping("/delete/{petId}/{id}")
-    public ResponseEntity<Schedule> deleteSchedule(@PathVariable("petId") Long petId,
+    public ResponseEntity<String> deleteSchedule(@PathVariable("petId") Long petId,
                                                    @PathVariable("id") Long id) {
         try {
             List<Schedule> schedules = scheduleRepository.findSchedulesByPetId(petId);
+
             for (Schedule sch : schedules) {
                 if (sch.getScheduleId().equals(id)) {
                     Schedule deletedSchedule = sch;
-                    scheduleRepository.deleteScheduleById(sch.getScheduleId());
+                    scheduleRepository.deleteById(id);
 
-                    return ResponseEntity.ok(deletedSchedule);
+                    return ResponseEntity.ok("deleted successfully");
                 }
             }
         } catch (UsernameNotFoundException e) {
