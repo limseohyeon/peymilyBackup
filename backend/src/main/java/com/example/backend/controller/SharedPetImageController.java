@@ -78,7 +78,7 @@ public class  SharedPetImageController {
         return imageUrls;
     }
 
-    @GetMapping("/downloadImage/{email}/{imageName:.+}") // 이미지 확장자를 포함하기 위해 ".+"를 추가
+    @GetMapping("/{imageName:.+}") // 이미지 확장자를 포함하기 위해 ".+"를 추가
     public ResponseEntity<Resource> downloadImage(@PathVariable("petId") Long petId,
                                                   @PathVariable("email") String email,
                                                   @PathVariable String imageName) throws IOException {
