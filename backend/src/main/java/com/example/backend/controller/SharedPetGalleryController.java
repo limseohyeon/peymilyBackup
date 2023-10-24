@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.SharedPetGalleryRequest;
 import com.example.backend.entity.SharedPetGallery;
+import com.example.backend.repository.SharedPetGalleryRepository;
 import com.example.backend.service.SharedPetGalleryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/sharedPetGallery/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -18,6 +20,8 @@ public class SharedPetGalleryController {
 
     @Autowired
     private SharedPetGalleryService sharedPetGalleryService;
+    @Autowired
+    private SharedPetGalleryRepository sharedPetGalleryRepository;
 
 //사진 올리기
     @PostMapping("/post/{petId}")
@@ -44,8 +48,8 @@ public ResponseEntity<List<SharedPetGallery>> GetAllSharedPetGalleryByPetId(@Pat
 }
 //특정 사진 가져오기
     @GetMapping("/get/{photoId}")
-    public ResponseEntity<SharedPetGallery> GetSharedPetGallery(@PathVariable("photoId") Long photoId) {
-        SharedPetGallery sharedPetGalleryPosted = sharedPetGalleryService.findPostById(photoId);
+    public ResponseEntity<Optional<SharedPetGallery>> GetSharedPetGallery(@PathVariable("photoId") Long photoId) {
+        Optional<SharedPetGallery> sharedPetGalleryPosted = sharedPetGalleryRepository.findById(photoId);
 
         if (sharedPetGalleryPosted.equals(null)) {
             return ResponseEntity.notFound().build();

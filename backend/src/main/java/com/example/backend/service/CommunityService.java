@@ -2,7 +2,6 @@ package com.example.backend.service;
 
 import com.example.backend.dto.CommunityRequest;
 import com.example.backend.entity.Community;
-import com.example.backend.entity.Schedule;
 import com.example.backend.entity.User;
 import com.example.backend.repository.CommunityRepository;
 import lombok.RequiredArgsConstructor;
