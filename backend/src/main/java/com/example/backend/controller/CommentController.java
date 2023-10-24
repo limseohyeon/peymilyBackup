@@ -41,7 +41,7 @@ public class CommentController {
 
     @GetMapping("/get/{commentId}")
     public ResponseEntity<Comment> getComment(@PathVariable("commentId") Long commentId) {
-        return ResponseEntity.ok(commentService.findCommentById(commentId));z
+        return ResponseEntity.ok(commentService.findCommentById(commentId));
     }
 
     @GetMapping("/getAll/{communityId}")
