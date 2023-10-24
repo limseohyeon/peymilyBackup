@@ -37,7 +37,7 @@ public class SharedPetGalleryController {
         }
     }
 //해당 펫에 속한 모든 사진 가져오기
-@GetMapping("/get/{petId}")
+@GetMapping("/getByPetId/{petId}")
 public ResponseEntity<List<SharedPetGallery>> GetAllSharedPetGalleryByPetId(@PathVariable("petId") Long petId) {
     List<SharedPetGallery> sharedAllPetGallery = sharedPetGalleryService.findAllPostByPetId(petId);
 
@@ -47,7 +47,7 @@ public ResponseEntity<List<SharedPetGallery>> GetAllSharedPetGalleryByPetId(@Pat
     return ResponseEntity.ok(sharedAllPetGallery);
 }
 //특정 사진 가져오기
-    @GetMapping("/get/{photoId}")
+    @GetMapping("/getByPhotoId/{photoId}")
     public ResponseEntity<Optional<SharedPetGallery>> GetSharedPetGallery(@PathVariable("photoId") Long photoId) {
         Optional<SharedPetGallery> sharedPetGalleryPosted = sharedPetGalleryRepository.findById(photoId);
 
