@@ -78,7 +78,7 @@ public ResponseEntity<List<SharedPetGallery>> GetAllSharedPetGalleryByPetId(@Pat
         }
     }
 //좋아요 업데이트
-    @PutMapping("/updateLikes/{email}")
+    @PutMapping("/updateLikes")
     public ResponseEntity<SharedPetGallery> UpdateLikes(@Valid @RequestBody SharedPetGalleryRequest updatedGalleryData,
                                                  @PathVariable("email") String email) {
         try {
