@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -107,29 +108,30 @@ public class  SharedPetImageController {
     }
 
     @PutMapping("/updateImage/{sharedPetId}")
-    public ResponseEntity<String> updateImage(@PathVariable("email") String email,
+    public ResponseEntity<String> updateImage(@PathVariable("petId") Long petId,
                                               @PathVariable("sharedPetId") Long sharedPetId,
                                               @RequestParam("file") MultipartFile file) throws IOException {
-        Optional<User> user = userRepository.findByEmail(email);
-        String inviter = user.get().getInviter();
+//        Optional<User> user = userRepository.findByEmail(email);
+//        String inviter = user.get().getInviter();
 
         String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
         String fileName = sharedPetId.toString() + StringUtils.getFilenameExtension(originalFilename);
         String uploadDir = "shared-images/";
-        String userUploadDir = uploadDir + inviter + "/";
+        String userUploadDir = uploadDir + petId + "/";
         FileUploadUtil.saveFile(userUploadDir, fileName, file);
 
         return new ResponseEntity<>("Image updated successfully", HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteImage/{email}/{sharedPetId}")
+    @Transactional
     public ResponseEntity<String> deleteImage(@PathVariable("petId") Long petId,
                                               @PathVariable("email") String email,
                                               @PathVariable("sharedPetId") String sharedPetId) throws IOException {
         String fileName = sharedPetId;
         String uploadDir = "shared-images";
 
-        Optional<User> user = userRepository.findByEmail(email);
+        //Optional<User> user = userRepository.findByEmail(email);
         //String inviter = user.get().getInviter();
 
         String userUploadDir = uploadDir + "/" + petId + "/";
