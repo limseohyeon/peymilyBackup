@@ -115,20 +115,12 @@ public class  SharedPetImageController {
 //        String inviter = user.get().getInviter();
 
         String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
-        String fileName = sharedPetId.toString() + StringUtils.getFilenameExtension(originalFilename);
+        String fileName = sharedPetId.toString() + "." + StringUtils.getFilenameExtension(originalFilename);
         String uploadDir = "shared-images/";
-        String userUploadDir = uploadDir + petId + "/";
-
-        Path existingImagePath = Paths.get(uploadDir, fileName);
-        Files.deleteIfExists(existingImagePath);
-
-        BufferedImage originalImage = ImageIO.read(file.getInputStream());
-        BufferedImage resizedImage = Thumbnails.of(originalImage)
-                .size(300, 300) // 원하는 크기로 조절
-                .asBufferedImage();
+        String userUploadDir = uploadDir + petId.toString() + "/";
 
         try {
-            FileUploadUtil.saveImage(userUploadDir, fileName, resizedImage);
+            FileUploadUtil.saveFile(userUploadDir, fileName, file);
             return new ResponseEntity<>("Image updated successfully", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Failed to update Image. Error : " + e);
