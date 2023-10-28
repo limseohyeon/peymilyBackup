@@ -115,7 +115,7 @@ public class  SharedPetImageController {
 //        String inviter = user.get().getInviter();
 
         String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
-        String fileName = sharedPetId.toString() + "." + StringUtils.getFilenameExtension(originalFilename);
+        String fileName = sharedPetId.toString() + ".jpg";
         String uploadDir = "shared-images/";
         String userUploadDir = uploadDir + petId.toString() + "/";
 
