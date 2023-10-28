@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -77,7 +78,7 @@ public ResponseEntity<List<SharedPetGallery>> GetAllSharedPetGalleryByPetId(@Pat
         }
     }
 //좋아요 업데이트
-    @PutMapping("/updateLikes/{petId}")
+    @PutMapping("/updateLikes")
     public ResponseEntity<SharedPetGallery> UpdateLikes(@Valid @RequestBody SharedPetGalleryRequest updatedGalleryData,
                                                  @PathVariable("email") String email) {
         try {
@@ -103,11 +104,12 @@ public ResponseEntity<List<SharedPetGallery>> GetAllSharedPetGalleryByPetId(@Pat
 //특정 사진 삭제하기
     @DeleteMapping("/delete/{photoId}")
     public ResponseEntity<SharedPetGallery> DeleteSharedPetGallery(@PathVariable("photoId") Long photoId) {
-        SharedPetGallery GalleryToDelete = sharedPetGalleryService.findPostById(photoId);
-
-        sharedPetGalleryService.deleteSharedPetGallery(photoId);
-
-        return ResponseEntity.ok(GalleryToDelete);
+        try {
+            sharedPetGalleryRepository.deleteById(photoId);
+            return ResponseEntity.noContent().build(); // 삭제 성공 시 204 No Content 반환
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build(); // 커뮤니티를 찾을 수 없을 때 404 Not Found 반환
+        }
     }
     //사용자에 속한 모든 사진 삭제하기(계정 탈퇴)
     @DeleteMapping("/deleteByEmail")
