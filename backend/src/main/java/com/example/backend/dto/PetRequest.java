@@ -16,4 +16,5 @@ public class PetRequest {
     private Integer petAge;
     private String detailInfo;
     private String inviter;
+    private String gender;
 }

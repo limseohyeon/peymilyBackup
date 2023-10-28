@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -85,6 +86,8 @@ public class ScheduleController {
         }
         return ResponseEntity.notFound().build();
     }
+
+
 // 모든 일정 불러오기
     @GetMapping("/get-all/{petId}")
     public ResponseEntity<List<Schedule>> getAllSchedulesByPetId(@PathVariable("petId") Long petId,
@@ -216,6 +219,61 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while completing schedule.");
         }
     }
+//    //수행자 통계
+//    @GetMapping("/get-by-date-range-with-executor-count/{petId}")
+//    public ResponseEntity<Map<String, Integer>> getSchedulesByDateRangeWithExecutorCount(
+//            @PathVariable("petId") Long petId,
+//            @RequestParam("startDate") String startDate,
+//            @RequestParam("endDate") String endDate) {
+//
+//        try {
+//            List<Schedule> schedules = scheduleRepository.findSchedulesByPetId(petId);
+//
+//            // 날짜 범위를 지정한 일정을 추출
+//            List<Schedule> filteredSchedules = schedules.stream()
+//                    .filter(schedule -> isDateInRange(schedule.getDate(), startDate, endDate))
+//                    .collect(Collectors.toList());
+//
+//            if (!filteredSchedules.isEmpty()) {
+//                // 실행자별 횟수 계산
+//                Map<String, Integer> executorCountMap = calculateExecutorCounts(filteredSchedules);
+//
+//                return ResponseEntity.ok(executorCountMap);
+//            } else {
+//                return ResponseEntity.notFound().build();
+//            }
+//        } catch (Exception e) {
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while fetching schedules by date range.");
+//        }
+//    }
+//
+//    //날짜 형식 변경
+//    private boolean isDateInRange(String date, String startDate, String endDate) {
+//        try {
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일");
+//            Date scheduleDate = sdf.parse(date);
+//            Date start = sdf.parse(startDate);
+//            Date end = sdf.parse(endDate);
+//
+//            return scheduleDate.compareTo(start) >= 0 && scheduleDate.compareTo(end) <= 0;
+//        } catch (ParseException e) {
+//            // 날짜 형식이 잘못된 경우에 대한 예외 처리
+//            return false;
+//        }
+//    }
+//    // 실행 횟수 계산
+//    private Map<String, Integer> calculateExecutorCounts(List<Schedule> schedules) {
+//        Map<String, Integer> executorCountMap = new HashMap<>();
+//
+//        for (Schedule schedule : schedules) {
+//            String executor = schedule.getExecutor();
+//            executorCountMap.put(executor, executorCountMap.getOrDefault(executor, 0) + 1);
+//        }
+//
+//        return executorCountMap;
+//    }
 
+//일정별 통계
 
 }
+
