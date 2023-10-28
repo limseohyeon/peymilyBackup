@@ -119,6 +119,9 @@ public class  SharedPetImageController {
         String uploadDir = "shared-images/";
         String userUploadDir = uploadDir + petId + "/";
 
+        Path existingImagePath = Paths.get(uploadDir, fileName);
+        Files.deleteIfExists(existingImagePath);
+
         BufferedImage originalImage = ImageIO.read(file.getInputStream());
         BufferedImage resizedImage = Thumbnails.of(originalImage)
                 .size(300, 300) // 원하는 크기로 조절
