@@ -122,12 +122,15 @@ public class  SharedPetImageController {
         BufferedImage originalImage = ImageIO.read(file.getInputStream());
         BufferedImage resizedImage = Thumbnails.of(originalImage)
                 .size(300, 300) // 원하는 크기로 조절
-                //.rotate(90)
                 .asBufferedImage();
 
-        FileUploadUtil.saveImage(userUploadDir, fileName, resizedImage);
-
-        return new ResponseEntity<>("Image updated successfully", HttpStatus.OK);
+        try {
+            FileUploadUtil.saveImage(userUploadDir, fileName, resizedImage);
+            return new ResponseEntity<>("Image updated successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("Failed to update Image. Error : " + e);
+            throw e;
+        }
     }
 
     @DeleteMapping("/deleteImage/{email}/{sharedPetId}")
