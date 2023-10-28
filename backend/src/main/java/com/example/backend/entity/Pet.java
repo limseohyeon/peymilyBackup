@@ -38,13 +38,14 @@ public class Pet implements Serializable {
     private String petName;
     private Integer petAge;
     private String detailInfo;
+    private String gender;
     private String inviter;
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Schedule> schedules = new ArrayList<>();
 
-    public static Pet build(User user, String petName, String petCode, Integer petAge, String detailInfo, String inviter) {
+    public static Pet build(User user, String petName, String petCode, Integer petAge, String detailInfo, String inviter, String gender) {
         return Pet.builder()
                 .user(user)
                 .petName(petName)
@@ -52,6 +53,7 @@ public class Pet implements Serializable {
                 .petAge(petAge)
                 .detailInfo(detailInfo)
                 .inviter(inviter)
+                .gender(gender)
                 .build();
     }
 }

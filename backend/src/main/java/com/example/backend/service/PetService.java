@@ -73,6 +73,7 @@ public class PetService {
                     .petAge(petRequest.getPetAge())
                     .detailInfo(petRequest.getDetailInfo())
                     .inviter(petRequest.getInviter())
+                    .gender(petRequest.getGender())
                     .build();
 
             return petRepository.save(pet);
