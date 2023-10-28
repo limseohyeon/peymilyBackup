@@ -31,7 +31,6 @@ public class ScheduleRequest {
     private String executorEmail;
     private String executor;
     private Integer period;
-    private Boolean repeat;
 //    private String complete;
 //    private Integer isCompleted;
 }
