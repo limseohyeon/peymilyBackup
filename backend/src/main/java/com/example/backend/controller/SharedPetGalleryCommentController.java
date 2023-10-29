@@ -62,21 +62,21 @@ public class SharedPetGalleryCommentController {
         return ResponseEntity.ok(commentToDelete);
     }
     //게시글 기준 댓글 지우기 (게시글 삭제)
-    @DeleteMapping("/delete/{photoId}")
+    @DeleteMapping("/deleteByPhotoId/{photoId}")
     public ResponseEntity<List<SharedPetGalleryComment>> DeleteCommentByPhotoId(@PathVariable("photoId") Long photoId) {
         List<SharedPetGalleryComment> commentToDelete = sharedPetGalleryCommentService.findAllCommentByPhotoId(photoId);
         sharedPetGalleryCommentService.deleteCommentByPhotoId(photoId);
         return ResponseEntity.ok(commentToDelete);
     }
     //사용자 기준 댓글 지우기 (계정 탈퇴)
-    @DeleteMapping("/delete/{email}")
+    @DeleteMapping("/deleteByEmail/{email}")
     public ResponseEntity<List<SharedPetGalleryComment>> DeleteCommentByEmail(@PathVariable("email") String email) {
         List<SharedPetGalleryComment> commentToDelete = sharedPetGalleryCommentService.findAllCommentByEmail(email);
         sharedPetGalleryCommentService.deleteCommentByEmail(email);
         return ResponseEntity.ok(commentToDelete);
     }
     //양육자 기준 댓글 지우기 (양육자 삭제)
-    @DeleteMapping("/delete/{email}/{petId}")
+    @DeleteMapping("/deleteByOwner/{email}/{petId}")
     public ResponseEntity<List<SharedPetGalleryComment>> DeleteCommentByEmailAndPetId(@PathVariable("email") String email,
                                                                                       @PathVariable("petId") Long petId) {
         List<SharedPetGalleryComment> commentToDelete = sharedPetGalleryCommentService.findAllCommentByEmailAndPetId(email, petId);
@@ -84,7 +84,7 @@ public class SharedPetGalleryCommentController {
         return ResponseEntity.ok(commentToDelete);
     }
     //펫 기준 댓글 지우기 (펫 계정 삭제)
-    @DeleteMapping("/delete/{petId}")
+    @DeleteMapping("/deleteByPetId/{petId}")
     public ResponseEntity<List<SharedPetGalleryComment>> DeleteCommentByPetId(@PathVariable("petId") Long petId) {
         List<SharedPetGalleryComment> commentToDelete = sharedPetGalleryCommentService.findAllCommentByPetId(petId);
         sharedPetGalleryCommentService.deleteCommentByPetId(petId);
