@@ -51,9 +51,9 @@ public class UserController {
     @GetMapping("/{email}")
     public ResponseEntity<User> getUser(@PathVariable("email") String email) {
         Optional<User> optionalUser = userService.findByEmail(email);
-        String inviter = optionalUser.get().getInviter();
 
         if (optionalUser.isPresent()) {
+            String inviter = optionalUser.get().getInviter();
             List<User> allUsers = userService.getAllUsers();
 
             for (User usr : allUsers) {
