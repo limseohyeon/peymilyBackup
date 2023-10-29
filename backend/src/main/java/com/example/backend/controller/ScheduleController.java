@@ -146,6 +146,7 @@ public ResponseEntity<Schedule> getSchedulesByPetId(@PathVariable("petId") Long 
                     sch.setExecutorEmail(scheduleBody.getExecutorEmail());
                     sch.setExecutor(scheduleBody.getExecutor());
                     sch.setPeriod(scheduleBody.getPeriod());
+                    sch.setRepeatSchedule(scheduleBody.getRepeatSchedule());
 
                     scheduleRepository.save(sch);
                     System.out.println("Schedule entity updated: " + sch);
