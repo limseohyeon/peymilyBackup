@@ -136,7 +136,7 @@ public class  SharedPetImageController {
     public ResponseEntity<String> deleteImage(@PathVariable("petId") Long petId,
                                               @PathVariable("email") String email,
                                               @PathVariable("sharedPetId") String sharedPetId) throws IOException {
-        String fileName = sharedPetId;
+        String fileName = sharedPetId + ".jpg";
         String uploadDir = "shared-images";
 
         //Optional<User> user = userRepository.findByEmail(email);
