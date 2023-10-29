@@ -35,6 +35,7 @@ public class Schedule {
     // 실행자
     private String executor;
     private Integer period;
+    private Integer repeatSchedule;
     //private Integer isCompleted;
     // EqualsAndHashCode 메서드 오버라이딩
     @Override

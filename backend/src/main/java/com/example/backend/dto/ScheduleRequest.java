@@ -29,6 +29,7 @@ public class ScheduleRequest {
     private String date;
     private String hm;
     private String executorEmail;
+    private Integer repeatSchedule;
     private String executor;
     private Integer period;
 //    private String complete;
