@@ -87,8 +87,8 @@ public class UserService {
         repository.updateUser(userId, newUserName, newPhoneNumber);
     }
 
-    public void deleteUser(String email) {
-        repository.deleteUser(email);
+    public void deleteUser(Long id) {
+        repository.deleteById(id);
     }
 
     //public User getInviter(Long inviterId) { return repository.findByInviterId(inviterId); }
