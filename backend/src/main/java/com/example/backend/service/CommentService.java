@@ -63,7 +63,7 @@ public class CommentService {
     }
 
 //    // 게시글에 속한 모든 댓글 삭제
-//    public void deleteAllCommentByCommunityId( Long communityId) {
+//    public void deleteAllCommentByCommunityId(Long communityId) {
 //        List<Comment> commentToDelete = findAllCommentByCommunityId(communityId);
 //        commentRepository.deleteByCommunityId(communityId);
 //    }
