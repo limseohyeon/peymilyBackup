@@ -156,30 +156,18 @@ public class PetController {
         return ResponseEntity.notFound().build();
     }
 
-
-    @DeleteMapping("/delete-pet/{email}/{petId}")
+    @DeleteMapping("/delete-pet/{petId}")
     @Transactional
-    public ResponseEntity<Pet> deletePet(@PathVariable("email") String email,
+    public ResponseEntity<Optional<Pet>> deletePet(
                                       @PathVariable("petId") Long petId) {
-
-        Optional<User> optionalUser = userRepository.findByEmail(email);
-
-        if (optionalUser.isPresent()) {
-            List<PetLink> pets = petLinkRepository.findAllLinkByOwner(email);
-
-            for (PetLink pet : pets) {
-                if (pet.getPetId().equals(petId)) {
-                    Optional<Pet> optionalPet = petRepository.findById(pet.getPetId());
-
-                    Pet existingPet = optionalPet.get();
-                    petRepository.deletePetByName(existingPet.getPetName());
-
-                    return ResponseEntity.ok(existingPet);
-                }
-            }
-            return ResponseEntity.notFound().build(); // 등록된 petName이 없는 경우 404 응답 반환
+        Optional<Pet> optionalPet = petRepository.findById(petId);
+        if(optionalPet.isPresent()){
+            petRepository.deleteById(petId);
+            return ResponseEntity.ok(optionalPet);
         }
-        return ResponseEntity.notFound().build();
+        else{
+            return ResponseEntity.notFound().build();
+        }
     }
 }
 

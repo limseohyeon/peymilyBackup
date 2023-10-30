@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.dto.CommentRequest;
 import com.example.backend.entity.Comment;
 import com.example.backend.entity.Invitation;
+import com.example.backend.entity.PetLink;
 import com.example.backend.repository.CommentRepository;
 import com.example.backend.service.CommentService;
 import com.example.backend.service.CommunityService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -67,20 +69,28 @@ public class CommentController {
     // 게시글에 속한 모든 댓글 삭제
     @DeleteMapping("/deleteByCommunityId/{communityId}")
     public ResponseEntity<Void> deleteCommentsByCommunityId(@PathVariable("communityId") Long communityId) {
-        List<Comment> comments = commentService.findAllCommentByCommunityId(communityId);
-        for (Comment comment : comments) {
-            commentRepository.deleteById(comment.getCommentId());
+        List<Comment> comments = commentRepository.findAllCommentByCommunityId(communityId);
+        if(!comments.isEmpty()){
+            for (Comment comment : comments) {
+                commentRepository.deleteById(comment.getCommentId());
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     //사용자에 속한 모든 댓글 삭제
-    @DeleteMapping("/deleteByCommunityId/{email}")
+    @DeleteMapping("/deleteByEmail/{email}")
     public ResponseEntity<Void> deleteCommentsByEmail(@PathVariable("email") String email) {
         List<Comment> comments = commentService.findAllCommentByEmail(email);
-        for (Comment comment : comments) {
-            commentRepository.deleteById(comment.getCommentId());
+        if(!comments.isEmpty()){
+            for (Comment comment : comments) {
+                commentRepository.deleteById(comment.getCommentId());
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
