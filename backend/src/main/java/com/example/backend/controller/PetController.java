@@ -136,6 +136,7 @@ public class PetController {
                 existingPet.setPetName(pet.getPetName());
                 existingPet.setPetAge(pet.getPetAge());
                 existingPet.setDetailInfo(pet.getDetailInfo());
+                existingPet.setGender(pet.getGender());
 
                 // Schedules의 petName 업데이트
                 List<Schedule> allSchedules = existingPet.getSchedules();
