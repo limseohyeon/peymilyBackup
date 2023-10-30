@@ -36,6 +36,8 @@ public class UserController {
     private AuthService authService;
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/fetchAll")
     @PreAuthorize("isAuthenticated()")
@@ -100,9 +102,8 @@ public class UserController {
     @DeleteMapping("/delete/{email}")
     public ResponseEntity<User> deleteUser(@PathVariable("email") String email) {
         Optional<User> userToDelete = userService.findByEmail(email);
-
-        userService.deleteUser(email);
-
+        Long id = userToDelete.get().getUserId();
+        userService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.OK).body(userToDelete.get());
     }
 
