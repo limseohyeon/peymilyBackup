@@ -22,7 +22,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping(value = "/GalleryComment", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/GalleryComment/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SharedPetGalleryCommentController {
     @Autowired
     private SharedPetGalleryCommentService sharedPetGalleryCommentService;
@@ -30,7 +30,7 @@ public class SharedPetGalleryCommentController {
     private SharedPetGalleryCommentRepository sharedPetGalleryCommentRepository;
 
     //게시글 등록
-    @PostMapping("/post/{email}")
+    @PostMapping("/post")
     public ResponseEntity<SharedPetGalleryComment> PostComment(@RequestBody @Valid SharedPetGalleryCommentRequest sharedPetGalleryCommentRequest,
                                                                @PathVariable("email") String email
                                                               ) {
