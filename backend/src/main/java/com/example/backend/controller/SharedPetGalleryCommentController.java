@@ -72,7 +72,6 @@ public ResponseEntity<SharedPetGalleryComment> getComment(@PathVariable("comment
     //특정 댓글 지우기
     @DeleteMapping("/delete/{commentId}")
     public ResponseEntity<SharedPetGalleryComment> DeleteComment(@PathVariable("commentId") Long commentId) {
-        Optional<SharedPetGalleryComment> commentToDelete = sharedPetGalleryCommentService.findCommentById(commentId);
 
         try {
             sharedPetGalleryCommentRepository.deleteById(commentId);
