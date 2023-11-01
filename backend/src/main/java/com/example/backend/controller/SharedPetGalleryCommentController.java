@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -40,11 +41,19 @@ public class SharedPetGalleryCommentController {
         }
     }
 //특정 댓글 가져오기
-    @GetMapping("/get/{commentId}")
-    public ResponseEntity<SharedPetGalleryComment> getComment(@PathVariable("commentId") Long commentId) {
-        return ResponseEntity.ok(sharedPetGalleryCommentService.findCommentById(commentId));
+@GetMapping("/get/{commentId}")
+public ResponseEntity<SharedPetGalleryComment> getComment(@PathVariable("commentId") Long commentId) {
+    Optional<SharedPetGalleryComment> commentOptional = sharedPetGalleryCommentService.findCommentById(commentId);
+    if (commentOptional.isPresent()) {
+        SharedPetGalleryComment comment = commentOptional.get();
+        return ResponseEntity.ok(comment);
+    } else {
+        // 원하는 처리를 수행하세요. (댓글을 찾지 못한 경우)
+        return ResponseEntity.notFound().build();
     }
-//모든 댓글 가져오기
+}
+
+    //모든 댓글 가져오기
     @GetMapping("/getAll/{photoId}")
     public ResponseEntity<List<SharedPetGalleryComment>> getComments(@PathVariable("photoId") Long photoId) {
         List<SharedPetGalleryComment> allComments = sharedPetGalleryCommentService.findAllCommentByPhotoId(photoId);
@@ -56,10 +65,17 @@ public class SharedPetGalleryCommentController {
     //특정 댓글 지우기
     @DeleteMapping("/delete/{commentId}")
     public ResponseEntity<SharedPetGalleryComment> DeleteComment(@PathVariable("commentId") Long commentId) {
-        SharedPetGalleryComment commentToDelete = sharedPetGalleryCommentService.findCommentById(commentId);
-        sharedPetGalleryCommentService.deleteCommentById(commentId);
+        Optional<SharedPetGalleryComment> commentToDelete = sharedPetGalleryCommentService.findCommentById(commentId);
 
-        return ResponseEntity.ok(commentToDelete);
+        if (commentToDelete.isPresent()) {
+            SharedPetGalleryComment comment = commentToDelete.get();
+            sharedPetGalleryCommentService.deleteCommentById(comment.getCommentId());
+            return ResponseEntity.ok(comment);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
+
     }
     //게시글 기준 댓글 지우기 (게시글 삭제)
     @DeleteMapping("/deleteByPhotoId/{photoId}")

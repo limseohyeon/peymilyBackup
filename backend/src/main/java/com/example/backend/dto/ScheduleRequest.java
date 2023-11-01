@@ -32,6 +32,7 @@ public class ScheduleRequest {
     private Integer repeatSchedule;
     private String executor;
     private Integer period;
+    private String memo;
 //    private String complete;
 //    private Integer isCompleted;
 }

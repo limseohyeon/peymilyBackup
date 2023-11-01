@@ -50,6 +50,7 @@ public class ScheduleService {
                 .executor(scheduleRequest.getExecutor())
                 .period(scheduleRequest.getPeriod())
                 .repeatSchedule(scheduleRequest.getRepeatSchedule())
+                .memo(scheduleRequest.getMemo())
                 .build();
 
         return scheduleRepository.save(schedule);
@@ -67,6 +68,7 @@ public class ScheduleService {
                     .executor(schedulerequest.getExecutor())
                     .period(schedulerequest.getPeriod())
                     .repeatSchedule(schedulerequest.getRepeatSchedule())
+                    .memo(schedulerequest.getMemo())
                     .build();
 
             return scheduleRepository.save(schedule);
