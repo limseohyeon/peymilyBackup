@@ -56,34 +56,34 @@ public class SharedPetGalleryCommentService {
     }
 
 
-    //특정 댓글 삭제
-    public Optional<SharedPetGalleryComment> deleteCommentById(Long commentId) {
-        Optional<SharedPetGalleryComment> commentToDelete = findCommentById(commentId);
-        sharedPetGalleryCommentRepository.deleteById(commentId);
-        return commentToDelete;
-    }
+//    //특정 댓글 삭제
+//    public Optional<SharedPetGalleryComment> deleteCommentById(Long commentId) {
+//        Optional<SharedPetGalleryComment> commentToDelete = findCommentById(commentId);
+//        sharedPetGalleryCommentRepository.deleteById(commentId);
+//        return commentToDelete;
+//    }
 
-    //펫 계정 삭제시 해당 펫에 속한 모든 댓글 삭제
-    public int deleteCommentByPetId(Long petId) {
-        sharedPetGalleryCommentRepository.deleteByPetId(petId);
-        return 0;
-    }
-    //게시글 삭제시 해당 게시글에 속한 모든 댓글 삭제
-    public List<SharedPetGalleryComment> deleteCommentByPhotoId(Long photoId) {
-        List<SharedPetGalleryComment> commentToDelete = findAllCommentByPhotoId(photoId);
-        sharedPetGalleryCommentRepository.deleteByPhotoId(photoId);
-        return commentToDelete;
-    }
-    //양육자 삭제시 해당 사용자가 작성한 모든 댓글 삭제
-    public List<SharedPetGalleryComment> deleteCommentByEmailAndPetId(String email, Long petId) {
-        List<SharedPetGalleryComment> commentToDelete = findAllCommentByEmailAndPetId(email,petId);
-        sharedPetGalleryCommentRepository.deleteByEmailAndPetId(email,petId);
-        return commentToDelete;
-    }
-    //사용자 탈퇴시 해당 사용자가 작성한 모든 댓글 삭제
-    public List<SharedPetGalleryComment> deleteCommentByEmail(String email) {
-        List<SharedPetGalleryComment> commentToDelete = findAllCommentByEmail(email);
-        sharedPetGalleryCommentRepository.deleteByEmail(email);
-        return commentToDelete;
-    }
+//    //펫 계정 삭제시 해당 펫에 속한 모든 댓글 삭제
+//    public int deleteCommentByPetId(Long petId) {
+//        sharedPetGalleryCommentRepository.deleteByPetId(petId);
+//        return 0;
+//    }
+//    //게시글 삭제시 해당 게시글에 속한 모든 댓글 삭제
+//    public List<SharedPetGalleryComment> deleteCommentByPhotoId(Long photoId) {
+//        List<SharedPetGalleryComment> commentToDelete = findAllCommentByPhotoId(photoId);
+//        sharedPetGalleryCommentRepository.deleteByPhotoId(photoId);
+//        return commentToDelete;
+//    }
+//    //양육자 삭제시 해당 사용자가 작성한 모든 댓글 삭제
+//    public List<SharedPetGalleryComment> deleteCommentByEmailAndPetId(String email, Long petId) {
+//        List<SharedPetGalleryComment> commentToDelete = findAllCommentByEmailAndPetId(email,petId);
+//        sharedPetGalleryCommentRepository.deleteByEmailAndPetId(email,petId);
+//        return commentToDelete;
+//    }
+//    //사용자 탈퇴시 해당 사용자가 작성한 모든 댓글 삭제
+//    public List<SharedPetGalleryComment> deleteCommentByEmail(String email) {
+//        List<SharedPetGalleryComment> commentToDelete = findAllCommentByEmail(email);
+//        sharedPetGalleryCommentRepository.deleteByEmail(email);
+//        return commentToDelete;
+//    }
 }
