@@ -69,24 +69,22 @@ public ResponseEntity<SharedPetGalleryComment> getComment(@PathVariable("comment
 
 
 
-    //특정 댓글 지우기
+    //특정 댓글 삭제
     @DeleteMapping("/delete/{commentId}")
-    public ResponseEntity<SharedPetGalleryComment> DeleteComment(@PathVariable("commentId") Long commentId) {
-
+    public ResponseEntity<Void> deleteCommentById(@PathVariable("commentId") Long commentId) {
         try {
             sharedPetGalleryCommentRepository.deleteById(commentId);
             return ResponseEntity.noContent().build(); // 삭제 성공 시 204 No Content 반환
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build(); // 댓글을 찾을 수 없을 때 404 Not Found 반환
         }
-
     }
-    //게시글 기준 댓글 지우기 (게시글 삭제)
+    // 게시글에 속한 모든 댓글 삭제
     @DeleteMapping("/deleteByPhotoId/{photoId}")
-    public ResponseEntity<List<SharedPetGalleryComment>> DeleteCommentByPhotoId(@PathVariable("photoId") Long photoId) {
-        List<SharedPetGalleryComment> commentToDelete = sharedPetGalleryCommentRepository.findAllCommentByPhotoId(photoId);
-        if(!commentToDelete.isEmpty()){
-            for (SharedPetGalleryComment comment : commentToDelete) {
+    public ResponseEntity<Void> deleteCommentsByCommunityId(@PathVariable("photoId") Long photoId) {
+        List<SharedPetGalleryComment> comments = sharedPetGalleryCommentRepository.findAllCommentByPhotoId(photoId);
+        if(!comments.isEmpty()){
+            for (SharedPetGalleryComment comment : comments) {
                 sharedPetGalleryCommentRepository.deleteById(comment.getCommentId());
             }
             return new ResponseEntity<>(HttpStatus.OK);
@@ -94,13 +92,13 @@ public ResponseEntity<SharedPetGalleryComment> getComment(@PathVariable("comment
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
-    //사용자 기준 댓글 지우기 (계정 탈퇴)
-    @DeleteMapping("/deleteByEmail/{email}")
-    public ResponseEntity<List<SharedPetGalleryComment>> DeleteCommentByEmail(@PathVariable("email") String email) {
-        List<SharedPetGalleryComment> commentToDelete = sharedPetGalleryCommentService.findAllCommentByEmail(email);
-        sharedPetGalleryCommentService.deleteCommentByEmail(email);
-        return ResponseEntity.ok(commentToDelete);
-    }
+//    //사용자 기준 댓글 지우기 (계정 탈퇴)
+//    @DeleteMapping("/deleteByEmail/{email}")
+//    public ResponseEntity<List<SharedPetGalleryComment>> DeleteCommentByEmail(@PathVariable("email") String email) {
+//        List<SharedPetGalleryComment> commentToDelete = sharedPetGalleryCommentService.findAllCommentByEmail(email);
+//        sharedPetGalleryCommentService.deleteCommentByEmail(email);
+//        return ResponseEntity.ok(commentToDelete);
+//    }
     //양육자 기준 댓글 지우기 (양육자 삭제)
     @DeleteMapping("/deleteByOwner/{email}/{petId}")
     public ResponseEntity<List<SharedPetGalleryComment>> DeleteCommentByEmailAndPetId(@PathVariable("email") String email,

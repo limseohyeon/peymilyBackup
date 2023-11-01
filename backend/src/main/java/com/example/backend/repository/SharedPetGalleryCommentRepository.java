@@ -32,23 +32,23 @@ public interface SharedPetGalleryCommentRepository  extends JpaRepository<Shared
 
 
 
-    //게시글 삭제시 해당 게시글 모든 댓글 삭제
-    @Modifying
-    @Query("DELETE FROM SharedPetGalleryComment c WHERE c.photoId = ?1")
-    List<SharedPetGalleryComment> deleteByPhotoId(Long photoId);
-
-    //펫계정 삭제시 해당 펫에 속해있던 케시글의 모든 댓글 삭제
-    @Modifying
-    @Query("DELETE FROM SharedPetGalleryComment c WHERE c.petId = ?1")
-    List<SharedPetGalleryComment> deleteByPetId(Long petId);
-
-    //사용자 탈퇴시 해당 사용자가 작성한 모든 댓글 삭제
-    @Modifying
-    @Query("DELETE FROM SharedPetGalleryComment c WHERE c.email = ?1 ")
-    List<SharedPetGalleryComment> deleteByEmail(String email);
-
-    //양육자 삭제시 해당 사용자가 작성한 모든 댓글 삭제
-    @Modifying
-    @Query("DELETE FROM SharedPetGalleryComment c WHERE c.email = ?1 AND c.petId = ?2")
-    List<SharedPetGalleryComment> deleteByEmailAndPetId(String email, Long petId);
+//    //게시글 삭제시 해당 게시글 모든 댓글 삭제
+//    @Modifying
+//    @Query("DELETE FROM SharedPetGalleryComment c WHERE c.photoId = ?1")
+//    List<SharedPetGalleryComment> deleteByPhotoId(Long photoId);
+//
+//    //펫계정 삭제시 해당 펫에 속해있던 케시글의 모든 댓글 삭제
+//    @Modifying
+//    @Query("DELETE FROM SharedPetGalleryComment c WHERE c.petId = ?1")
+//    List<SharedPetGalleryComment> deleteByPetId(Long petId);
+//
+//    //사용자 탈퇴시 해당 사용자가 작성한 모든 댓글 삭제
+//    @Modifying
+//    @Query("DELETE FROM SharedPetGalleryComment c WHERE c.email = ?1 ")
+//    List<SharedPetGalleryComment> deleteByEmail(String email);
+//
+//    //양육자 삭제시 해당 사용자가 작성한 모든 댓글 삭제
+//    @Modifying
+//    @Query("DELETE FROM SharedPetGalleryComment c WHERE c.email = ?1 AND c.petId = ?2")
+//    List<SharedPetGalleryComment> deleteByEmailAndPetId(String email, Long petId);
 }
