@@ -12,9 +12,7 @@ import java.util.List;
 @Repository
 public interface SharedPetGalleryCommentRepository  extends JpaRepository<SharedPetGalleryComment, Long> {
 
-    //특정 댓글 가져오기
-    @Query("SELECT c FROM SharedPetGalleryComment c WHERE c.commentId = ?1")
-    SharedPetGalleryComment findCommentByCommentId(Long commentId);
+
 
     //게시글 기준 댓글 가져오기
     @Query("SELECT c FROM SharedPetGalleryComment c WHERE c.photoId = ?1")
@@ -32,10 +30,7 @@ public interface SharedPetGalleryCommentRepository  extends JpaRepository<Shared
     @Query("SELECT c FROM SharedPetGalleryComment c WHERE c.email = ?1 AND c.petId = ?2 ")
     List<SharedPetGalleryComment> findCommentByEmailAndPetId(String email,Long petId);
 
-    //댓글 1개 삭제
-    @Modifying
-    @Query("DELETE FROM SharedPetGalleryComment c WHERE c.commentId = ?1")
-    int deleteByCommentId(Long commentId);
+
 
     //게시글 삭제시 해당 게시글 모든 댓글 삭제
     @Modifying

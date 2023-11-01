@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -31,8 +32,8 @@ public class SharedPetGalleryCommentService {
         return sharedPetGalleryCommentRepository.save(comment);
     }
 
-    public SharedPetGalleryComment findCommentById(Long commentId) {
-        return sharedPetGalleryCommentRepository.findCommentByCommentId(commentId);
+    public Optional<SharedPetGalleryComment> findCommentById(Long commentId) {
+        return sharedPetGalleryCommentRepository.findById(commentId);
     }
 
     // photoId를 바탕으로 커뮤니티 게시글의 댓글을 불러옴(해당 게시글 모든 댓글 가져오기)
@@ -54,20 +55,11 @@ public class SharedPetGalleryCommentService {
         return sharedPetGalleryCommentRepository.findCommentByPetId(petId);
     }
 
-    // 댓글 내용 수정
-    public SharedPetGalleryComment updateCommentByPhotoId(SharedPetGalleryCommentRequest sharedPetGalleryCommentRequest, Long photoId) {
-        SharedPetGalleryComment commentToChange = findCommentById(photoId);
-        commentToChange.setCommentInfo(sharedPetGalleryCommentRequest.getCommentInfo());
-        if (commentToChange.getCommentInfo().length() == 0) {
-            System.out.println("내용을 입력하세요!");
-            return null;
-        }
-        return sharedPetGalleryCommentRepository.save(commentToChange);
-    }
+
     //특정 댓글 삭제
-    public SharedPetGalleryComment deleteCommentById(Long commentId) {
-        SharedPetGalleryComment commentToDelete = findCommentById(commentId);
-        sharedPetGalleryCommentRepository.deleteByCommentId(commentId);
+    public Optional<SharedPetGalleryComment> deleteCommentById(Long commentId) {
+        Optional<SharedPetGalleryComment> commentToDelete = findCommentById(commentId);
+        sharedPetGalleryCommentRepository.deleteById(commentId);
         return commentToDelete;
     }
 
