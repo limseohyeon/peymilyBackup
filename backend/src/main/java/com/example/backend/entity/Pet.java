@@ -29,10 +29,7 @@ public class Pet implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName="userId") // 230709 긴급 수정
-    @JsonBackReference
-    private User user;
+
     @Column(unique = true)
     private String petCode;
     private String petName;
@@ -40,6 +37,11 @@ public class Pet implements Serializable {
     private String detailInfo;
     private String gender;
     private String inviter;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName="userId") // 230709 긴급 수정
+    @JsonBackReference
+    private User user;
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

@@ -22,11 +22,7 @@ public class Schedule {
     @Id
     @GeneratedValue
     private Long scheduleId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    // 2023-10-15 수정
-    @JoinColumn(name = "petCode", referencedColumnName = "petCode")
-    @JsonBackReference
-    private Pet pet;
+
     private String schedule;
     private String date;
     private String hm;
@@ -37,6 +33,13 @@ public class Schedule {
     private Integer period;
     private Integer repeatSchedule;
     private String memo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    // 2023-10-15 수정
+    @JoinColumn(name = "petCode", referencedColumnName = "petCode")
+    @JsonBackReference
+    private Pet pet;
+
     //private Integer isCompleted;
     // EqualsAndHashCode 메서드 오버라이딩
     @Override

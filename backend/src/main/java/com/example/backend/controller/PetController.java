@@ -63,8 +63,6 @@ public class PetController {
             Optional<User> user = userRepository.findByEmail(email);
 
             Pet savedPet = petService.savePet(petRequest, user.get().getInviter());
-
-
             return ResponseEntity.status(HttpStatus.CREATED).body(savedPet);
         } catch (UsernameNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
