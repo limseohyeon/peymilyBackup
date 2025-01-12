@@ -2,14 +2,14 @@ package com.example.backend.service;
 
 import com.example.backend.dto.CommunityRequest;
 import com.example.backend.entity.Community;
-import com.example.backend.entity.User;
+import com.example.backend.users.entity.User;
 import com.example.backend.repository.CommunityRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,20 +1,13 @@
 package com.example.backend.service;
 
 import com.example.backend.dto.PetRequest;
-import com.example.backend.dto.UserRequest;
 import com.example.backend.entity.Pet;
-import com.example.backend.entity.User;
+import com.example.backend.users.entity.User;
 import com.example.backend.repository.PetRepository;
-import com.example.backend.repository.UserRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -25,7 +18,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 

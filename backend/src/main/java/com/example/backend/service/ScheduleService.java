@@ -1,11 +1,8 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.PetRequest;
 import com.example.backend.dto.ScheduleRequest;
 import com.example.backend.entity.Pet;
-import com.example.backend.entity.PetLink;
 import com.example.backend.entity.Schedule;
-import com.example.backend.entity.User;
 import com.example.backend.repository.PetLinkRepository;
 import com.example.backend.repository.PetRepository;
 import com.example.backend.repository.ScheduleRepository;
@@ -14,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service

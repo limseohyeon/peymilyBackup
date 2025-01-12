@@ -8,9 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 // date랑 scheduleId가 들어가면 email이 나와야 함

@@ -2,7 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.dto.SharedPetGalleryRequest;
 import com.example.backend.entity.SharedPetGallery;
-import com.example.backend.entity.User;
+import com.example.backend.users.entity.User;
 import com.example.backend.repository.SharedPetGalleryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

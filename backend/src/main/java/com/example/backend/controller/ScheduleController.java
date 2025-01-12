@@ -9,7 +9,8 @@ import com.example.backend.repository.UserRepository;
 import com.example.backend.service.ExecutedScheduleService;
 import com.example.backend.service.ScheduleService;
 import com.example.backend.service.UserService;
-import com.mysql.cj.conf.ConnectionUrlParser;
+import com.example.backend.users.entity.User;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static org.hibernate.sql.InFragment.NULL;
-import org.modelmapper.internal.Pair;
 @RestController
 @RequestMapping("/schedule/{email}")
 public class ScheduleController {
@@ -69,16 +63,7 @@ public class ScheduleController {
                }
            }
 
-//기존 코드(petLinkX)
-//            if (optionalPet.get().getPetId().equals(petId) && optionalPet.get().getOwner().equals(owner)) {
-//                Schedule savedSchedule = scheduleService.saveSchedule(scheduleRequest, petId);
-//                //Schedule schedule = modelMapper.map(scheduleService, Schedule.class);
-//                //schedule.setPet(pet);
-//                //Schedule savedSchedule = scheduleRepository.save(schedule);
-//                //ScheduleService savedScheduleService = modelMapper.map(savedSchedule, ScheduleService.class);
-//
-//                return ResponseEntity.status(HttpStatus.CREATED).body(savedSchedule);
-//            }
+
         } catch (UsernameNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (Exception e) {

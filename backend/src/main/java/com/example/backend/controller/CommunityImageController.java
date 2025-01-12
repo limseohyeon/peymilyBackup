@@ -1,7 +1,5 @@
 package com.example.backend.controller;
 
-import com.example.backend.entity.User;
-import com.example.backend.repository.UserRepository;
 import com.example.backend.service.UserService;
 import com.example.backend.util.FileUploadUtil;
 import net.coobird.thumbnailator.Thumbnails;
@@ -24,7 +22,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController

@@ -1,14 +1,16 @@
 package com.example.backend.dto;
 
 import com.example.backend.entity.Pet;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.modelmapper.internal.Pair;
-
-import javax.persistence.*;
-import java.util.Date;
-import java.util.Map;
 
 @Table(name="SCHEDULE_TBL")
 @Data

@@ -1,11 +1,10 @@
 package com.example.backend.service;
 
 import com.example.backend.dto.UserRequest;
-import com.example.backend.entity.User;
+import com.example.backend.users.entity.User;
 import com.example.backend.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

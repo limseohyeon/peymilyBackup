@@ -6,17 +6,15 @@ import com.example.backend.entity.Invitation;
 import com.example.backend.entity.PetLink;
 import com.example.backend.repository.CommentRepository;
 import com.example.backend.service.CommentService;
-import com.example.backend.service.CommunityService;
-import org.hibernate.service.spi.InjectService;
+
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

@@ -4,11 +4,11 @@ import com.example.backend.dto.CommentRequest;
 import com.example.backend.dto.CommunityRequest;
 import com.example.backend.entity.Comment;
 import com.example.backend.repository.CommentRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
+;
 import java.util.List;
 
 @Service
@@ -62,15 +62,4 @@ public class CommentService {
         }
     }
 
-//    // 게시글에 속한 모든 댓글 삭제
-//    public void deleteAllCommentByCommunityId(Long communityId) {
-//        List<Comment> commentToDelete = findAllCommentByCommunityId(communityId);
-//        commentRepository.deleteByCommunityId(communityId);
-//    }
-//    // 사용자에 속한 모든 댓글 삭제
-//    public List<Comment> deleteAllCommentByEmail( String email) {
-//        List<Comment> commentToDelete = findAllCommentByEmail(email);
-//        commentRepository.deleteByEmail(email);
-//        return commentToDelete;
-//    }
 }

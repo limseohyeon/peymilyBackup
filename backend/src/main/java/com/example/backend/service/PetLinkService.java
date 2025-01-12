@@ -3,11 +3,10 @@ package com.example.backend.service;
 import com.example.backend.dto.PetRequest;
 import com.example.backend.entity.Pet;
 import com.example.backend.entity.PetLink;
-import com.example.backend.entity.User;
+import com.example.backend.users.entity.User;
 import com.example.backend.repository.PetLinkRepository;
 import com.example.backend.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 

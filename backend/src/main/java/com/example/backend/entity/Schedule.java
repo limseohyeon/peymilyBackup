@@ -2,13 +2,15 @@ package com.example.backend.entity;
 
 import com.example.backend.entity.Pet;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.*;
 
-
-import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Entity

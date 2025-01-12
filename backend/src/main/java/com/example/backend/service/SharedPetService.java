@@ -1,22 +1,16 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.PetRequest;
 import com.example.backend.dto.SharedPetRequest;
 import com.example.backend.entity.Pet;
-import com.example.backend.entity.Schedule;
 import com.example.backend.entity.SharedPet;
-import com.example.backend.entity.User;
 import com.example.backend.repository.PetRepository;
 import com.example.backend.repository.SharedPetRepository;
-import com.example.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

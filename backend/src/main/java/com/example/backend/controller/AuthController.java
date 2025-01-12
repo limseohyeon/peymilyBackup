@@ -1,21 +1,20 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.UserRequest;
-import com.example.backend.entity.User;
+import com.example.backend.users.entity.User;
 import com.example.backend.service.AuthService;
 import com.example.backend.service.AuthenticationResponse;
 import com.example.backend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.AuthenticationException;
 
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")

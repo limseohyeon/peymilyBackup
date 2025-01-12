@@ -1,9 +1,8 @@
 package com.example.backend.controller;
 
-import com.example.backend.entity.User;
+import com.example.backend.users.entity.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.util.FileUploadUtil;
-import com.example.backend.util.ImageUtil;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -14,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.commons.io.FileUtils;
-import com.example.backend.consts.ConstURL;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

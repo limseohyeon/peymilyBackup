@@ -9,14 +9,14 @@ import com.example.backend.repository.SharedPetGalleryCommentRepository;
 import com.example.backend.service.CommentService;
 import com.example.backend.service.SharedPetGalleryCommentService;
 import com.example.backend.service.SharedPetGalleryService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 

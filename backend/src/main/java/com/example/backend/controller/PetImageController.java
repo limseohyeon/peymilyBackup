@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.entity.User;
+import com.example.backend.users.entity.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.util.FileUploadUtil;
 import net.coobird.thumbnailator.Thumbnails;

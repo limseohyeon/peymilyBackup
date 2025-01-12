@@ -1,22 +1,19 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.PetLinkRequest;
-import com.example.backend.dto.PetRequest;
 import com.example.backend.entity.PetLink;
-import com.example.backend.entity.User;
+import com.example.backend.users.entity.User;
 import com.example.backend.repository.PetLinkRepository;
-import com.example.backend.repository.PetRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.PetLinkService;
 import com.example.backend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -169,51 +166,6 @@ public class PetLinkController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    //사용자가 속한 모든 petLink 수정하기
-//    @PutMapping("/put/{owner}")
-//    public ResponseEntity<PetLink> UpdateAllLinkedPetByOwner(@PathVariable("owner") String owner,
-//                                                   @Valid @RequestBody PetLinkRequest updatedPetLinkData) {
-//
-//        List<PetLink> allPetLinkedByOwner = petLinkRepository.findLinkByOwner(owner);
-//        try {
-//            PetLink existingPetLink = petLinkRepository.findById(linkId).orElse(null);
-//            if (existingPetLink == null) {
-//                System.out.println(linkId+"펫 링크를 찾을 수 없습니다");
-//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//            }
-//
-//            existingPetLink.setOwner(updatedPetLinkData.getOwner());
-//            existingPetLink.setInviter(updatedPetLinkData.getInviter());
-//            existingPetLink.setOwnerName(updatedPetLinkData.getOwnerName());
-//
-//            PetLink updatedPetLink = petLinkRepository.save(existingPetLink);
-//            System.out.println(linkId+"펫 링크 수정 성공");
-//
-//            return new ResponseEntity<>(updatedPetLink, HttpStatus.OK);
-//        } catch (Exception e) {
-//            System.out.println(linkId+"펫 링크 수정 실패");
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
-//    //특정 사용자가 속한 모든 petLink 삭제하기
-//    @DeleteMapping("/delete/{linkId}")
-//    public ResponseEntity<Void> DeleteAllLinkedPet(@PathVariable("linkId") Long linkId) {
-//        try {
-//            if (!petLinkRepository.existsById(linkId)) {
-//                System.out.println("삭제할 펫 링크를 찾을 수 없습니다");
-//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//            }
-//
-//            petLinkRepository.deleteById(linkId);
-//            System.out.println("펫 링크 삭제 성공");
-//
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } catch (Exception e) {
-//            System.out.println("펫 링크 삭제 실패");
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-// 특정 petLink 삭제하기
     @DeleteMapping("/delete/{linkId}")
     public ResponseEntity<Void> DeleteLinkedPet(@PathVariable("linkId") Long linkId) {
         try {

@@ -1,27 +1,24 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.SharedPetRequest;
-import com.example.backend.entity.Pet;
 import com.example.backend.entity.SharedPet;
-import com.example.backend.entity.User;
-import com.example.backend.repository.PetRepository;
+import com.example.backend.users.entity.User;
 import com.example.backend.repository.SharedPetRepository;
 import com.example.backend.repository.UserRepository;
-import com.example.backend.service.PetService;
 import com.example.backend.service.SharedPetService;
 import com.example.backend.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 

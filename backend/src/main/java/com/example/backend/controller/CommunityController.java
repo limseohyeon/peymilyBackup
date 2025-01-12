@@ -5,16 +5,16 @@ import com.example.backend.dto.ScheduleRequest;
 import com.example.backend.entity.*;
 import com.example.backend.repository.CommunityRepository;
 import com.example.backend.service.CommunityService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping(value = "/community", produces = MediaType.APPLICATION_JSON_VALUE)

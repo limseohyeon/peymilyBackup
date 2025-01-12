@@ -1,37 +1,31 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.PetRequest;
-import com.example.backend.dto.UserRequest;
 import com.example.backend.entity.Pet;
 import com.example.backend.entity.PetLink;
 import com.example.backend.entity.Schedule;
-import com.example.backend.entity.User;
+import com.example.backend.users.entity.User;
 import com.example.backend.repository.PetLinkRepository;
 import com.example.backend.repository.PetRepository;
 import com.example.backend.repository.ScheduleRepository;
 import com.example.backend.service.PetLinkService;
 import com.example.backend.service.PetService;
-import com.example.backend.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.modelmapper.ModelMapper;
 import com.example.backend.repository.UserRepository;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-import javax.validation.Valid;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/pet", produces = MediaType.APPLICATION_JSON_VALUE)
